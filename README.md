@@ -6,4 +6,4 @@ copy there the two files " id_rsa" and " id_rsa.pub" ( you can find them on gitl
 
 
 
-/////TRYING BY MIGUEL, PUSHING! /////////////////////
+/////TRYING BY MIGUEL with GITHUB, PUSHING! /////////////////////
