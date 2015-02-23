@@ -50,7 +50,8 @@ public class Wizzball extends PApplet  {
 		  textFont(f,16);
 		  fill(200 );
 		  stroke(153);
-		  text(" Hello, welcome to Wizzball game.\n Please, enter your name and press TAB...\n" ,50 ,50 );
+		  //changed by Miguel
+		  text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n" ,50 ,50 );
 		  text( typing, 50, 100 );
 		  if ( firstStep )
 		  {
