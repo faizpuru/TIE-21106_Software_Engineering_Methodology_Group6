@@ -31,9 +31,11 @@ public class Wizzball extends PApplet  {
 	boolean isBounceUp = false;
 	boolean isBounceDown = false;
 	PImage img;
+	PImage floor;
 
 	public void setup() {
 		img = loadImage("space_background.jpg");
+		floor = loadImage("MoonFloor.jpg");
 		size(500, 500,P3D);
 		f = createFont("Arial",16,true);
 		square = createShape(RECT, 0, 10, width*10, 2);
@@ -46,6 +48,7 @@ public class Wizzball extends PApplet  {
 
 	public void draw() {
 		  img.resize(width, height);
+		  floor.resize(width, (int) (height*0.2));
 		  background(0);
 		  textFont(f,16);
 		  fill(200 );
@@ -61,12 +64,12 @@ public class Wizzball extends PApplet  {
 		  if ( enterTheGame )  
 		  {
 			  clear();
-			  background(img);  
+			  background(img); 
 			  sp1 = new Spot( this, xpos, ypos, 5 );
 			  sp1.display();
 			  xpos = (float) (xpos + xspeed * 0.2) ;
 			  ypos = (float) (ypos + yspeed * 0.5 );
-			  shape(square, 0, (float) (height*0.8));
+			  image(floor, 0, (float) (height*0.8));
 		
 			  if (ypos > height*0.8  ) {
 				  // If the object reaches either edge, multiply speed by -1 to turn it around.
