@@ -1,4 +1,4 @@
-package Wizzball;
+package wizzball;
 import processing.core.PApplet;
 
 public class Spot {

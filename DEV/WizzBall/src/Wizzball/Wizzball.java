@@ -1,12 +1,12 @@
 // test from MY pc
 
-package Wizzball;
+package wizzball;
 
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PShape;
-import Wizzball.Spot;
+import wizzball.Spot;
 
 public class Wizzball extends PApplet  {
 	
