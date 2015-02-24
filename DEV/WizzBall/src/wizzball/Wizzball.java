@@ -85,6 +85,8 @@ public class Wizzball extends PApplet  {
 			text("Press TAB to continue...", xFont, yFont+300, zFont);
 
 			yFont--;
+			if (yFont < -300 )
+				enterTheGame = true;
 		}
 
 		if (enterTheGame){
