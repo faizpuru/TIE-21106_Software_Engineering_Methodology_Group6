@@ -32,11 +32,15 @@ public class Wizzball extends PApplet  {
 	PImage floor;
 	PImage ceiling;
 
+	float yFont = 250;
+	float zFont = -200;
+	float xFont = 250;
+
 	public void setup() {
 		img = loadImage("space_background.jpg");
 		floor = loadImage("MoonFloor.jpg");
 		ceiling = loadImage("ceiling.jpg");
-		size(500, 500, P2D);
+		size(500, 500, OPENGL);
 		f = createFont("Arial",16,true);
 		ellipseMode(RADIUS);
 		xpos = width/2;
@@ -57,14 +61,30 @@ public class Wizzball extends PApplet  {
 		if ( firstStep )
 		{
 			clear();
-			text("Hello " + player + " , you will enter the game.\n "
-					+ "You can move the character using arrows keys.\n "
-					+ "When the ball bounces up,\n you can decelerate it using up arrow \n "
-					+ "When the ball is coming down,\n you can accelerate it using down arrow.\n "
-					+ "Press TAB to continue...",50 ,50 );
+			
+
+			textMode(MODEL);
+			rotateX(PI/6);
+			textAlign(CENTER);
+			stroke(0);
+			strokeWeight(5);
+
+
+
+			text("Hello " + player + " , you will enter the game.", xFont, yFont, zFont);
+			text("You can move the character using arrows keys.", xFont, yFont+50, zFont);
+			text("When the ball bounces up, you can decelerate it using up arrow", xFont, yFont+100, zFont);
+			text("When the ball is coming down, you can accelerate it using down arrow.", xFont, yFont+150, zFont);
+			text("Press TAB to continue...", xFont, yFont+200, zFont);
+
+			yFont--;
 		}
 
-			if (enterTheGame){
+		if (enterTheGame){
+			rotateX(-PI/6);
+			strokeWeight(0);
+			
+			
 			clear();
 			background(img); 
 			sp1 = new Spot( this, xpos, ypos, 5 );
@@ -73,7 +93,7 @@ public class Wizzball extends PApplet  {
 			ypos = (float) (ypos + yspeed * 0.5 );
 			image(floor, 0, (float) (height*0.8));
 			image(ceiling,0, 0);
-			
+
 
 			//Floor collision 
 
@@ -83,7 +103,7 @@ public class Wizzball extends PApplet  {
 				changeBounce();
 			}
 			if (ypos < height*0.14 ) { //Adjust this number for proper collision with ceiling
-				
+
 				yspeed = yspeed * -1;
 				changeBounce();
 			}
@@ -92,7 +112,7 @@ public class Wizzball extends PApplet  {
 				yspeed = yspeed * -1;
 				changeBounce();
 			}
-			
+
 			if ( xpos > width || xpos < 0)
 			{
 				xspeed *= -1;
