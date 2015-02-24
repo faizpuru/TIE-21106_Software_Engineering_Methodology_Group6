@@ -5,7 +5,6 @@ package wizzball;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
-import processing.core.PShape;
 import wizzball.Spot;
 
 public class Wizzball extends PApplet  {
@@ -21,7 +20,6 @@ public class Wizzball extends PApplet  {
 	boolean firstStep = false;
 	boolean enterTheGame = false;
 	int count = 0;
-	PShape square = null;
 	int x = 50;
 	int rad = 60;        // Width of the shape
 	float xpos, ypos;    // Starting position of shape    
@@ -32,14 +30,14 @@ public class Wizzball extends PApplet  {
 	boolean isBounceDown = true;
 	PImage img;
 	PImage floor;
+	PImage ceiling;
 
 	public void setup() {
 		img = loadImage("space_background.jpg");
 		floor = loadImage("MoonFloor.jpg");
-		size(500, 500,P3D);
+		ceiling = loadImage("ceiling.jpg");
+		size(500, 500, P2D);
 		f = createFont("Arial",16,true);
-		square = createShape(RECT, 0, 10, width*10, 2);
-		square.setFill(color(0, 0, 255));
 		ellipseMode(RADIUS);
 		xpos = width/2;
 		ypos = height/2;
@@ -49,8 +47,8 @@ public class Wizzball extends PApplet  {
 	public void draw() {
 		img.resize(width, height);
 		floor.resize(width, (int) (height*0.2));
+		ceiling.resize(width, (int) (height*0.1));
 		background(0);
-		//directionalLight(204, 204, 204, (float) 0.5, 0, -1);
 		textFont(f,16);
 		fill(200);
 		stroke(153);
@@ -74,11 +72,18 @@ public class Wizzball extends PApplet  {
 			xpos = (float) (xpos + xspeed * 0.2) ;
 			ypos = (float) (ypos + yspeed * 0.5 );
 			image(floor, 0, (float) (height*0.8));
+			image(ceiling,0, 0);
+			
 
 			//Floor collision 
 
-			if (ypos > height*0.77  ) {
-				// If the object reaches either edge, multiply speed by -1 to turn it around.
+			if (ypos > height*0.77   ) { //Adjust this number for proper collision with floor
+
+				yspeed = yspeed * -1;
+				changeBounce();
+			}
+			if (ypos < height*0.14 ) { //Adjust this number for proper collision with ceiling
+				
 				yspeed = yspeed * -1;
 				changeBounce();
 			}
@@ -87,6 +92,7 @@ public class Wizzball extends PApplet  {
 				yspeed = yspeed * -1;
 				changeBounce();
 			}
+			
 			if ( xpos > width || xpos < 0)
 			{
 				xspeed *= -1;
