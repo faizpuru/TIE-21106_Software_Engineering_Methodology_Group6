@@ -7,6 +7,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 import wizzball.Spot;
 
+
 public class Wizzball extends PApplet  {
 
 	/**
@@ -31,6 +32,8 @@ public class Wizzball extends PApplet  {
 	PImage img;
 	PImage floor;
 	PImage ceiling;
+	
+
 
 	float yFont = 250;
 	float zFont = -200;
@@ -38,13 +41,14 @@ public class Wizzball extends PApplet  {
 
 	public void setup() {
 		img = loadImage("space_background.jpg");
-		floor = loadImage("MoonFloor.jpg");
+		floor = loadImage("moonfloor.jpg");
 		ceiling = loadImage("ceiling.jpg");
 		size(500, 500, OPENGL);
 		f = createFont("Arial",16,true);
 		ellipseMode(RADIUS);
 		xpos = width/2;
 		ypos = height/2;
+
 
 	}
 
@@ -100,12 +104,12 @@ public class Wizzball extends PApplet  {
 
 			//Floor collision 
 
-			if (ypos > height*0.77   ) { //Adjust this number for proper collision with floor
+			if (ypos > height*0.77  && yspeed > 0 ) { //Adjust this number for proper collision with floor
 
 				yspeed = yspeed * -1;
 				changeBounce();
 			}
-			if (ypos < height*0.14 ) { //Adjust this number for proper collision with ceiling
+			if (ypos < height*0.14 && yspeed < 0) { //Adjust this number for proper collision with ceiling
 
 				yspeed = yspeed * -1;
 				changeBounce();
