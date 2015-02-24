@@ -50,19 +50,23 @@ public class Wizzball extends PApplet  {
 		img.resize(width, height);
 		floor.resize(width, (int) (height*0.2));
 		background(0);
+		//directionalLight(204, 204, 204, (float) 0.5, 0, -1);
 		textFont(f,16);
-		fill(200 );
+		fill(200);
 		stroke(153);
-		//changed by Miguel
 		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n" ,50 ,50 );
 		text( typing, 50, 100 );
 		if ( firstStep )
 		{
 			clear();
-			text("Hello " + player + " , you will enter the game.\n You can move the character using arrows keys.\n When the ball bounces up,\n you can decelerate it using up arrow \n When the ball is coming down,\n you can accelerate it using down arrow.\n Press RETURN to continue...",50 ,50 );
+			text("Hello " + player + " , you will enter the game.\n "
+					+ "You can move the character using arrows keys.\n "
+					+ "When the ball bounces up,\n you can decelerate it using up arrow \n "
+					+ "When the ball is coming down,\n you can accelerate it using down arrow.\n "
+					+ "Press TAB to continue...",50 ,50 );
 		}
-		if ( enterTheGame )  
-		{
+
+			if (enterTheGame){
 			clear();
 			background(img); 
 			sp1 = new Spot( this, xpos, ypos, 5 );
@@ -71,7 +75,9 @@ public class Wizzball extends PApplet  {
 			ypos = (float) (ypos + yspeed * 0.5 );
 			image(floor, 0, (float) (height*0.8));
 
-			if (ypos > height*0.8  ) {
+			//Floor collision 
+
+			if (ypos > height*0.77  ) {
 				// If the object reaches either edge, multiply speed by -1 to turn it around.
 				yspeed = yspeed * -1;
 				changeBounce();
@@ -124,14 +130,17 @@ public class Wizzball extends PApplet  {
 		}
 		else
 		{
-			typing = typing + key; 
+			if (keyCode == BACKSPACE) {
+				typing = typing.substring(0, typing.length() - 1);
+			} 
+			else
+				if (key != CODED) typing += key; 
 		}
-
-		if ( key == TAB  ){
-
-			enterTheGame = true;
+		if(keyCode == TAB){
 			count += 1;
+			enterTheGame=true;
 		}
+
 		if ( keyCode == UP ) {
 			if ( isBounceUp )
 				accelerate();
