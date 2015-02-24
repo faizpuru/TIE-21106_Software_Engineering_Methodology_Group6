@@ -64,6 +64,7 @@ public class Wizzball extends PApplet  {
 			
 
 			textMode(MODEL);
+			textFont(f,20);
 			rotateX(PI/6);
 			textAlign(CENTER);
 			stroke(0);
@@ -73,9 +74,11 @@ public class Wizzball extends PApplet  {
 
 			text("Hello " + player + " , you will enter the game.", xFont, yFont, zFont);
 			text("You can move the character using arrows keys.", xFont, yFont+50, zFont);
-			text("When the ball bounces up, you can decelerate it using up arrow", xFont, yFont+100, zFont);
-			text("When the ball is coming down, you can accelerate it using down arrow.", xFont, yFont+150, zFont);
-			text("Press TAB to continue...", xFont, yFont+200, zFont);
+			text("When the ball bounces up,", xFont, yFont+100, zFont);
+			text("you can decelerate it using up arrow", xFont, yFont+150, zFont);
+			text("When the ball is coming down,", xFont, yFont+200, zFont);
+			text("you can accelerate it using down arrow.", xFont, yFont+250, zFont);
+			text("Press TAB to continue...", xFont, yFont+300, zFont);
 
 			yFont--;
 		}
