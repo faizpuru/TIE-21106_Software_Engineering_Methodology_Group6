@@ -5,6 +5,7 @@ package wizzball;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
+import processing.core.PVector;
 import wizzball.Spot;
 
 
@@ -29,10 +30,8 @@ public class Wizzball extends PApplet  {
 	Spot sp1 = null;
 	boolean isBounceUp = false;
 	boolean isBounceDown = true;
-	PImage img;
-	PImage floor;
-	PImage ceiling;
-
+	PImage img, floor, ceiling, saturn;
+	PVector vback, vmiddle, vfront;
 
 
 	float yFont = 250;
@@ -43,19 +42,27 @@ public class Wizzball extends PApplet  {
 		img = loadImage("space_background.jpg");
 		floor = loadImage("moonfloor.jpg");
 		ceiling = loadImage("ceiling.jpg");
+		saturn = loadImage("saturn.png");
 		size(500, 500, OPENGL);
 		f = createFont("Arial",16,true);
 		ellipseMode(RADIUS);
 		xpos = width/2;
 		ypos = height/2;
 
+		vback = new PVector(0, 0);
+		vmiddle = new PVector(150, 140);
+		//vfront = new PVector(0, 5); //just fixing the position of the image
 
+		frameRate(24);
 	}
 
 	public void draw() {
+
+
 		img.resize(width, height);
 		floor.resize(width, (int) (height*0.2));
 		ceiling.resize(width, (int) (height*0.1));
+		saturn.resize(width/6, height/6);
 		background(0);
 		textFont(f,16);
 		fill(200);
@@ -66,15 +73,12 @@ public class Wizzball extends PApplet  {
 		{
 			clear();
 
-
 			textMode(MODEL);
 			textFont(f,20);
 			rotateX(PI/6);
 			textAlign(CENTER);
 			stroke(0);
 			strokeWeight(5);
-
-
 
 			text("Hello " + player + " , you will enter the game.", xFont, yFont, zFont);
 			text("You can move the character using arrows keys.", xFont, yFont+50, zFont);
@@ -95,15 +99,16 @@ public class Wizzball extends PApplet  {
 
 
 			clear();
-			background(img); 
+			paraDraw(img, vback, 1);
+			paraDraw(saturn, vmiddle, 2);
+			fill(255,0,0);
 			sp1 = new Spot( this, xpos, ypos, 5 );
 			sp1.display();
 			xpos = (float) (xpos + xspeed * 0.2) ;
 			ypos = (float) (ypos + yspeed * 0.5 );
 			image(floor, 0, (float) (height*0.8));
 			image(ceiling,0, 0);
-
-
+			
 			//Floor collision 
 
 			if (ypos > height*0.77  && yspeed > 0 ) { //Adjust this number for proper collision with floor
@@ -189,5 +194,21 @@ public class Wizzball extends PApplet  {
 			else if(isBounceUp)
 				decelerate();
 		}
+	}
+
+
+	void paraDraw(PImage img, PVector pos, float vel){
+		pos.sub(vel, 0, 0);
+
+		int r = (int)pos.x+img.width;
+
+		if(r < width) image(img, r, pos.y);
+		if(pos.x < width) image(img, pos.x-img.width, pos.y); 
+		if(pos.x < -img.width) pos.x = width;
+		//println("r: " + r + ", pos.x: " +pos.x);
+
+		image(img, pos.x, pos.y);
+		//fill(#ff0000);
+		//rect(pos.x, 0, img.width, img.height);
 	}
 }
