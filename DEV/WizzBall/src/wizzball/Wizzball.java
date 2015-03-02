@@ -32,7 +32,7 @@ public class Wizzball extends PApplet  {
 	PImage img;
 	PImage floor;
 	PImage ceiling;
-	
+
 
 
 	float yFont = 250;
@@ -65,7 +65,7 @@ public class Wizzball extends PApplet  {
 		if ( firstStep )
 		{
 			clear();
-			
+
 
 			textMode(MODEL);
 			textFont(f,20);
@@ -92,8 +92,8 @@ public class Wizzball extends PApplet  {
 		if (enterTheGame){
 			rotateX(-PI/6);
 			strokeWeight(0);
-			
-			
+
+
 			clear();
 			background(img); 
 			sp1 = new Spot( this, xpos, ypos, 5 );
