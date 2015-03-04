@@ -30,9 +30,8 @@ public class Wizzball extends PApplet  {
 	Spot sp1 = null;
 	boolean isBounceUp = false;
 	boolean isBounceDown = true;
-	PImage img, floor, ceiling, saturn;
+	PImage img, floor, ceiling, saturn, stars;
 	PVector vback, vmiddle, vfront;
-
 
 	float yFont = 250;
 	float zFont = -200;
@@ -42,6 +41,7 @@ public class Wizzball extends PApplet  {
 		img = loadImage("space_background.jpg");
 		floor = loadImage("moonfloor.jpg");
 		ceiling = loadImage("ceiling.jpg");
+		stars = loadImage("starsBack.jpg");
 		saturn = loadImage("saturn.png");
 		size(500, 500, OPENGL);
 		f = createFont("Arial",16,true);
@@ -60,27 +60,30 @@ public class Wizzball extends PApplet  {
 
 
 		img.resize(width, height);
+		stars.resize(width, height);
 		floor.resize(width, (int) (height*0.2));
 		ceiling.resize(width, (int) (height*0.1));
 		saturn.resize(width/6, height/6);
 		background(0);
-		textFont(f,16);
+		textFont(f,15);
 		fill(200);
 		stroke(153);
 		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n" ,50 ,50 );
-		text( typing, 50, 100 );
+		text(typing, 50, 100 );
 		if ( firstStep )
 		{
 			clear();
-
+			
+			background(stars);
 			textMode(MODEL);
-			textFont(f,20);
+			fill(255,255,0);	
+			textFont(f,25);
 			rotateX(PI/6);
 			textAlign(CENTER);
-			stroke(0);
-			strokeWeight(5);
+			stroke(0, 20);
+			//strokeWeight(5);
 
-			text("Hello " + player + " , you will enter the game.", xFont, yFont, zFont);
+			text("Hello " + player+ ", you will enter the game.", xFont, yFont, zFont);
 			text("You can move the character using arrows keys.", xFont, yFont+50, zFont);
 			text("When the ball bounces up,", xFont, yFont+100, zFont);
 			text("you can decelerate it using up arrow", xFont, yFont+150, zFont);
@@ -205,10 +208,8 @@ public class Wizzball extends PApplet  {
 		if(r < width) image(img, r, pos.y);
 		if(pos.x < width) image(img, pos.x-img.width, pos.y); 
 		if(pos.x < -img.width) pos.x = width;
-		//println("r: " + r + ", pos.x: " +pos.x);
 
 		image(img, pos.x, pos.y);
-		//fill(#ff0000);
-		//rect(pos.x, 0, img.width, img.height);
+		
 	}
 }
