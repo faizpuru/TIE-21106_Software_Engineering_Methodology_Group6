@@ -32,8 +32,8 @@ public class Wizzball extends PApplet  {
 	 * NEGATIVE SPEED --->  GOING UP
 	 * POSITIVE SPEED ---> GOING DOWN
 	 */
-	float xspeed = (float) 5;  // Speed of the shape  
-	float yspeed = (float) 5;  // Speed of the shape
+	float xspeed = (float) 15;  // Speed of the shape  
+	float yspeed = (float) 15;  // Speed of the shape
 	Spot sp1 = null;
 	boolean isBounceUp = false;
 	boolean isBounceDown = true;
@@ -44,7 +44,7 @@ public class Wizzball extends PApplet  {
 	float zFont = -200;
 	float xFont = 250;
 	
-	int gravity; //1 downwards ---  -1 upwards
+	float gravity; //positive downwards ---  negative upwards
 	boolean isRotated = false;
 
 	public void setup() {
@@ -59,7 +59,7 @@ public class Wizzball extends PApplet  {
 		xpos = width/2;
 		ypos = height/2;
 		
-		gravity=1; //Setup gravity
+		gravity=(float) 0.5; //Setup gravity
 
 
 		vback = new PVector(0, 0);
@@ -122,18 +122,38 @@ public class Wizzball extends PApplet  {
 			paraDraw(saturn, vmiddle, 2);
 			fill(255,0,0);
 			
-			if(isBounceDown && (gravity==1)){
-				float speedTmp=(float) Math.abs(yspeed+gravity*0.5); //Control MAX_SPEED		
-				if(speedTmp<=MAX_SPEED){
-				  yspeed = (float) (yspeed + gravity);
+			
+			if((gravity>0)){
+				if(isBounceDown){
+					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
+					if(speedTmp<=MAX_SPEED){
+					  yspeed = (float) (yspeed + gravity);
+					}	
 				}
-			}
-			else if(isBounceUp && (gravity==-1)){
-				float speedTmp=(float) Math.abs(yspeed+gravity*0.5); //Control MAX_SPEED		
-				if(speedTmp<=MAX_SPEED){
-					yspeed = (float) (yspeed +gravity);
+				else{
+					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
+					if(speedTmp<=MAX_SPEED){
+					  yspeed = (float) (yspeed + gravity);
+					}				
 				}
+				
 			}
+			else if((gravity<0)){
+				if(isBounceUp){
+					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
+					if(speedTmp<=MAX_SPEED){
+						yspeed = (float) (yspeed +gravity);
+					}	
+				}
+				else{
+					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
+					if(speedTmp<=MAX_SPEED){
+						yspeed = (float) (yspeed +gravity);
+					}	
+				}
+				
+			}
+			
 			sp1 = new Spot( this, xpos, ypos, 5 );
 			sp1.display();
 			xpos = (float) (xpos + xspeed * 0.2) ;
@@ -162,7 +182,6 @@ public class Wizzball extends PApplet  {
 			if ( xpos > width || xpos < 0)
 			{
 				xspeed *= -1;
-				text("bravo" + player ,20 ,20);
 			}        
 		}
 	}
@@ -219,15 +238,13 @@ public class Wizzball extends PApplet  {
 			else if(isBounceDown)
 				decelerate();
 		} */
-		if ( keyCode == DOWN  )
+		/*if ( keyCode == DOWN  )
 		{	
 			if(isBounceUp)
 				decelerate();
-		}
+		}*/
 		if(keyCode ==71){
 			gravity=gravity*(-1);
-			text("Gravity Changed" ,50 ,50 );
-
 		}
 	}
 
