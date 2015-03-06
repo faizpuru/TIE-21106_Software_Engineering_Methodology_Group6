@@ -6,7 +6,6 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
-import wizzball.Spot;
 
 
 public class Wizzball extends PApplet  {
@@ -27,7 +26,7 @@ public class Wizzball extends PApplet  {
 	int x = 50;
 	int rad = 60;        // Width of the shape
 	float xpos, ypos;    // Starting position of shape    
-	
+
 	/*
 	 * NEGATIVE SPEED --->  GOING UP
 	 * POSITIVE SPEED ---> GOING DOWN
@@ -43,7 +42,7 @@ public class Wizzball extends PApplet  {
 	float yFont = 250;
 	float zFont = -200;
 	float xFont = 250;
-	
+
 	float gravity; //positive downwards ---  negative upwards
 	boolean isRotated = false;
 
@@ -58,10 +57,10 @@ public class Wizzball extends PApplet  {
 		ellipseMode(RADIUS);
 		xpos = width/2;
 		ypos = height/2;
-		
+
 		sp1 = new Spot( this, xpos, ypos, 30 );
 
-		
+
 		gravity=(float) 0.5; //Setup gravity
 
 
@@ -89,7 +88,7 @@ public class Wizzball extends PApplet  {
 		if ( firstStep )
 		{
 			clear();
-			
+
 			background(stars);
 			textMode(MODEL);
 			fill(255,255,0);	
@@ -117,29 +116,29 @@ public class Wizzball extends PApplet  {
 			if(isRotated)
 				rotateX(-PI/6);
 			strokeWeight(0);
-		
+
 
 
 			clear();
 			paraDraw(img, vback, 1);
 			paraDraw(saturn, vmiddle, 2);
 			fill(255,0,0);
-			
-			
+
+
 			if((gravity>0)){
 				if(isBounceDown){
 					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
 					if(speedTmp<=MAX_SPEED){
-					  yspeed = (float) (yspeed + gravity);
+						yspeed = (float) (yspeed + gravity);
 					}	
 				}
 				else{
 					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
 					if(speedTmp<=MAX_SPEED){
-					  yspeed = (float) (yspeed + gravity);
+						yspeed = (float) (yspeed + gravity);
 					}				
 				}
-				
+
 			}
 			else if((gravity<0)){
 				if(isBounceUp){
@@ -154,19 +153,19 @@ public class Wizzball extends PApplet  {
 						yspeed = (float) (yspeed +gravity);
 					}	
 				}
-				
+
 			}
-			
+
 
 			sp1.x = xpos;
 			sp1.y = ypos;
-			
+
 			sp1.display();
 			xpos = (float) (xpos + xspeed * 0.2) ;
 			ypos = (float) (ypos + yspeed * 0.5 );
 			image(floor, 0, (float) (height*0.8));
 			image(ceiling,0, 0);
-			
+
 			//Floor collision 
 
 			if (ypos > height*0.77  && yspeed > 0 ) { //Adjust this number for proper collision with floor
@@ -192,6 +191,7 @@ public class Wizzball extends PApplet  {
 			if ( xpos > width || xpos < 0)
 			{
 				xspeed *= -1;
+				yspeed += sp1.rotationSpeed*50; //Rotation effect			
 			}        
 		}
 	}
@@ -203,7 +203,7 @@ public class Wizzball extends PApplet  {
 
 	public void accelerate(){
 		float speedTmp=Math.abs(yspeed)+3; //Control MAX_SPEED
-		
+
 		if(speedTmp<=MAX_SPEED){
 			if(yspeed>0)
 				yspeed = (float) ( yspeed  + 3 );
@@ -213,11 +213,11 @@ public class Wizzball extends PApplet  {
 	}
 
 	public void decelerate(){		
-			if(yspeed<0){
-				yspeed = (float) ( yspeed  + 3 );
-				if(yspeed>0)
-					changeBounce();
-			}
+		if(yspeed<0){
+			yspeed = (float) ( yspeed  + 3 );
+			if(yspeed>0)
+				changeBounce();
+		}
 	}
 
 	public void keyPressed() {
@@ -241,7 +241,7 @@ public class Wizzball extends PApplet  {
 			count += 1;
 			enterTheGame=true;
 		}
-		
+
 		if(keyCode == RIGHT){
 			sp1.accelerateRotation(0.1);
 		}
@@ -276,6 +276,6 @@ public class Wizzball extends PApplet  {
 		if(pos.x < -img.width) pos.x = width;
 
 		image(img, pos.x, pos.y);
-		
+
 	}
 }

@@ -54,7 +54,12 @@ public class Spot {
 
 			 
 		 }
-	 private void friction() {
+	  
+	
+	 /**
+	 * Reduce the rotation speed with the time
+	 */
+	private void friction() {
 		 if(rotationSpeed>0)
 			 rotationSpeed -= friction;
 		 if(rotationSpeed<0)
@@ -69,6 +74,11 @@ public class Spot {
 		 parent.redraw();
 	        
 	  }
+	
+	
+	/**
+	 * Positiv value = turn right, negativ = turn leff
+	 */
 	public void accelerateRotation(double d) {
 		if((d >0 && rotationSpeed+d < maxspeed) || (d < 0 && rotationSpeed+d > -maxspeed))
 			rotationSpeed +=d;	 
