@@ -194,11 +194,11 @@ public class Wizzball extends PApplet  {
 			changeBounce();
 		}
 
-		if ( xpos > width-sp1.radius || xpos < sp1.radius)
+		/*if ( xpos > width-sp1.radius || xpos < sp1.radius)
 		{
 			xspeed *= -1;
 			yspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect			
-		}        
+		}        */
 	}
 
 

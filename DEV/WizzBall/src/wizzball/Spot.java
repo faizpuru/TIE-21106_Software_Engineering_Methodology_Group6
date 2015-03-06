@@ -21,7 +21,7 @@ public class Spot {
 		  
 		  parent = p;
 		  radius = 40;
-		  x = (float) (p.width*0.25);
+		  x = (float) (p.width/2);
 		  y = (float) (p.height*0.5);
 	  }
 	  // Second version of the Spot constructor;
@@ -39,7 +39,7 @@ public class Spot {
 	  public void display() {
 		currentAngle = currentAngle+rotationSpeed;
 		parent.pushMatrix();
-		parent.translate(x, y);
+		parent.translate(parent.width/2, y);
 		parent.rotate(currentAngle);
 		parent.image(ball,-radius,-radius,radius*2,radius*2);
 		parent.popMatrix();
