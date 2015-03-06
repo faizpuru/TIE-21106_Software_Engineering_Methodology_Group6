@@ -7,8 +7,8 @@ public class Spot {
 	 PApplet parent;
 	 PImage ball;
 	 
-	 static float currentAngle = 0;
-	 static float rotationSpeed = (float) 0.2;
+	 float currentAngle = 0;
+	 float rotationSpeed = (float) 0.2;
 	 float maxspeed = (float) 0.5;
 	 float friction = (float) 0.01;
 	 
@@ -38,14 +38,11 @@ public class Spot {
 	  
 	  public void display() {
 		currentAngle = currentAngle+rotationSpeed;
+		parent.pushMatrix();
 		parent.translate(x, y);
-
 		parent.rotate(currentAngle);
-
 		parent.image(ball,-radius,-radius,radius*2,radius*2);
-
-		parent.rotate(-currentAngle);
-		parent.translate(-x, -y);
+		parent.popMatrix();
 		
 		friction();
 
