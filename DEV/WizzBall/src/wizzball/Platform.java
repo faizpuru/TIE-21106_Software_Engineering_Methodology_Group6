@@ -17,8 +17,8 @@ public class Platform {
 	  Platform( PApplet p ) {
 		  
 		  parent = p;
-		  height = 50;
-		  width =20;
+		  height = 100;
+		  width =50;
 		  xAbs = 0;
 		  x = 0;
 		  down = false;
@@ -42,8 +42,13 @@ public class Platform {
 	  public void display() {
 		  if(down)  
 			  parent.image(platform,(x-width/2 + parent.width/2),(float) (parent.height*0.8-height),width,height);
-		  else
-			  parent.image(platform,(x-width/2 + parent.width/2),(float) (parent.height*0.1),width,height);
+		  else{
+				parent.pushMatrix();
+				parent.translate((x - width / 2 + parent.width / 2), (float) (parent.height * 0.1)+height);
+				parent.rotate(parent.PI);
+				parent.image(platform,0 , 0, width, height)	;
+				parent.popMatrix();
+		  }
 		 }
 	  
 	  public void recalculatePlatformX(float xpos){
