@@ -31,14 +31,14 @@ public class Wizzball extends PApplet  {
 	 * NEGATIVE SPEED --->  GOING UP
 	 * POSITIVE SPEED ---> GOING DOWN
 	 */
-	float xspeed = (float) 15;  // Speed of the shape  
+	float xspeed = (float) 0;  // Speed of the shape (initial = 0)  
 	float yspeed = (float) 15;  // Speed of the shape
 	Spot sp1 = null;
 	boolean isBounceUp = false;
 	boolean isBounceDown = true;
 	PImage img, floor, ceiling, saturn, stars;
 	PVector vback, vmiddle, vfront;
-	int rotationEffect = 30;
+	int rotationEffect = 40;
 
 	float yFont = 250;
 	float zFont = -200;

@@ -8,7 +8,7 @@ public class Spot {
 	 PImage ball;
 	 
 	 float currentAngle = 0;
-	 float rotationSpeed = (float) 0.2;
+	 float rotationSpeed = (float) 0;
 	 float maxspeed = (float) 0.5;
 	 float friction = (float) 0.01;
 	 
