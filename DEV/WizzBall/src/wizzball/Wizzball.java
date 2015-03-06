@@ -38,6 +38,7 @@ public class Wizzball extends PApplet  {
 	boolean isBounceDown = true;
 	PImage img, floor, ceiling, saturn, stars;
 	PVector vback, vmiddle, vfront;
+	int rotationEffect = 30;
 
 	float yFont = 250;
 	float zFont = -200;
@@ -171,14 +172,14 @@ public class Wizzball extends PApplet  {
 			if (ypos > height*0.77  && yspeed > 0 ) { //Adjust this number for proper collision with floor
 
 				yspeed = yspeed * -1;
-				xspeed += sp1.rotationSpeed*50; //rotation effect
+				xspeed += sp1.rotationSpeed*rotationEffect; //rotation effect
 
 				changeBounce();
 			}
 			if (ypos < height*0.14 && yspeed < 0) { //Adjust this number for proper collision with ceiling
 
 				yspeed = yspeed * -1;
-				xspeed += sp1.rotationSpeed*50; //Rotation effect
+				xspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect
 
 				changeBounce();
 			}
@@ -191,7 +192,7 @@ public class Wizzball extends PApplet  {
 			if ( xpos > width || xpos < 0)
 			{
 				xspeed *= -1;
-				yspeed += sp1.rotationSpeed*50; //Rotation effect			
+				yspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect			
 			}        
 		}
 	}
