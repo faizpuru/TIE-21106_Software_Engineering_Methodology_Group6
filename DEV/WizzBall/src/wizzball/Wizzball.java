@@ -174,8 +174,7 @@ public class Wizzball extends PApplet {
 
 			sp1.display();
 
-			
-			 //Display platforms to the good position
+			// Display platforms to the good position
 			for (Platform p : platforms) {
 				p.display();
 				p.recalculatePlatformX(xpos);
@@ -183,6 +182,13 @@ public class Wizzball extends PApplet {
 
 			xpos = (float) (xpos + xspeed * 0.2);
 			ypos = (float) (ypos + yspeed * 0.5);
+			
+			//The ball can't go under the floor
+			ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);
+			ypos = (float) (ypos > height * 0.8 - sp1.radius ? height * 0.8 - sp1.radius : ypos);
+			
+				
+
 			image(floor, 0, (float) (height * 0.8));
 			image(ceiling, 0, 0);
 
@@ -202,7 +208,7 @@ public class Wizzball extends PApplet {
 		 */
 		// Floor collision
 
-		if (ypos > (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this
+		if (ypos >= (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this
 																// number for
 																// proper
 																// collision
@@ -210,9 +216,10 @@ public class Wizzball extends PApplet {
 
 			yspeed = yspeed * -1;
 			xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-			xspeed = abs(xspeed) > MAX_SPEED ? (xspeed/abs(xspeed))*MAX_SPEED : xspeed;
+			xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed))
+					* MAX_SPEED : xspeed;
 		}
-		if (ypos < (height * 0.1 + sp1.radius) && yspeed < 0) { // Adjust this
+		if (ypos <= (height * 0.1 + sp1.radius) && yspeed < 0) { // Adjust this
 																// number for
 																// proper
 																// collision
@@ -220,8 +227,8 @@ public class Wizzball extends PApplet {
 
 			yspeed = yspeed * -1;
 			xspeed += sp1.rotationSpeed * rotationEffect; // Rotation effect
-			xspeed = abs(xspeed) > MAX_SPEED ? (xspeed/abs(xspeed))*MAX_SPEED : xspeed;
-
+			xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed))
+					* MAX_SPEED : xspeed;
 
 		} else if (ypos < 0) {
 			yspeed = yspeed * -1;
@@ -232,7 +239,6 @@ public class Wizzball extends PApplet {
 		 * yspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect }
 		 */
 	}
-
 
 	public void accelerate() {
 		float speedTmp = Math.abs(yspeed) + 3; // Control MAX_SPEED
@@ -245,13 +251,10 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	/*public void decelerate() {
-		if (yspeed < 0) {
-			yspeed = (float) (yspeed + 3);
-			if (yspeed > 0)
-				changeBounce();
-		}
-	}*/
+	/*
+	 * public void decelerate() { if (yspeed < 0) { yspeed = (float) (yspeed +
+	 * 3); if (yspeed > 0) changeBounce(); } }
+	 */
 
 	public void keyPressed() {
 
