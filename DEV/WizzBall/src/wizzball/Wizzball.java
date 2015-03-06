@@ -44,6 +44,8 @@ public class Wizzball extends PApplet  {
 	float zFont = -200;
 	float xFont = 250;
 
+	int v=0;  //background velocity
+
 	float gravity; //positive downwards ---  negative upwards
 	boolean isRotated = false;
 
@@ -121,8 +123,8 @@ public class Wizzball extends PApplet  {
 
 
 			clear();
-			paraDraw(img, vback, 1);
-			paraDraw(saturn, vmiddle, 2);
+			paraDraw(img, vback, v);
+			//paraDraw(saturn, vmiddle, 2);
 			fill(255,0,0);
 
 
@@ -166,6 +168,18 @@ public class Wizzball extends PApplet  {
 			ypos = (float) (ypos + yspeed * 0.5 );
 			image(floor, 0, (float) (height*0.8));
 			image(ceiling,0, 0);
+
+
+			if(key==CODED){
+				if(keyCode==LEFT){   //background movement
+					v-=1;
+				}
+			}
+			if(key==CODED){
+				if(keyCode==RIGHT){
+					v+=1;
+				}
+			}
 
 			//Floor collision 
 
