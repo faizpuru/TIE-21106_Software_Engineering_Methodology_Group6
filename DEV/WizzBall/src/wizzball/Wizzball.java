@@ -15,6 +15,8 @@ public class Wizzball extends PApplet  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final int MAX_SPEED=20;
+	private static final int INCR_SPEED=2;
 
 	PFont f;
 	String typing = "";
@@ -25,7 +27,12 @@ public class Wizzball extends PApplet  {
 	int x = 50;
 	int rad = 60;        // Width of the shape
 	float xpos, ypos;    // Starting position of shape    
-	float xspeed = (float) 5;  // Speed of the shape
+	
+	/*
+	 * NEGATIVE SPEED --->  GOING UP
+	 * POSITIVE SPEED ---> GOING DOWN
+	 */
+	float xspeed = (float) 5;  // Speed of the shape  
 	float yspeed = (float) 5;  // Speed of the shape
 	Spot sp1 = null;
 	boolean isBounceUp = false;
@@ -36,6 +43,8 @@ public class Wizzball extends PApplet  {
 	float yFont = 250;
 	float zFont = -200;
 	float xFont = 250;
+	
+	int gravity; //1 downwards ---  -1 upwards
 
 	public void setup() {
 		img = loadImage("space_background.jpg");
@@ -48,6 +57,9 @@ public class Wizzball extends PApplet  {
 		ellipseMode(RADIUS);
 		xpos = width/2;
 		ypos = height/2;
+		
+		gravity=1; //Setup gravity
+
 
 		vback = new PVector(0, 0);
 		vmiddle = new PVector(150, 140);
@@ -96,7 +108,7 @@ public class Wizzball extends PApplet  {
 				enterTheGame = true;
 		}
 
-		if (enterTheGame){
+		if (enterTheGame){ 		/////GAME
 			rotateX(-PI/6);
 			strokeWeight(0);
 
@@ -105,6 +117,19 @@ public class Wizzball extends PApplet  {
 			paraDraw(img, vback, 1);
 			paraDraw(saturn, vmiddle, 2);
 			fill(255,0,0);
+			
+			if(isBounceDown && (gravity==1)){
+				float speedTmp=(float) Math.abs(yspeed+gravity*0.5); //Control MAX_SPEED		
+				if(speedTmp<=MAX_SPEED){
+				  yspeed = (float) (yspeed + gravity);
+				}
+			}
+			else if(isBounceUp && (gravity==-1)){
+				float speedTmp=(float) Math.abs(yspeed+gravity*0.5); //Control MAX_SPEED		
+				if(speedTmp<=MAX_SPEED){
+					yspeed = (float) (yspeed +gravity);
+				}
+			}
 			sp1 = new Spot( this, xpos, ypos, 5 );
 			sp1.display();
 			xpos = (float) (xpos + xspeed * 0.2) ;
@@ -144,22 +169,22 @@ public class Wizzball extends PApplet  {
 	}
 
 	public void accelerate(){
-		if(yspeed>0)
-			yspeed = (float) ( yspeed  + 3 );
-		else
-			yspeed = (float) ( yspeed  - 3 );
+		float speedTmp=Math.abs(yspeed)+3; //Control MAX_SPEED
+		
+		if(speedTmp<=MAX_SPEED){
+			if(yspeed>0)
+				yspeed = (float) ( yspeed  + 3 );
+			else
+				yspeed = (float) ( yspeed  - 3 );		
+		}	
 	}
 
-	public void decelerate(){
-		if(yspeed>0){
-			yspeed = (float) ( yspeed  - 3 );
-			if(yspeed<0)
-				changeBounce();
-		}	else{
-			yspeed = (float) ( yspeed + 3 );
-			if(yspeed>0)
-				changeBounce();
-		}
+	public void decelerate(){		
+			if(yspeed<0){
+				yspeed = (float) ( yspeed  + 3 );
+				if(yspeed>0)
+					changeBounce();
+			}
 	}
 
 	public void keyPressed() {
@@ -184,18 +209,21 @@ public class Wizzball extends PApplet  {
 			enterTheGame=true;
 		}
 
-		if ( keyCode == UP ) {
+		/*if ( keyCode == UP ) {
 			if ( isBounceUp )
 				accelerate();
 			else if(isBounceDown)
 				decelerate();
-		} 
+		} */
 		if ( keyCode == DOWN  )
-		{
-			if ( isBounceDown )
-				accelerate();
-			else if(isBounceUp)
+		{	
+			if(isBounceUp)
 				decelerate();
+		}
+		if(keyCode ==71){
+			gravity=gravity*(-1);
+			text("Gravity Changed" ,50 ,50 );
+
 		}
 	}
 
