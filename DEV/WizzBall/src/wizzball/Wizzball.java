@@ -59,6 +59,9 @@ public class Wizzball extends PApplet  {
 		xpos = width/2;
 		ypos = height/2;
 		
+		sp1 = new Spot( this, xpos, ypos, 30 );
+
+		
 		gravity=(float) 0.5; //Setup gravity
 
 
@@ -154,7 +157,10 @@ public class Wizzball extends PApplet  {
 				
 			}
 			
-			sp1 = new Spot( this, xpos, ypos, 5 );
+
+			sp1.x = xpos;
+			sp1.y = ypos;
+			
 			sp1.display();
 			xpos = (float) (xpos + xspeed * 0.2) ;
 			ypos = (float) (ypos + yspeed * 0.5 );
@@ -166,11 +172,15 @@ public class Wizzball extends PApplet  {
 			if (ypos > height*0.77  && yspeed > 0 ) { //Adjust this number for proper collision with floor
 
 				yspeed = yspeed * -1;
+				xspeed += sp1.rotationSpeed*50;
+
 				changeBounce();
 			}
 			if (ypos < height*0.14 && yspeed < 0) { //Adjust this number for proper collision with ceiling
 
 				yspeed = yspeed * -1;
+				xspeed += sp1.rotationSpeed*50;
+
 				changeBounce();
 			}
 			else if ( ypos < 0 )
@@ -230,6 +240,13 @@ public class Wizzball extends PApplet  {
 		if(keyCode == TAB){
 			count += 1;
 			enterTheGame=true;
+		}
+		
+		if(keyCode == RIGHT){
+			sp1.addSpeed(0.1);
+		}
+		if(keyCode == LEFT){
+			sp1.addSpeed(-0.1);
 		}
 
 		/*if ( keyCode == UP ) {
