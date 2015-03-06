@@ -142,37 +142,14 @@ public class Wizzball extends PApplet  {
 			//paraDraw(saturn, vmiddle, 2);
 			fill(255,0,0);
 
-
-			if((gravity>0)){
-				if(isBounceDown){
-					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
-					if(speedTmp<=MAX_SPEED){
-						yspeed = (float) (yspeed + gravity);
-					}	
-				}
-				else{
-					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
-					if(speedTmp<=MAX_SPEED){
-						yspeed = (float) (yspeed + gravity);
-					}				
-				}
-
-			}
-			else if((gravity<0)){
-				if(isBounceUp){
-					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
-					if(speedTmp<=MAX_SPEED){
-						yspeed = (float) (yspeed +gravity);
-					}	
-				}
-				else{
-					float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
-					if(speedTmp<=MAX_SPEED){
-						yspeed = (float) (yspeed +gravity);
-					}	
-				}
-
-			}
+			
+			//CONTROL OF THE GRAVITY
+			
+			float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
+			if(speedTmp<=MAX_SPEED){
+				yspeed = (float) (yspeed + gravity);
+			}						
+				
 
 
 			sp1.x = xpos;
