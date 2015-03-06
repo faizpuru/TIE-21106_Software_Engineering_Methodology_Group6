@@ -23,6 +23,7 @@ public class Spot {
 		  radius = 40;
 		  x = (float) 0;
 		  y = (float) (p.height*0.5);
+		  
 	  }
 	  // Second version of the Spot constructor;
 	  // the fields are assigned with parameters

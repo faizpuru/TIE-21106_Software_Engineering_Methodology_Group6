@@ -6,6 +6,7 @@ public class Platform {
 	 float x,width, height, xAbs;
 	 boolean down; //if down, platform on floor, !down, platform on ceiling
 	 PApplet parent;
+	 PImage platform;
 	 
 	 
 
@@ -21,6 +22,8 @@ public class Platform {
 		  xAbs = 0;
 		  x = 0;
 		  down = false;
+		  platform = p.loadImage("platform.png");
+
 	  }
 	  // Second version of the platform constructor;
 	  // the fields are assigned with parameters
@@ -31,14 +34,16 @@ public class Platform {
 		  this.height = height;
 		  this.width = width;
 		  this.down = up;
+		  platform = p.loadImage("platform.png");
+
 
 	  }
 	  
 	  public void display() {
 		  if(down)  
-			  parent.rect((x-width/2 + parent.width/2),(float) (parent.height*0.8-height),width,height);
+			  parent.image(platform,(x-width/2 + parent.width/2),(float) (parent.height*0.8-height),width,height);
 		  else
-			  parent.rect((x-width/2 + parent.width/2),(float) (parent.height*0.1),width,height);
+			  parent.image(platform,(x-width/2 + parent.width/2),(float) (parent.height*0.1),width,height);
 		 }
 	  
 	  public void recalculatePlatformX(float xpos){

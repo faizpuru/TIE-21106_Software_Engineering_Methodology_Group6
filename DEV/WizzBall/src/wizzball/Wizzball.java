@@ -73,12 +73,12 @@ public class Wizzball extends PApplet {
 		 * Create the platforms Could be random
 		 */
 		platforms = new Vector<Platform>();
-		platforms.addElement(new Platform(this, 1000, 100, 30, true));
-		platforms.addElement(new Platform(this, 5000, 100, 30, true));
-		platforms.addElement(new Platform(this, -2000, 150, 30, false));
-		platforms.addElement(new Platform(this, 8000, 100, 30, true));
-		platforms.addElement(new Platform(this, 15000, 180, 30, false));
-		platforms.addElement(new Platform(this, 20000, 100, 30, true));
+		platforms.addElement(new Platform(this, 1000, 100, 50, true));
+		platforms.addElement(new Platform(this, 5000, 100, 50, true));
+		platforms.addElement(new Platform(this, -2000, 150, 50, false));
+		platforms.addElement(new Platform(this, 8000, 100, 50, true));
+		platforms.addElement(new Platform(this, 15000, 180, 50, false));
+		platforms.addElement(new Platform(this, 20000, 100, 50, true));
 
 		gravity = (float) 0.5; // Setup gravity
 
