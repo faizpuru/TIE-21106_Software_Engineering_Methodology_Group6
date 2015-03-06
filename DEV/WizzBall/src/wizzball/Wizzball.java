@@ -2,6 +2,8 @@
 
 package wizzball;
 
+import java.util.Vector;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -34,6 +36,7 @@ public class Wizzball extends PApplet  {
 	float xspeed = (float) 0;  // Speed of the shape (initial = 0)  
 	float yspeed = (float) 15;  // Speed of the shape
 	Spot sp1 = null;
+	Vector<Platform> platforms = null;
 	boolean isBounceUp = false;
 	boolean isBounceDown = true;
 	PImage img, floor, ceiling, saturn, stars;
@@ -61,6 +64,16 @@ public class Wizzball extends PApplet  {
 		ypos = height/2;
 
 		sp1 = new Spot( this, xpos, ypos, 30 );
+		
+		platforms = new Vector<Platform>();
+		platforms.addElement(new Platform(this,1000,100,30,true));
+		platforms.addElement(new Platform(this,5000,100,30,true));
+		platforms.addElement(new Platform(this,-2000,150,30,false));
+		platforms.addElement(new Platform(this,8000,100,30,true));
+		platforms.addElement(new Platform(this,15000,180,30,false));
+		platforms.addElement(new Platform(this,20000,100,30,true));
+
+
 
 
 		gravity=(float) 0.5; //Setup gravity
@@ -120,7 +133,6 @@ public class Wizzball extends PApplet  {
 			strokeWeight(0);
 
 
-
 			clear();
 			paraDraw(img, vback, v);
 			//paraDraw(saturn, vmiddle, 2);
@@ -163,6 +175,13 @@ public class Wizzball extends PApplet  {
 			sp1.y = ypos;
 
 			sp1.display();
+			
+			for(Platform p : platforms){
+				p.display();
+				p.recalculatePlatformX(xpos);
+			}
+			
+
 			xpos = (float) (xpos + xspeed * 0.2) ;
 			ypos = (float) (ypos + yspeed * 0.5 );
 			image(floor, 0, (float) (height*0.8));
