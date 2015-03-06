@@ -65,6 +65,10 @@ public class Wizzball extends PApplet  {
 
 		sp1 = new Spot( this, xpos, ypos, 30 );
 		
+		
+		/*Create the platforms 
+		 * Could be random 
+		 * */
 		platforms = new Vector<Platform>();
 		platforms.addElement(new Platform(this,1000,100,30,true));
 		platforms.addElement(new Platform(this,5000,100,30,true));
@@ -176,6 +180,10 @@ public class Wizzball extends PApplet  {
 
 			sp1.display();
 			
+			
+			/*
+			 * Display platforms to the good position
+			 */
 			for(Platform p : platforms){
 				p.display();
 				p.recalculatePlatformX(xpos);
