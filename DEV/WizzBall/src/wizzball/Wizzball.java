@@ -45,6 +45,7 @@ public class Wizzball extends PApplet  {
 	float xFont = 250;
 	
 	int gravity; //1 downwards ---  -1 upwards
+	boolean isRotated = false;
 
 	public void setup() {
 		img = loadImage("space_background.jpg");
@@ -91,6 +92,7 @@ public class Wizzball extends PApplet  {
 			fill(255,255,0);	
 			textFont(f,25);
 			rotateX(PI/6);
+			isRotated = true;
 			textAlign(CENTER);
 			stroke(0, 20);
 			//strokeWeight(5);
@@ -108,9 +110,11 @@ public class Wizzball extends PApplet  {
 				enterTheGame = true;
 		}
 
-		if (enterTheGame){ 		/////GAME
-			rotateX(-PI/6);
+		if (enterTheGame){
+			if(isRotated)
+				rotateX(-PI/6);
 			strokeWeight(0);
+		
 
 
 			clear();
