@@ -17,17 +17,23 @@ public class Wizzball extends PApplet  {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final int MAX_SPEED=20;
-	private static final int INCR_SPEED=2;
+	private static final double INCR_SPEED=0.1;
 
 	PFont f;
 	String typing = "";
 	String player =  "";
 	boolean firstStep = false;
 	boolean enterTheGame = false;
+	boolean gameOver=false;
 	int count = 0;
 	int x = 50;
 	int rad = 60;        // Width of the shape
-	float xpos, ypos;    // Starting position of shape    
+	float xpos, ypos;    // Starting position of shape  
+	
+	//Timer
+	int actualTime=millis();
+	int totalTime = 60000;
+
 
 	/*
 	 * NEGATIVE SPEED --->  GOING UP
@@ -39,7 +45,7 @@ public class Wizzball extends PApplet  {
 	Vector<Platform> platforms = null;
 	boolean isBounceUp = false;
 	boolean isBounceDown = true;
-	PImage img, floor, ceiling, saturn, stars;
+	PImage img, floor, ceiling, saturn, stars,starsOver,gameover;
 	PVector vback, vmiddle, vfront;
 	int rotationEffect = 40;
 
@@ -57,6 +63,10 @@ public class Wizzball extends PApplet  {
 		ceiling = loadImage("ceiling.jpg");
 		stars = loadImage("starsBack.jpg");
 		saturn = loadImage("saturn.png");
+		starsOver =loadImage("goscreen.png");
+		gameover=loadImage("logo..png");
+		
+		
 		size(500, 500, OPENGL);
 		f = createFont("Arial",16,true);
 		ellipseMode(RADIUS);
@@ -64,6 +74,7 @@ public class Wizzball extends PApplet  {
 		ypos = height/2;
 
 		sp1 = new Spot( this, xpos, ypos, 30 );
+		
 		
 		
 		/*Create the platforms 
@@ -130,12 +141,13 @@ public class Wizzball extends PApplet  {
 			yFont--;
 			if (yFont < -300 )
 				enterTheGame = true;
+				firstStep=false;
+
 		}
 
 		if (enterTheGame){
 			
 			strokeWeight(0);
-
 
 			clear();
 			paraDraw(img, vback, v);
@@ -143,13 +155,29 @@ public class Wizzball extends PApplet  {
 			fill(255,0,0);
 
 			
-			//CONTROL OF THE GRAVITY
+			///CONTROL OF THE GRAVITY
 			
 			float speedTmp=(float) Math.abs(yspeed+gravity); //Control MAX_SPEED		
 			if(speedTmp<=MAX_SPEED){
 				yspeed = (float) (yspeed + gravity);
 			}						
 				
+			///CONTROL THE TIME
+			
+			// Calculate how much time has passed
+			  int passedTime = millis() - actualTime;
+			  
+			  if (passedTime > totalTime) { //After 60 seconds..
+			    println( " GAME ENDED! " );
+			    actualTime = millis(); //Restart timer
+			    gameOver=true;
+			  }
+			  
+			  int countdown=(totalTime-passedTime)/1000;
+			  
+			  
+			  text("Time left: " + countdown, 50, 100);
+
 
 
 			sp1.x = xpos;
@@ -178,6 +206,17 @@ public class Wizzball extends PApplet  {
 			text("distance : " + xpos, 50, 70);
 			
 		}
+		/*if(gameOver){
+			clear();
+			strokeWeight(0);
+
+			clear();
+			background(starsOver);
+		    image(gameover, 25, 200);
+			fill(255,0,0);
+
+			
+		}*/
 		//Floor collision 
 
 		if (ypos > (height*0.8-sp1.radius)  && yspeed > 0 ) { //Adjust this number for proper collision with floor
@@ -255,10 +294,10 @@ public class Wizzball extends PApplet  {
 		}
 
 		if(keyCode == RIGHT){
-			sp1.accelerateRotation(0.1);
+			sp1.accelerateRotation(INCR_SPEED);
 		}
 		if(keyCode == LEFT){
-			sp1.accelerateRotation(-0.1);
+			sp1.accelerateRotation(-INCR_SPEED);
 		}
 
 		/*if ( keyCode == UP ) {
