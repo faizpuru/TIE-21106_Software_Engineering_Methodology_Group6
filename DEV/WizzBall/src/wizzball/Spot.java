@@ -21,7 +21,7 @@ public class Spot {
 		  
 		  parent = p;
 		  radius = 40;
-		  x = (float) (p.width/2);
+		  x = (float) 0;
 		  y = (float) (p.height*0.5);
 	  }
 	  // Second version of the Spot constructor;

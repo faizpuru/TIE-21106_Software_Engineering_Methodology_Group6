@@ -57,7 +57,7 @@ public class Wizzball extends PApplet  {
 		size(500, 500, OPENGL);
 		f = createFont("Arial",16,true);
 		ellipseMode(RADIUS);
-		xpos = width/2;
+		xpos = 0;
 		ypos = height/2;
 
 		sp1 = new Spot( this, xpos, ypos, 30 );
@@ -170,6 +170,8 @@ public class Wizzball extends PApplet  {
 
 
 			v = xpos-sp1.x;
+			
+			text("distance : " + xpos, 50, 70);
 			
 		}
 		//Floor collision 
