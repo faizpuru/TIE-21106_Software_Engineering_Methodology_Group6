@@ -44,7 +44,7 @@ public class Wizzball extends PApplet  {
 	float zFont = -200;
 	float xFont = 250;
 
-	int v=0;  //background velocity
+	float v=0;  //background velocity
 
 	float gravity; //positive downwards ---  negative upwards
 	boolean isRotated = false;
@@ -170,46 +170,44 @@ public class Wizzball extends PApplet  {
 			image(ceiling,0, 0);
 
 
-			if(key==CODED){
-				if(keyCode==LEFT){   //background movement
-					v-=1;
-				}
-			}
-			if(key==CODED){
-				if(keyCode==RIGHT){
-					v+=1;
-				}
+
+			if(keyCode==LEFT){   //background movement
+				v=-6;
 			}
 
-			//Floor collision 
-
-			if (ypos > (height*0.8-sp1.radius)  && yspeed > 0 ) { //Adjust this number for proper collision with floor
-
-				yspeed = yspeed * -1;
-				xspeed += sp1.rotationSpeed*rotationEffect; //rotation effect
-
-				changeBounce();
+			if(keyCode==RIGHT){
+				v=6;
 			}
-			if (ypos < (height*0.1 + sp1.radius) && yspeed < 0) { //Adjust this number for proper collision with ceiling
-
-				yspeed = yspeed * -1;
-				xspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect
-
-				changeBounce();
-			}
-			else if ( ypos < 0 )
-			{
-				yspeed = yspeed * -1;
-				changeBounce();
-			}
-
-			if ( xpos > width-sp1.radius || xpos < sp1.radius)
-			{
-				xspeed *= -1;
-				yspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect			
-			}        
 		}
+		//Floor collision 
+
+		if (ypos > (height*0.8-sp1.radius)  && yspeed > 0 ) { //Adjust this number for proper collision with floor
+
+			yspeed = yspeed * -1;
+			xspeed += sp1.rotationSpeed*rotationEffect; //rotation effect
+
+			changeBounce();
+		}
+		if (ypos < (height*0.1 + sp1.radius) && yspeed < 0) { //Adjust this number for proper collision with ceiling
+
+			yspeed = yspeed * -1;
+			xspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect
+
+			changeBounce();
+		}
+		else if ( ypos < 0 )
+		{
+			yspeed = yspeed * -1;
+			changeBounce();
+		}
+
+		if ( xpos > width-sp1.radius || xpos < sp1.radius)
+		{
+			xspeed *= -1;
+			yspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect			
+		}        
 	}
+
 
 	public void changeBounce(){
 		isBounceUp = !isBounceUp;
@@ -293,4 +291,5 @@ public class Wizzball extends PApplet  {
 		image(img, pos.x, pos.y);
 
 	}
+
 }
