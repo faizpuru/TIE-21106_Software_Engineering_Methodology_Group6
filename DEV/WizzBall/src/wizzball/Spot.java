@@ -10,6 +10,7 @@ public class Spot {
 	 static float currentAngle = 0;
 	 static float rotationSpeed = (float) 0.2;
 	 float maxspeed = (float) 0.5;
+	 float friction = (float) 0.01;
 	 
 
 	
@@ -55,9 +56,9 @@ public class Spot {
 		 }
 	 private void friction() {
 		 if(rotationSpeed>0)
-			 rotationSpeed -= 0.02;
+			 rotationSpeed -= friction;
 		 if(rotationSpeed<0)
-			 rotationSpeed += 0.02;
+			 rotationSpeed += friction;
 			 
 		
 	}
@@ -68,7 +69,7 @@ public class Spot {
 		 parent.redraw();
 	        
 	  }
-	public void addSpeed(double d) {
+	public void accelerateRotation(double d) {
 		if((d >0 && rotationSpeed+d < maxspeed) || (d < 0 && rotationSpeed+d > -maxspeed))
 			rotationSpeed +=d;	 
 	}

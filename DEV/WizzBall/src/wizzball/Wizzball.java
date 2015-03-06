@@ -172,14 +172,14 @@ public class Wizzball extends PApplet  {
 			if (ypos > height*0.77  && yspeed > 0 ) { //Adjust this number for proper collision with floor
 
 				yspeed = yspeed * -1;
-				xspeed += sp1.rotationSpeed*50;
+				xspeed += sp1.rotationSpeed*50; //rotation effect
 
 				changeBounce();
 			}
 			if (ypos < height*0.14 && yspeed < 0) { //Adjust this number for proper collision with ceiling
 
 				yspeed = yspeed * -1;
-				xspeed += sp1.rotationSpeed*50;
+				xspeed += sp1.rotationSpeed*50; //Rotation effect
 
 				changeBounce();
 			}
@@ -243,10 +243,10 @@ public class Wizzball extends PApplet  {
 		}
 		
 		if(keyCode == RIGHT){
-			sp1.addSpeed(0.1);
+			sp1.accelerateRotation(0.1);
 		}
 		if(keyCode == LEFT){
-			sp1.addSpeed(-0.1);
+			sp1.accelerateRotation(-0.1);
 		}
 
 		/*if ( keyCode == UP ) {
