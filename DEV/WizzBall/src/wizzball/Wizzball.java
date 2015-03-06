@@ -169,14 +169,8 @@ public class Wizzball extends PApplet  {
 			image(ceiling,0, 0);
 
 
-
-			if(keyCode==LEFT){   //background movement
-				v=-6;
-			}
-
-			if(keyCode==RIGHT){
-				v=6;
-			}
+			v = xpos-sp1.x;
+			
 		}
 		//Floor collision 
 
