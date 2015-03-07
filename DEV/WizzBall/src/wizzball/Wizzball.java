@@ -31,7 +31,7 @@ public class Wizzball extends PApplet {
 
 	// Timer
 	int actualTime;
-	int totalTime = 20000;
+	int totalTime = 60000;
 
 	/*
 	 * NEGATIVE SPEED ---> GOING UP POSITIVE SPEED ---> GOING DOWN
@@ -200,14 +200,18 @@ public class Wizzball extends PApplet {
 			text("distance : " + xpos, 50, 70);
 
 		}
-		
-		  if(gameOver){ 
-		  
+		/*
+		 * GAME OVER SCREEN
+		 */
+		if(gameOver){ 
+			  
 			  clear(); 
-			  background(starsOver); 
-			  image(gameover, 25, 200);
-		  }
+			  paraDraw(starsOver, vback, v);
+
+			  image(gameover,width/4, height / 4);
+		 }
 		 
+		
 		// Floor collision
 
 		if (ypos >= (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this
