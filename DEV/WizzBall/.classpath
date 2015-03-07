@@ -77,6 +77,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/minim/minim.jar"/>
+	<classpathentry kind="lib" path="lib/base/minim/jl1.0.jar"/>
+	<classpathentry kind="lib" path="lib/base/minim/jsminim.jar"/>
+	<classpathentry kind="lib" path="lib/base/minim/mp3spi1.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/base/minim/tritonus_share.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
