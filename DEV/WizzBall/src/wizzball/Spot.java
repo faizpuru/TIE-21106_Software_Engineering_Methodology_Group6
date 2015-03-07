@@ -20,7 +20,7 @@ public class Spot {
 	  Spot( PApplet p ) {
 		  
 		  parent = p;
-		  radius = 40;
+		  radius = 20;
 		  x = (float) 0;
 		  y = (float) (p.height*0.5);
 		  
