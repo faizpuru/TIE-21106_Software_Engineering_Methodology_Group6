@@ -283,6 +283,19 @@ public class Wizzball extends PApplet {
 
 	}
 	
+	private void bounceCorner() {
+		xspeed = xspeed * -1;
+		yspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
+		yspeed = abs(yspeed) > MAX_SPEED ? (yspeed / abs(yspeed)) * MAX_SPEED : yspeed;	
+		
+		yspeed = yspeed * -1;
+		xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
+		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;	
+		
+		playBounceSound();
+
+	}
+	
 	private void playBounceSound(){
 		bouncingPlayer.rewind();
 		bouncingPlayer.play();
@@ -293,8 +306,34 @@ public class Wizzball extends PApplet {
 			if (p.isDisplay()) {
 				
 				//corners to implement
-				//if()
+				//racine_carre((x_point - x_centre)² + (y_centre - y_point)) < rayon
+				if(Math.sqrt(Math.pow((p.getLeft() - sp1.x),2) + Math.pow((sp1.y - p.getTop()),2))<= sp1.radius){
+					xpos = p.getLeft() - sp1.radius;
+					ypos = p.getTop() - sp1.radius;
+					bounceCorner();
+					continue;
+				}
 				
+				if(Math.sqrt(Math.pow((p.getRight() - sp1.x),2) + Math.pow((sp1.y - p.getTop()),2))<= sp1.radius){
+					xpos = p.getRight() + sp1.radius;
+					ypos = p.getTop() - sp1.radius;
+					bounceCorner();
+					continue;
+				}
+				
+				if(Math.sqrt(Math.pow((p.getLeft() - sp1.x),2) + Math.pow((sp1.y - p.getBottom()),2))<= sp1.radius){
+					xpos = p.getLeft() - sp1.radius;
+					ypos = p.getBottom() + sp1.radius;
+					bounceCorner();
+					continue;
+				}
+				
+				if(Math.sqrt(Math.pow((p.getRight() - sp1.x),2) + Math.pow((sp1.y - p.getBottom()),2))<= sp1.radius){
+					xpos = p.getRight() + sp1.radius;
+					ypos = p.getBottom() + sp1.radius;
+					bounceCorner();
+					continue;
+				}
 				//Top and bottom
 				if(xpos >= p.getLeft() && xpos <= p.getRight()){
 					if(p.getTop()>=ypos - sp1.radius && p.getTop()<=ypos + sp1.radius){
