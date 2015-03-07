@@ -29,7 +29,7 @@ public class Wizzball extends PApplet {
 	int count = 0;
 	int x = 50;
 	int rad = 60; // Width of the shape
-	float xpos, ypos; // Starting position of shape
+	float xpos = 0 , ypos; // Starting position of shape
 
 	// Timer
 	int actualTime;
@@ -43,7 +43,7 @@ public class Wizzball extends PApplet {
 	Spot sp1 = null;
 	Vector<Platform> platforms = null;
 	PImage img, floor, ceiling, saturn, stars, starsOver, gameover;
-	PVector vback, vmiddle, vfront;
+	PVector vback = new PVector(0, 0), vmiddle= new PVector(150, 140), vfront;
 	int rotationEffect = 40;
 
 	float yFont = 250;
@@ -52,42 +52,45 @@ public class Wizzball extends PApplet {
 
 	float v = 0; // background velocity
 
-	float gravity; // positive downwards --- negative upwards
+	float gravity = (float) 0.5; // positive downwards --- negative upwards
 
 	Minim minim;
-	AudioPlayer musicPlayer;
+	AudioPlayer musicPlayer, bouncingPlayer;
 
 	public void setup() {
 
-		minim = new Minim(this);
-		musicPlayer = minim.loadFile("music.mp3");
+		loadMusics();
+		loadImages();
+		createPlatforms();
+		frameRate(24);
+		sp1 = new Spot(this, xpos, ypos, 15);
 
+
+		size(500, 500, OPENGL);
+		f = createFont("Arial", 16, true);
+		ellipseMode(RADIUS);		
+		ypos = height / 2;
+
+		// vfront = new PVector(0, 5); //just fixing the position of the image
+
+	}
+
+	private void loadImages() {
 		img = loadImage("space_background.jpg");
 		floor = loadImage("moonfloor.jpg");
 		ceiling = loadImage("ceiling.jpg");
 		stars = loadImage("starsBack.jpg");
 		saturn = loadImage("saturn.png");
 		starsOver = loadImage("goscreen.png");
-		gameover = loadImage("logo.png");
+		gameover = loadImage("logo.png");		
+	}
 
-		size(500, 500, OPENGL);
-		f = createFont("Arial", 16, true);
-		ellipseMode(RADIUS);
-		xpos = 0;
-		ypos = height / 2;
-
-		sp1 = new Spot(this, xpos, ypos, 15);
+	private void loadMusics() {
+		minim = new Minim(this);
+		musicPlayer = minim.loadFile("music.mp3");
+		bouncingPlayer = minim.loadFile("bounce.mp3");
 
 		
-		createPlatforms();
-
-		gravity = (float) 0.5; // Setup gravity
-
-		vback = new PVector(0, 0);
-		vmiddle = new PVector(150, 140);
-		// vfront = new PVector(0, 5); //just fixing the position of the image
-
-		frameRate(24);
 	}
 
 	private void createPlatforms() {
@@ -245,9 +248,7 @@ public class Wizzball extends PApplet {
 																	// with
 																	// floor
 
-			yspeed = yspeed * -1;
-			xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-			xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;
+			ybounce();
 		} else if (ypos <= (height * 0.1 + sp1.radius) && yspeed < 0) { // Adjust
 																		// this
 			// number for
@@ -255,9 +256,7 @@ public class Wizzball extends PApplet {
 			// collision
 			// with ceiling
 
-			yspeed = yspeed * -1;
-			xspeed += sp1.rotationSpeed * rotationEffect; // Rotation effect
-			xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;
+			ybounce();
 
 		}
 
@@ -266,6 +265,27 @@ public class Wizzball extends PApplet {
 		 * 
 		 * /* if ( xpos > width-sp1.radius || xpos < sp1.radius) { xspeed *= -1; yspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect }
 		 */
+	}
+
+	private void ybounce() {
+		yspeed = yspeed * -1;
+		xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
+		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;	
+		playBounceSound();
+		
+	}
+	
+	private void xbounce() {
+		xspeed = xspeed * -1;
+		yspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
+		yspeed = abs(yspeed) > MAX_SPEED ? (yspeed / abs(yspeed)) * MAX_SPEED : yspeed;	
+		playBounceSound();
+
+	}
+	
+	private void playBounceSound(){
+		bouncingPlayer.rewind();
+		bouncingPlayer.play();
 	}
 
 	private void managePlatformsCollision() {
@@ -279,17 +299,13 @@ public class Wizzball extends PApplet {
 				if(xpos >= p.getLeft() && xpos <= p.getRight()){
 					if(p.getTop()>=ypos - sp1.radius && p.getTop()<=ypos + sp1.radius){
 						ypos = p.getTop() - sp1.radius;
-						yspeed *= -1;
-						xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-						xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;
+						ybounce();
 
 					}
 					
 					if(p.getBottom()<=ypos + sp1.radius && p.getBottom()>=ypos - sp1.radius){
 						ypos = p.getBottom() + sp1.radius;
-						yspeed *= -1;
-						xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-						xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;
+						ybounce();
 
 					}
 				}
@@ -299,7 +315,7 @@ public class Wizzball extends PApplet {
 					if (ypos + sp1.radius/2 >= p.getTop() && ypos - sp1.radius/2 <= p.getBottom()) {
 						if (p.getLeft() <= xpos + sp1.radius /2 && sp1.radius/2  < p.x - p.width/2 ) {
 							xpos = p.getLeft()  - sp1.radius/2;
-							xspeed *= -1;
+							xbounce();
 						}
 					}
 
@@ -308,13 +324,15 @@ public class Wizzball extends PApplet {
 					if (ypos >= p.getTop() && ypos <= p.getBottom()) {
 						if (p.getRight() >= xpos - sp1.radius /2 && sp1.radius/2  > p.x + p.width/2 ) {
 							xpos = p.getRight()  + sp1.radius/2;
-							xspeed *= -1;
+							xbounce();
 						}
 					}
 				}
 			}
 		}
 	}
+
+	
 
 	public void accelerate() {
 		float speedTmp = Math.abs(yspeed) + 3; // Control MAX_SPEED
