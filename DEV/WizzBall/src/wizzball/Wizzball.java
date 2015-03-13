@@ -35,6 +35,12 @@ public class Wizzball extends PApplet {
 	int actualTime;
 	int totalTime = 60000;
 
+	//The array of stars
+	Star[] stars;
+
+	//Global offset
+	PVector offset;
+
 	/*
 	 * NEGATIVE SPEED ---> GOING UP POSITIVE SPEED ---> GOING DOWN
 	 */
@@ -42,7 +48,7 @@ public class Wizzball extends PApplet {
 	float yspeed = (float) 5; // Speed of the shape
 	Spot sp1 = null;
 	Vector<Platform> platforms = null;
-	PImage img, floor, ceiling, saturn, stars, starsOver, gameover;
+	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
 	PVector vback = new PVector(0, 0), vmiddle= new PVector(150, 140), vfront;
 	int rotationEffect = 40;
 
@@ -73,13 +79,21 @@ public class Wizzball extends PApplet {
 
 		// vfront = new PVector(0, 5); //just fixing the position of the image
 
+		stars = new Star[width];
+		for(int i = 0; i < stars.length; i ++) stars[i] = new Star();
+
+		//Initialize the offset
+		offset = new PVector(width / 2, height / 2);
+
+		smooth();
+
 	}
 
 	private void loadImages() {
 		img = loadImage("space_background.jpg");
 		floor = loadImage("moonfloor.jpg");
 		ceiling = loadImage("ceiling.jpg");
-		stars = loadImage("starsBack.jpg");
+		stars1 = loadImage("starsBack.jpg");
 		saturn = loadImage("saturn.png");
 		starsOver = loadImage("goscreen.png");
 		gameover = loadImage("logo.png");		
@@ -90,25 +104,25 @@ public class Wizzball extends PApplet {
 		musicPlayer = minim.loadFile("music.mp3");
 		bouncingPlayer = minim.loadFile("bounce.mp3");
 
-		
+
 	}
 
 	private void createPlatforms() {
 		platforms = new Vector<Platform>();
-		
+
 		//Stair
 		for(int i = 0 ; i < 10 ; ++i){
 			platforms.addElement(new Platform(this, i*50, 10+20*i, 50, true));
 		}
-		
-		
+
+
 		platforms.addElement(new Platform(this, 550, 190, 50, false));
 		platforms.addElement(new Platform(this, 650, 190, 50, true));
 		platforms.addElement(new Platform(this, 750, 190, 50, false));
 		platforms.addElement(new Platform(this, 850, 190, 50, true));
 		platforms.addElement(new Platform(this, 950, 190, 50, false));
 
-		
+
 	}
 
 	public void draw() {
@@ -116,8 +130,8 @@ public class Wizzball extends PApplet {
 		if (!musicPlayer.isPlaying())
 			musicPlayer.play();
 
-		img.resize(width, height);
-		stars.resize(width, height);
+		//img.resize(width, height);
+		stars1.resize(width, height);
 		floor.resize(width, (int) (height * 0.2));
 		ceiling.resize(width, (int) (height * 0.1));
 		saturn.resize(width / 6, height / 6);
@@ -130,7 +144,7 @@ public class Wizzball extends PApplet {
 		if (firstStep) {
 			clear();
 
-			background(stars);
+			background(stars1);
 			textMode(MODEL);
 			fill(255, 255, 0);
 			textFont(f, 25);
@@ -160,17 +174,34 @@ public class Wizzball extends PApplet {
 
 		if (enterTheGame) {
 
-			strokeWeight(0);
-
 			clear();
-			paraDraw(img, vback, v);
+			
+			image(floor, 0, (float) (height * 0.8));
+			image(ceiling, 0, 0);
+			
+			//Display the stars
+			
+			for(int i = 0; i < stars.length; i ++) stars[i].display();
+
+			//Modify the offset, using the center of the screen as a form of joystick
+			
+			PVector angle = new PVector(sp1.x - width / 2, sp1.y - height / 2);
+			angle.normalize();
+			angle.mult(dist(width / 2, height / 2, sp1.x, sp1.y) / 50);
+
+			offset.add(angle);
+
+			//	strokeWeight(0);
+
+
+			//paraDraw(img, vback, v);
 			// paraDraw(saturn, vmiddle, 2);
 			fill(255, 0, 0);
 
 			// /CONTROL OF THE GRAVITY
 
 			float speedTmp = (float) Math.abs(yspeed + gravity); // Control
-																	// MAX_SPEED
+			// MAX_SPEED
 			if (speedTmp <= MAX_SPEED) {
 				yspeed = (float) (yspeed + gravity);
 			}
@@ -211,8 +242,7 @@ public class Wizzball extends PApplet {
 			ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);
 			ypos = (float) (ypos > height * 0.8 - sp1.radius ? height * 0.8 - sp1.radius : ypos);
 
-			image(floor, 0, (float) (height * 0.8));
-			image(ceiling, 0, 0);
+	
 
 			v = xpos - sp1.x;
 
@@ -230,27 +260,27 @@ public class Wizzball extends PApplet {
 		 * GAME OVER SCREEN
 		 */
 		if(gameOver){ 
-			  
-			  clear(); 
-			  paraDraw(starsOver, vback, v);
 
-			  image(gameover,width/4, height / 4);
-		 }
-		 
-		
+			clear(); 
+			// paraDraw(starsOver, vback, v);
+
+			image(gameover,width/4, height / 4);
+		}
+
+
 		// Floor collision
 
 		if (ypos >= (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this
-																	// number
-																	// for
-																	// proper
-																	// collision
-																	// with
-																	// floor
+			// number
+			// for
+			// proper
+			// collision
+			// with
+			// floor
 
 			ybounce();
 		} else if (ypos <= (height * 0.1 + sp1.radius) && yspeed < 0) { // Adjust
-																		// this
+			// this
 			// number for
 			// proper
 			// collision
@@ -272,9 +302,9 @@ public class Wizzball extends PApplet {
 		xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
 		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;	
 		playBounceSound();
-		
+
 	}
-	
+
 	private void xbounce() {
 		xspeed = xspeed * -1;
 		yspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
@@ -282,20 +312,20 @@ public class Wizzball extends PApplet {
 		playBounceSound();
 
 	}
-	
+
 	private void bounceCorner() {
 		xspeed = xspeed * -1;
 		yspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
 		yspeed = abs(yspeed) > MAX_SPEED ? (yspeed / abs(yspeed)) * MAX_SPEED : yspeed;	
-		
+
 		yspeed = yspeed * -1;
 		xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
 		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;	
-		
+
 		playBounceSound();
 
 	}
-	
+
 	private void playBounceSound(){
 		bouncingPlayer.rewind();
 		bouncingPlayer.play();
@@ -304,30 +334,30 @@ public class Wizzball extends PApplet {
 	private void managePlatformsCollision() {
 		for (Platform p : platforms) {
 			if (p.isDisplay()) {
-				
+
 				//corners to implement
-				//racine_carre((x_point - x_centre)² + (y_centre - y_point)) < rayon
+				//racine_carre((x_point - x_centre)ï¿½ + (y_centre - y_point)) < rayon
 				if(Math.sqrt(Math.pow((p.getLeft() - sp1.x),2) + Math.pow((sp1.y - p.getTop()),2))<= sp1.radius){
 					xpos = p.getLeft() - sp1.radius;
 					ypos = p.getTop() - sp1.radius;
 					bounceCorner();
 					continue;
 				}
-				
+
 				if(Math.sqrt(Math.pow((p.getRight() - sp1.x),2) + Math.pow((sp1.y - p.getTop()),2))<= sp1.radius){
 					xpos = p.getRight() + sp1.radius;
 					ypos = p.getTop() - sp1.radius;
 					bounceCorner();
 					continue;
 				}
-				
+
 				if(Math.sqrt(Math.pow((p.getLeft() - sp1.x),2) + Math.pow((sp1.y - p.getBottom()),2))<= sp1.radius){
 					xpos = p.getLeft() - sp1.radius;
 					ypos = p.getBottom() + sp1.radius;
 					bounceCorner();
 					continue;
 				}
-				
+
 				if(Math.sqrt(Math.pow((p.getRight() - sp1.x),2) + Math.pow((sp1.y - p.getBottom()),2))<= sp1.radius){
 					xpos = p.getRight() + sp1.radius;
 					ypos = p.getBottom() + sp1.radius;
@@ -341,7 +371,7 @@ public class Wizzball extends PApplet {
 						ybounce();
 
 					}
-					
+
 					if(p.getBottom()<=ypos + sp1.radius && p.getBottom()>=ypos - sp1.radius){
 						ypos = p.getBottom() + sp1.radius;
 						ybounce();
@@ -371,7 +401,7 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	
+
 
 	public void accelerate() {
 		float speedTmp = Math.abs(yspeed) + 3; // Control MAX_SPEED
@@ -425,7 +455,7 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	void paraDraw(PImage img, PVector pos, float vel) {
+	/*	void paraDraw(PImage img, PVector pos, float vel) {
 		pos.sub(vel, 0, 0);
 
 		int r = (int) pos.x + img.width;
@@ -441,6 +471,8 @@ public class Wizzball extends PApplet {
 
 	}
 
+	 */
+
 	public float getLimitX(char side) {
 		if (side == 'l')
 			return xpos - width / 2;
@@ -449,5 +481,39 @@ public class Wizzball extends PApplet {
 
 		return 0;
 	}
+	//Star class
+	class Star {
+		//Location
+		PVector loc;
+		//Size
+		int size;
+		//Brightness
+		int bright;
+
+		Star() {
+			//Randomize all of the values
+			size = (int) random(1, 6);
+			loc = new PVector(random(width * map(size, 1, 7, 7, 1)), random(height * map(size, 1, 7, 7, 1)));
+			bright = (int) random(204, 255);
+		}
+
+		void display() {
+			pushStyle();
+
+			//Setup the style
+			stroke(bright);
+			strokeWeight(size);
+
+			//Find the actual location and constrain it to within the bounds of the screen
+			int x = (int) (((loc.x - offset.x) * size / 8)) % width;
+			int y = (int) (((loc.y - offset.y) * size / 8)) % height;
+			if(x < 0) x += width;
+			if(y < 0) y += height;
+
+			//Display the point
+			point(x, y);
+
+			popStyle();
+		}}
 
 }
