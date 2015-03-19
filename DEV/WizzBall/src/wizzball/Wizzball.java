@@ -81,7 +81,7 @@ public class Wizzball extends PApplet {
 
 		stars = new Star[width];
 		for(int i = 0; i < stars.length; i ++) stars[i] = new Star();
-
+        
 		//Initialize the offset
 		offset = new PVector(width / 2, height / 2);
 
@@ -175,16 +175,17 @@ public class Wizzball extends PApplet {
 		if (enterTheGame) {
 
 			clear();
-			
+
 			image(floor, 0, (float) (height * 0.8));
 			image(ceiling, 0, 0);
-			
+
 			//Display the stars
-			
+
 			for(int i = 0; i < stars.length; i ++) stars[i].display();
 
-			//Modify the offset, using the center of the screen as a form of joystick
-			
+			//Modify the offset, using the center of the screen as a form of joystick 
+			//Something should be changed HERE to use the position of the ball as the joystick
+
 			PVector angle = new PVector(sp1.x - width / 2, sp1.y - height / 2);
 			angle.normalize();
 			angle.mult(dist(width / 2, height / 2, sp1.x, sp1.y) / 50);
@@ -242,7 +243,7 @@ public class Wizzball extends PApplet {
 			ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);
 			ypos = (float) (ypos > height * 0.8 - sp1.radius ? height * 0.8 - sp1.radius : ypos);
 
-	
+
 
 			v = xpos - sp1.x;
 
@@ -507,8 +508,10 @@ public class Wizzball extends PApplet {
 			//Find the actual location and constrain it to within the bounds of the screen
 			int x = (int) (((loc.x - offset.x) * size / 8)) % width;
 			int y = (int) (((loc.y - offset.y) * size / 8)) % height;
-			if(x < 0) x += width;
-			if(y < 0) y += height;
+			if(x < 0) 
+				x += width;
+			if(y < 0) 
+				y += height;
 
 			//Display the point
 			point(x, y);
