@@ -31,7 +31,7 @@ public class Wizzball extends PApplet {
 
 	// Timer
 	int actualTime;
-	int totalTime = 6000;
+	int totalTime = 60000;
 
 	//The array of stars
 	Star[] stars;
@@ -77,7 +77,7 @@ public class Wizzball extends PApplet {
 
 		// vfront = new PVector(0, 5); //just fixing the position of the image
 
-		stars = new Star[width];
+		stars = new Star[200];
 		for(int i = 0; i < stars.length; i ++) stars[i] = new Star();
 
 		//Initialize the offset
@@ -567,9 +567,9 @@ public class Wizzball extends PApplet {
 
 		Star() {
 			//Randomize all of the values
-			size = (int) random(1, 6);
+			size = (int) random(1, 4);
 			loc = new PVector(random(width * map(size, 1, 7, 7, 1)), random(height * map(size, 1, 7, 7, 1)));
-			bright = (int) random(204, 255);
+			bright = (int) random(75, 150);
 		}
 
 		void display() {
