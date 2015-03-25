@@ -31,7 +31,7 @@ public class Wizzball extends PApplet {
 
 	// Timer
 	int actualTime;
-	int totalTime = 60000;
+	int totalTime = 600000;
 
 	//The array of stars
 	Star[] stars;
@@ -197,8 +197,8 @@ public class Wizzball extends PApplet {
 			//	strokeWeight(0);
 
 
-			//paraDraw(img, vback, v);
-			// paraDraw(saturn, vmiddle, 2);
+			//paraDraw(floor, vback, v);
+			//paraDraw(ceiling, vmiddle, 2);
 			fill(255, 0, 0);
 
 			// /CONTROL OF THE GRAVITY
@@ -531,7 +531,7 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	/*	void paraDraw(PImage img, PVector pos, float vel) {
+		void paraDraw(PImage img, PVector pos, float vel) {
 		pos.sub(vel, 0, 0);
 
 		int r = (int) pos.x + img.width;
@@ -547,7 +547,7 @@ public class Wizzball extends PApplet {
 
 	}
 
-	 */
+	 
 
 	public float getLimitX(char side) {
 		if (side == 'l')
