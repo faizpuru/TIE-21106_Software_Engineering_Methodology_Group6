@@ -331,12 +331,7 @@ public class Wizzball extends PApplet {
 
 			manageObjectsCollision();
 			if(xpos>=end){				
-				currentLevel++;
-				xpos = 0;
-				ypos = height/2;
-				xspeed=0;
-				yspeed = 5;
-				loadLevel();
+				nextLevel();
 			}
 			text("distance : " + xpos, 50, 70);
 
@@ -384,6 +379,20 @@ public class Wizzball extends PApplet {
 		 * 
 		 * /* if ( xpos > width-sp1.radius || xpos < sp1.radius) { xspeed *= -1; yspeed += sp1.rotationSpeed*rotationEffect; //Rotation effect }
 		 */
+	}
+
+	private void nextLevel() {
+		currentLevel++;
+		//Reinitialize position
+		xpos = 0;
+		ypos = height/2;
+		
+		//reinitialize speed
+		xspeed=0;
+		yspeed = 5;
+		
+		//Load a new level
+		loadLevel();		
 	}
 
 	private void ybounce() {
