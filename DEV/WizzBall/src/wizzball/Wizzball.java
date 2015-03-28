@@ -153,7 +153,7 @@ public class Wizzball extends PApplet {
 						if(words[7].equals("+")) down = true;
 						
 						boolean direcStairs = false;
-						if(words[6].equals("+")) down = true;
+						if(words[6].equals("+")) direcStairs = true;
 						
 						
 						int steps = parseInt(words[1]);
