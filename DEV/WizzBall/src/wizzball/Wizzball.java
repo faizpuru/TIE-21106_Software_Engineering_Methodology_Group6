@@ -150,7 +150,12 @@ public class Wizzball extends PApplet {
 					
 					if(words[0].equals("S")){
 						boolean down = false;
+						if(words[7].equals("+")) down = true;
+						
+						boolean direcStairs = false;
 						if(words[6].equals("+")) down = true;
+						
+						
 						int steps = parseInt(words[1]);
 						float begin = parseFloat(words[2]);
 						float end = parseFloat(words[3]);
@@ -162,10 +167,16 @@ public class Wizzball extends PApplet {
 						
 
 						
-						
-						for(int i = 0 ; i < steps ; ++i){
-							platforms.addElement(new Platform(this, begin+i*width, heightMin+heightIncrement*i, width, down));
+						if(direcStairs){
+							for(int i = 0 ; i < steps ; ++i){
+								platforms.addElement(new Platform(this, begin+i*width, heightMin+heightIncrement*i, width, down));
+							}
+						} else {
+							for(int i = 0 ; i < steps ; ++i){
+								platforms.addElement(new Platform(this, begin+i*width, heightMax-heightIncrement*i, width, down));
+							}
 						}
+						
 					}
 				}
 				System.out.println(strLine);
