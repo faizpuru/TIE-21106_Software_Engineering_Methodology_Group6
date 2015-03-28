@@ -122,11 +122,11 @@ public class Wizzball extends PApplet {
 					nbLine++;
 				} else if (nbLine == 1) {
 					end = parseInt(words[1]);
-					objects.addElement(new Platform(this, end, (float) (this.height * 0.7), 40, true));
+					objects.addElement(new Platform(this, end+50, (float) (this.height * 0.7), 40, true));
 					objects.addElement(new Platform(this, begin, (float) (this.height * 0.7), 40, true));
 					nbLine++;
 				} else if (nbLine == 2) {
-					totalTime = parseInt(words[1]) * 1000;
+					totalTime =millis() +  parseInt(words[1]) * 1000;
 					nbLine++;
 				}
 
@@ -330,6 +330,14 @@ public class Wizzball extends PApplet {
 			v = xpos - sp1.x;
 
 			manageObjectsCollision();
+			if(xpos>=end){				
+				currentLevel++;
+				xpos = 0;
+				ypos = height/2;
+				xspeed=0;
+				yspeed = 5;
+				loadLevel();
+			}
 			text("distance : " + xpos, 50, 70);
 
 		}

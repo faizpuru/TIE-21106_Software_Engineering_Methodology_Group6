@@ -26,6 +26,7 @@ public class BasicObject {
 
 	}
 
+	@SuppressWarnings("static-access")
 	public void loadImage() {
 		image = parent.createImage(100, 100, parent.RGB);
 	}
