@@ -50,8 +50,7 @@ public class Wizzball extends PApplet {
 	float xspeed = (float) 0; // Speed of the shape (initial = 0)
 	float yspeed = (float) 5; // Speed of the shape
 	Spot sp1 = null;
-	Vector<Platform> platforms = null;
-	Vector<Hole> holes = null;
+	Vector<BasicObject> objects = null;
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
 	PVector vback = new PVector(0, 0), vmiddle = new PVector(150, 140), vfront;
 	int rotationEffect = 40;
@@ -103,80 +102,77 @@ public class Wizzball extends PApplet {
 
 			String strLine;
 
-			//initialize platforms and holes containers
-			if (platforms == null)
-				platforms = new Vector<Platform>();
-			else platforms.clear();
-			
-			if(holes == null)
-			holes = new Vector<Hole>();
-			else holes.clear();
-			
-			int nbLine  = 0;
+			// initialize platforms and holes containers
+			if (objects == null)
+				objects = new Vector<BasicObject>();
+			else
+				objects.clear();
+
+			int nbLine = 0;
 			String[] words;
 
 			// Read File Line By Line
 			while ((strLine = br.readLine()) != null) {
 				// Print the content on the console
 				words = strLine.split(" ");
-				
-				//Initialize begin, end and time for the level
-				if(nbLine == 0){
+
+				// Initialize begin, end and time for the level
+				if (nbLine == 0) {
 					begin = parseInt(words[1]);
-					nbLine++ ;
-				} else if(nbLine == 1){
-					end = parseInt(words[1]);
-					platforms.addElement(new Platform(this, end, (float)(this.height*0.7), 40, true));
-					platforms.addElement(new Platform(this, begin,(float)(this.height*0.7), 40, true));
 					nbLine++;
-				} else if(nbLine == 2){
-					totalTime = parseInt(words[1])*1000;
+				} else if (nbLine == 1) {
+					end = parseInt(words[1]);
+					objects.addElement(new Platform(this, end, (float) (this.height * 0.7), 40, true));
+					objects.addElement(new Platform(this, begin, (float) (this.height * 0.7), 40, true));
+					nbLine++;
+				} else if (nbLine == 2) {
+					totalTime = parseInt(words[1]) * 1000;
 					nbLine++;
 				}
-				
-				else{//Create platforms, stairs and holes
-					if(words[0].equals("P")){
+
+				else {// Create platforms, stairs and holes
+					if (words[0].equals("P")) {
 						boolean down = false;
-						if(words[4].equals("+")) down = true;
-						platforms.addElement(new Platform(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
+						if (words[4].equals("+"))
+							down = true;
+						objects.addElement(new Platform(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
 					}
-					
-					if(words[0].equals("H")){
+
+					if (words[0].equals("H")) {
 						boolean down = false;
-						if(words[4].equals("+")) down = true;
-						holes.addElement(new Hole(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
+						if (words[4].equals("+"))
+							down = true;
+						objects.addElement(new Hole(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
 					}
-					
-					
-					if(words[0].equals("S")){
+
+					if (words[0].equals("S")) {
 						boolean down = false;
-						if(words[7].equals("+")) down = true;
-						
+						if (words[7].equals("+"))
+							down = true;
+
 						boolean direcStairs = false;
-						if(words[6].equals("+")) direcStairs = true;
-						
-						
+						if (words[6].equals("+"))
+							direcStairs = true;
+
 						int steps = parseInt(words[1]);
 						float begin = parseFloat(words[2]);
 						float end = parseFloat(words[3]);
 						float heightMin = parseFloat(words[4]);
 						float heightMax = parseFloat(words[5]);
-						
-						float width = (abs(end-begin))/(steps-1);
-						float heightIncrement = (heightMax-heightMin)/steps;
-						
 
-						
-						if(direcStairs){
-							for(int i = 0 ; i < steps ; ++i){
-								platforms.addElement(new Platform(this, begin+i*width, heightMin+heightIncrement*i, width, down));
+						float width = (abs(end - begin)) / (steps - 1);
+						float heightIncrement = (heightMax - heightMin) / steps;
+
+						if (direcStairs) {
+							for (int i = 0; i < steps; ++i) {
+								objects.addElement(new Platform(this, begin + i * width, heightMin + heightIncrement * i, width, down));
 							}
 						} else {
-							for(int i = 0 ; i < steps ; ++i){
-								platforms.addElement(new Platform(this, begin+i*width, heightMax-heightIncrement*i, width, down));
+							for (int i = 0; i < steps; ++i) {
+								objects.addElement(new Platform(this, begin + i * width, heightMax - heightIncrement * i, width, down));
 							}
 						}
-						
+
 					}
 				}
 				System.out.println(strLine);
@@ -211,7 +207,6 @@ public class Wizzball extends PApplet {
 		musicPlayer = minim.loadFile("musics/music.mp3");
 		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
 	}
-
 
 	public void draw() {
 
@@ -317,7 +312,7 @@ public class Wizzball extends PApplet {
 			sp1.display();
 
 			// Display platforms to the good position
-			for (Platform p : platforms) {
+			for (BasicObject p : objects) {
 				if (p.isDisplay()) {
 					p.display();
 					p.recalculatePositionX(xpos);
@@ -325,12 +320,6 @@ public class Wizzball extends PApplet {
 
 			}
 
-			for (Hole h : holes) {
-				if (h.isDisplay()) {
-					h.display();
-					h.recalculatePositionX(xpos);
-				}
-			}
 			xpos = (float) (xpos + xspeed * 0.2);
 			ypos = (float) (ypos + yspeed * 0.5);
 
@@ -340,8 +329,7 @@ public class Wizzball extends PApplet {
 
 			v = xpos - sp1.x;
 
-			managePlatformsCollision();
-			manageHolesCollision();
+			manageObjectsCollision();
 			text("distance : " + xpos, 50, 70);
 
 		}
@@ -424,8 +412,8 @@ public class Wizzball extends PApplet {
 		bouncingPlayer.play();
 	}
 
-	private void managePlatformsCollision() {
-		for (Platform p : platforms) {
+	private void manageObjectsCollision() {
+		for (BasicObject p : objects) {
 			if (p.isDisplay()) {
 
 				// corners to implement
@@ -460,14 +448,23 @@ public class Wizzball extends PApplet {
 				// Top and bottom
 				if (xpos >= p.getLeft() && xpos <= p.getRight()) {
 					if (p.getTop() >= ypos - sp1.radius && p.getTop() <= ypos + sp1.radius) {
-						ypos = p.getTop() - sp1.radius;
-						ybounce();
+						if (p instanceof Hole) {
+							gameOver();
+						} else {
+							ypos = p.getTop() - sp1.radius;
+							ybounce();
+						}
 
 					}
 
 					if (p.getBottom() <= ypos + sp1.radius && p.getBottom() >= ypos - sp1.radius) {
-						ypos = p.getBottom() + sp1.radius;
-						ybounce();
+
+						if (p instanceof Hole) {
+							gameOver();
+						} else {
+							ypos = p.getBottom() + sp1.radius;
+							ybounce();
+						}
 
 					}
 				}
@@ -494,70 +491,10 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	private void manageHolesCollision() {
-		for (Hole h : holes) {
-			if (h.isDisplay()) {
-				if (Math.sqrt(Math.pow((h.getLeft() - sp1.x), 2) + Math.pow((sp1.y - h.getTop()), 2)) <= sp1.radius) {
-					xpos = h.getLeft() - sp1.radius;
-					ypos = h.getTop() - sp1.radius;
-					bounceCorner();
-					continue;
-				}
 
-				if (Math.sqrt(Math.pow((h.getRight() - sp1.x), 2) + Math.pow((sp1.y - h.getTop()), 2)) <= sp1.radius) {
-					xpos = h.getRight() + sp1.radius;
-					ypos = h.getTop() - sp1.radius;
-					bounceCorner();
-					continue;
-				}
-
-				if (Math.sqrt(Math.pow((h.getLeft() - sp1.x), 2) + Math.pow((sp1.y - h.getBottom()), 2)) <= sp1.radius) {
-					xpos = h.getLeft() - sp1.radius;
-					ypos = h.getBottom() + sp1.radius;
-					bounceCorner();
-					continue;
-				}
-
-				if (Math.sqrt(Math.pow((h.getRight() - sp1.x), 2) + Math.pow((sp1.y - h.getBottom()), 2)) <= sp1.radius) {
-					xpos = h.getRight() + sp1.radius;
-					ypos = h.getBottom() + sp1.radius;
-					bounceCorner();
-					continue;
-				}
-				// Top and bottom
-				if (xpos >= h.getLeft() && xpos <= h.getRight()) {
-					if (h.getTop() > ypos - sp1.radius && h.getTop() < ypos + sp1.radius) {
-						gameOver = true;
-						enterTheGame = false;
-
-					}
-
-					if (h.getBottom() < ypos + sp1.radius && h.getBottom() > ypos - sp1.radius) {
-						gameOver = true;
-						enterTheGame = false;
-
-					}
-				}
-				// /Left collision
-				if (xspeed > 0) {
-					if (ypos + sp1.radius / 2 >= h.getTop() && ypos - sp1.radius / 2 <= h.getBottom()) {
-						if (h.getLeft() <= xpos + sp1.radius / 2 && sp1.radius / 2 < h.x - h.width / 2) {
-							xpos = h.getLeft() - sp1.radius / 2;
-							xbounce();
-						}
-					}
-
-					// /Right collision
-				} else if (xspeed < 0) {
-					if (ypos >= h.getTop() && ypos <= h.getBottom()) {
-						if (h.getRight() >= xpos - sp1.radius / 2 && sp1.radius / 2 > h.x + h.width / 2) {
-							xpos = h.getRight() + sp1.radius / 2;
-							xbounce();
-						}
-					}
-				}
-			}
-		}
+	private void gameOver() {
+		gameOver = true; 
+		enterTheGame = false;		
 	}
 
 	public void accelerate() {
