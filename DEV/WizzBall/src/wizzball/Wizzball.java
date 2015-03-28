@@ -103,7 +103,7 @@ public class Wizzball extends PApplet {
 
 			String strLine;
 
-			//initialize platforms and holes
+			//initialize platforms and holes containers
 			if (platforms == null)
 				platforms = new Vector<Platform>();
 			else platforms.clear();
@@ -320,7 +320,7 @@ public class Wizzball extends PApplet {
 			for (Platform p : platforms) {
 				if (p.isDisplay()) {
 					p.display();
-					p.recalculatePlatformX(xpos);
+					p.recalculatePositionX(xpos);
 				}
 
 			}
@@ -328,7 +328,7 @@ public class Wizzball extends PApplet {
 			for (Hole h : holes) {
 				if (h.isDisplay()) {
 					h.display();
-					h.recalculateHoleX(xpos);
+					h.recalculatePositionX(xpos);
 				}
 			}
 			xpos = (float) (xpos + xspeed * 0.2);
