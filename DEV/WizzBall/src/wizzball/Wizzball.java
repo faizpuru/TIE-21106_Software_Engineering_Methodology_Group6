@@ -1,5 +1,9 @@
 package wizzball;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Vector;
 
 import ddf.minim.AudioPlayer;
@@ -27,16 +31,17 @@ public class Wizzball extends PApplet {
 	int count = 0;
 	int x = 50;
 	int rad = 60; // Width of the shape
-	float xpos = 0 , ypos; // Starting position of shape
+	float xpos = 0, ypos; // Starting position of shape
 
 	// Timer
 	int actualTime;
 	int totalTime = 600000;
-
-	//The array of stars
+	int begin = 0;
+	int end = 0;
+	// The array of stars
 	Star[] stars;
 
-	//Global offset
+	// Global offset
 	PVector offset;
 
 	/*
@@ -48,7 +53,7 @@ public class Wizzball extends PApplet {
 	Vector<Platform> platforms = null;
 	Vector<Hole> holes = null;
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
-	PVector vback = new PVector(0, 0), vmiddle= new PVector(150, 140), vfront;
+	PVector vback = new PVector(0, 0), vmiddle = new PVector(150, 140), vfront;
 	int rotationEffect = 40;
 
 	float yFont = 250;
@@ -61,30 +66,118 @@ public class Wizzball extends PApplet {
 
 	Minim minim;
 	AudioPlayer musicPlayer, bouncingPlayer;
+	private int currentLevel = 1;
 
 	public void setup() {
-
+		loadLevel();
 		loadMusics();
 		loadImages();
-		createPlatforms();
-		createHoles();
 		frameRate(24);
 		sp1 = new Spot(this, xpos, ypos, 15);
 		size(500, 500, OPENGL);
 		f = createFont("Arial", 16, true);
-		ellipseMode(RADIUS);		
+		ellipseMode(RADIUS);
 		ypos = height / 2;
 
 		// vfront = new PVector(0, 5); //just fixing the position of the image
 
 		stars = new Star[200];
-		for(int i = 0; i < stars.length; i ++) stars[i] = new Star();
-        
-		//Initialize the offset
+		for (int i = 0; i < stars.length; i++)
+			stars[i] = new Star();
+
+		// Initialize the offset
 		offset = new PVector(width / 2, height / 2);
 
 		smooth();
 
+	}
+
+	/**
+	 * Load the level corresponding to the txt file
+	 */
+	public void loadLevel() {
+		// Open the file
+		try {
+			FileInputStream fstream = new FileInputStream("data/levels/level" + currentLevel + ".txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+			String strLine;
+
+			//initialize platforms and holes
+			if (platforms == null)
+				platforms = new Vector<Platform>();
+			else platforms.clear();
+			
+			if(holes == null)
+			holes = new Vector<Hole>();
+			else holes.clear();
+			
+			int nbLine  = 0;
+			String[] words;
+
+			// Read File Line By Line
+			while ((strLine = br.readLine()) != null) {
+				// Print the content on the console
+				words = strLine.split(" ");
+				
+				//Initialize begin, end and time for the level
+				if(nbLine == 0){
+					begin = parseInt(words[1]);
+					nbLine++ ;
+				} else if(nbLine == 1){
+					end = parseInt(words[1]);
+					platforms.addElement(new Platform(this, end, (float)(this.height*0.7), 40, true));
+					platforms.addElement(new Platform(this, begin,(float)(this.height*0.7), 40, true));
+					nbLine++;
+				} else if(nbLine == 2){
+					totalTime = parseInt(words[1])*1000;
+					nbLine++;
+				}
+				
+				else{//Create platforms, stairs and holes
+					if(words[0].equals("P")){
+						boolean down = false;
+						if(words[4].equals("+")) down = true;
+						platforms.addElement(new Platform(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
+					}
+					
+					if(words[0].equals("H")){
+						boolean down = false;
+						if(words[4].equals("+")) down = true;
+						holes.addElement(new Hole(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
+					}
+					
+					
+					if(words[0].equals("S")){
+						boolean down = false;
+						if(words[6].equals("+")) down = true;
+						int steps = parseInt(words[1]);
+						float begin = parseFloat(words[2]);
+						float end = parseFloat(words[3]);
+						float heightMin = parseFloat(words[4]);
+						float heightMax = parseFloat(words[5]);
+						
+						float width = (abs(end-begin))/(steps-1);
+						float heightIncrement = (heightMax-heightMin)/steps;
+						
+
+						
+						
+						for(int i = 0 ; i < steps ; ++i){
+							platforms.addElement(new Platform(this, begin+i*width, heightMin+heightIncrement*i, width, down));
+						}
+					}
+				}
+				System.out.println(strLine);
+			}
+
+			// Close the input stream
+			br.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void loadImages() {
@@ -94,45 +187,27 @@ public class Wizzball extends PApplet {
 		stars1 = loadImage("starsBack.jpg");
 		saturn = loadImage("saturn.png");
 		starsOver = loadImage("goscreen.png");
-		gameover = loadImage("logo.png");		
+		gameover = loadImage("logo.png");
+	}
+
+	@Override
+	public PImage loadImage(String filename) {
+		return super.loadImage("images/" + filename);
 	}
 
 	private void loadMusics() {
 		minim = new Minim(this);
-		musicPlayer = minim.loadFile("music.mp3");
-		bouncingPlayer = minim.loadFile("bounce.mp3");
+		musicPlayer = minim.loadFile("musics/music.mp3");
+		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
 	}
 
-	private void createPlatforms() {
-		platforms = new Vector<Platform>();
-
-		//Stair
-		for(int i = 0 ; i < 10 ; ++i){
-			platforms.addElement(new Platform(this, i*50, 10+20*i, 50, true));
-		}
-		platforms.addElement(new Platform(this, 550, 190, 50, false));
-		platforms.addElement(new Platform(this, 650, 190, 50, true));
-		platforms.addElement(new Platform(this, 750, 190, 50, false));
-		platforms.addElement(new Platform(this, 850, 190, 50, true));
-		platforms.addElement(new Platform(this, 950, 190, 50, false));
-
-
-	}
-	
-	private void createHoles(){
-		holes = new Vector<Hole>();
-		holes.addElement(new Hole(this, 50, 30, 50, false));
-		holes.addElement(new Hole(this, 250, 30, 50, false));
-		holes.addElement(new Hole(this, 650, 30, 50, false));
-		holes.addElement(new Hole(this, 800, 30, 50, false));
-	}
 
 	public void draw() {
 
 		if (!musicPlayer.isPlaying())
 			musicPlayer.play();
 
-		//img.resize(width, height);
+		// img.resize(width, height);
 		stars1.resize(width, height);
 		floor.resize(width, (int) (height * 0.2));
 		ceiling.resize(width, (int) (height * 0.1));
@@ -166,9 +241,9 @@ public class Wizzball extends PApplet {
 			text("Press TAB to continue...", xFont, yFont + 300, zFont);
 
 			yFont--;
-			if (yFont < -300){
+			if (yFont < -300) {
 				enterTheGame = true;
-				actualTime= millis();
+				actualTime = millis();
 				firstStep = false;
 			}
 
@@ -181,12 +256,13 @@ public class Wizzball extends PApplet {
 			image(floor, 0, (float) (height * 0.8));
 			image(ceiling, 0, 0);
 
-			//Display the stars
+			// Display the stars
 
-			for(int i = 0; i < stars.length; i ++) stars[i].display();
+			for (int i = 0; i < stars.length; i++)
+				stars[i].display();
 
-			//Modify the offset, using the center of the screen as a form of joystick 
-			//Something should be changed HERE to use the position of the ball as the joystick
+			// Modify the offset, using the center of the screen as a form of joystick
+			// Something should be changed HERE to use the position of the ball as the joystick
 
 			PVector angle = new PVector(sp1.x - width / 2, sp1.y - height / 2);
 			angle.normalize();
@@ -194,11 +270,10 @@ public class Wizzball extends PApplet {
 
 			offset.add(angle);
 
-			//	strokeWeight(0);
+			// strokeWeight(0);
 
-
-			//paraDraw(floor, vback, v);
-			//paraDraw(ceiling, vmiddle, 2);
+			// paraDraw(floor, vback, v);
+			// paraDraw(ceiling, vmiddle, 2);
 			fill(255, 0, 0);
 
 			// /CONTROL OF THE GRAVITY
@@ -216,9 +291,9 @@ public class Wizzball extends PApplet {
 
 			if (passedTime > totalTime) { // After 60 seconds..
 				println(" GAME ENDED! ");
-				//actualTime = millis(); // Restart timer
+				// actualTime = millis(); // Restart timer
 				gameOver = true;
-				enterTheGame=false;
+				enterTheGame = false;
 			}
 
 			int countdown = (totalTime - passedTime) / 1000;
@@ -236,11 +311,10 @@ public class Wizzball extends PApplet {
 					p.display();
 					p.recalculatePlatformX(xpos);
 				}
-				
-			
+
 			}
-			
-			for (Hole  h: holes ) {
+
+			for (Hole h : holes) {
 				if (h.isDisplay()) {
 					h.display();
 					h.recalculateHoleX(xpos);
@@ -252,8 +326,6 @@ public class Wizzball extends PApplet {
 			// The ball can't go under the floor
 			ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);
 			ypos = (float) (ypos > height * 0.8 - sp1.radius ? height * 0.8 - sp1.radius : ypos);
-
-
 
 			v = xpos - sp1.x;
 
@@ -268,17 +340,15 @@ public class Wizzball extends PApplet {
 		 * clear(); background(starsOver); image(gameover, 25, 200); fill(255,0,0);
 		 * 
 		 * 
-		 * }
-		 * GAME OVER SCREEN
+		 * } GAME OVER SCREEN
 		 */
-		if(gameOver){ 
+		if (gameOver) {
 
-			clear(); 
+			clear();
 			// paraDraw(starsOver, vback, v);
 
-			image(gameover,width/4, height / 4);
+			image(gameover, width / 4, height / 4);
 		}
-
 
 		// Floor collision
 
@@ -312,7 +382,7 @@ public class Wizzball extends PApplet {
 	private void ybounce() {
 		yspeed = yspeed * -1;
 		xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;	
+		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;
 		playBounceSound();
 
 	}
@@ -320,7 +390,7 @@ public class Wizzball extends PApplet {
 	private void xbounce() {
 		xspeed = xspeed * -1;
 		yspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-		yspeed = abs(yspeed) > MAX_SPEED ? (yspeed / abs(yspeed)) * MAX_SPEED : yspeed;	
+		yspeed = abs(yspeed) > MAX_SPEED ? (yspeed / abs(yspeed)) * MAX_SPEED : yspeed;
 		playBounceSound();
 
 	}
@@ -328,17 +398,17 @@ public class Wizzball extends PApplet {
 	private void bounceCorner() {
 		xspeed = xspeed * -1;
 		yspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-		yspeed = abs(yspeed) > MAX_SPEED ? (yspeed / abs(yspeed)) * MAX_SPEED : yspeed;	
+		yspeed = abs(yspeed) > MAX_SPEED ? (yspeed / abs(yspeed)) * MAX_SPEED : yspeed;
 
 		yspeed = yspeed * -1;
 		xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
-		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;	
+		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;
 
 		playBounceSound();
 
 	}
 
-	private void playBounceSound(){
+	private void playBounceSound() {
 		bouncingPlayer.rewind();
 		bouncingPlayer.play();
 	}
@@ -347,44 +417,44 @@ public class Wizzball extends PApplet {
 		for (Platform p : platforms) {
 			if (p.isDisplay()) {
 
-				//corners to implement
-				//racine_carre((x_point - x_centre)� + (y_centre - y_point)) < rayon
-				if(Math.sqrt(Math.pow((p.getLeft() - sp1.x),2) + Math.pow((sp1.y - p.getTop()),2))<= sp1.radius){
+				// corners to implement
+				// racine_carre((x_point - x_centre)� + (y_centre - y_point)) < rayon
+				if (Math.sqrt(Math.pow((p.getLeft() - sp1.x), 2) + Math.pow((sp1.y - p.getTop()), 2)) <= sp1.radius) {
 					xpos = p.getLeft() - sp1.radius;
 					ypos = p.getTop() - sp1.radius;
 					bounceCorner();
 					continue;
 				}
 
-				if(Math.sqrt(Math.pow((p.getRight() - sp1.x),2) + Math.pow((sp1.y - p.getTop()),2))<= sp1.radius){
+				if (Math.sqrt(Math.pow((p.getRight() - sp1.x), 2) + Math.pow((sp1.y - p.getTop()), 2)) <= sp1.radius) {
 					xpos = p.getRight() + sp1.radius;
 					ypos = p.getTop() - sp1.radius;
 					bounceCorner();
 					continue;
 				}
 
-				if(Math.sqrt(Math.pow((p.getLeft() - sp1.x),2) + Math.pow((sp1.y - p.getBottom()),2))<= sp1.radius){
+				if (Math.sqrt(Math.pow((p.getLeft() - sp1.x), 2) + Math.pow((sp1.y - p.getBottom()), 2)) <= sp1.radius) {
 					xpos = p.getLeft() - sp1.radius;
 					ypos = p.getBottom() + sp1.radius;
 					bounceCorner();
 					continue;
 				}
 
-				if(Math.sqrt(Math.pow((p.getRight() - sp1.x),2) + Math.pow((sp1.y - p.getBottom()),2))<= sp1.radius){
+				if (Math.sqrt(Math.pow((p.getRight() - sp1.x), 2) + Math.pow((sp1.y - p.getBottom()), 2)) <= sp1.radius) {
 					xpos = p.getRight() + sp1.radius;
 					ypos = p.getBottom() + sp1.radius;
 					bounceCorner();
 					continue;
 				}
-				//Top and bottom
-				if(xpos >= p.getLeft() && xpos <= p.getRight()){
-					if(p.getTop()>=ypos - sp1.radius && p.getTop()<=ypos + sp1.radius){
+				// Top and bottom
+				if (xpos >= p.getLeft() && xpos <= p.getRight()) {
+					if (p.getTop() >= ypos - sp1.radius && p.getTop() <= ypos + sp1.radius) {
 						ypos = p.getTop() - sp1.radius;
 						ybounce();
 
 					}
 
-					if(p.getBottom()<=ypos + sp1.radius && p.getBottom()>=ypos - sp1.radius){
+					if (p.getBottom() <= ypos + sp1.radius && p.getBottom() >= ypos - sp1.radius) {
 						ypos = p.getBottom() + sp1.radius;
 						ybounce();
 
@@ -393,9 +463,9 @@ public class Wizzball extends PApplet {
 
 				// /Left collision
 				if (xspeed > 0) {
-					if (ypos + sp1.radius/2 >= p.getTop() && ypos - sp1.radius/2 <= p.getBottom()) {
-						if (p.getLeft() <= xpos + sp1.radius /2 && sp1.radius/2  < p.x - p.width/2 ) {
-							xpos = p.getLeft()  - sp1.radius/2;
+					if (ypos + sp1.radius / 2 >= p.getTop() && ypos - sp1.radius / 2 <= p.getBottom()) {
+						if (p.getLeft() <= xpos + sp1.radius / 2 && sp1.radius / 2 < p.x - p.width / 2) {
+							xpos = p.getLeft() - sp1.radius / 2;
 							xbounce();
 						}
 					}
@@ -403,8 +473,8 @@ public class Wizzball extends PApplet {
 					// /Right collision
 				} else if (xspeed < 0) {
 					if (ypos >= p.getTop() && ypos <= p.getBottom()) {
-						if (p.getRight() >= xpos - sp1.radius /2 && sp1.radius/2  > p.x + p.width/2 ) {
-							xpos = p.getRight()  + sp1.radius/2;
+						if (p.getRight() >= xpos - sp1.radius / 2 && sp1.radius / 2 > p.x + p.width / 2) {
+							xpos = p.getRight() + sp1.radius / 2;
 							xbounce();
 						}
 					}
@@ -416,52 +486,52 @@ public class Wizzball extends PApplet {
 	private void manageHolesCollision() {
 		for (Hole h : holes) {
 			if (h.isDisplay()) {
-				if(Math.sqrt(Math.pow((h.getLeft() - sp1.x),2) + Math.pow((sp1.y - h.getTop()),2))<= sp1.radius){
+				if (Math.sqrt(Math.pow((h.getLeft() - sp1.x), 2) + Math.pow((sp1.y - h.getTop()), 2)) <= sp1.radius) {
 					xpos = h.getLeft() - sp1.radius;
 					ypos = h.getTop() - sp1.radius;
 					bounceCorner();
 					continue;
 				}
 
-				if(Math.sqrt(Math.pow((h.getRight() - sp1.x),2) + Math.pow((sp1.y - h.getTop()),2))<= sp1.radius){
+				if (Math.sqrt(Math.pow((h.getRight() - sp1.x), 2) + Math.pow((sp1.y - h.getTop()), 2)) <= sp1.radius) {
 					xpos = h.getRight() + sp1.radius;
 					ypos = h.getTop() - sp1.radius;
 					bounceCorner();
 					continue;
 				}
 
-				if(Math.sqrt(Math.pow((h.getLeft() - sp1.x),2) + Math.pow((sp1.y - h.getBottom()),2))<= sp1.radius){
+				if (Math.sqrt(Math.pow((h.getLeft() - sp1.x), 2) + Math.pow((sp1.y - h.getBottom()), 2)) <= sp1.radius) {
 					xpos = h.getLeft() - sp1.radius;
 					ypos = h.getBottom() + sp1.radius;
 					bounceCorner();
 					continue;
 				}
 
-				if(Math.sqrt(Math.pow((h.getRight() - sp1.x),2) + Math.pow((sp1.y - h.getBottom()),2))<= sp1.radius){
+				if (Math.sqrt(Math.pow((h.getRight() - sp1.x), 2) + Math.pow((sp1.y - h.getBottom()), 2)) <= sp1.radius) {
 					xpos = h.getRight() + sp1.radius;
 					ypos = h.getBottom() + sp1.radius;
 					bounceCorner();
 					continue;
 				}
-				//Top and bottom
-				if(xpos >= h.getLeft() && xpos <= h.getRight()){
-					if(h.getTop()>ypos - sp1.radius && h.getTop()<ypos + sp1.radius){
+				// Top and bottom
+				if (xpos >= h.getLeft() && xpos <= h.getRight()) {
+					if (h.getTop() > ypos - sp1.radius && h.getTop() < ypos + sp1.radius) {
 						gameOver = true;
-						enterTheGame=false;
+						enterTheGame = false;
 
 					}
 
-					if(h.getBottom()<ypos + sp1.radius && h.getBottom()>ypos - sp1.radius){
+					if (h.getBottom() < ypos + sp1.radius && h.getBottom() > ypos - sp1.radius) {
 						gameOver = true;
-						enterTheGame=false;
+						enterTheGame = false;
 
 					}
 				}
 				// /Left collision
 				if (xspeed > 0) {
-					if (ypos + sp1.radius/2 >= h.getTop() && ypos - sp1.radius/2 <= h.getBottom()) {
-						if (h.getLeft() <= xpos + sp1.radius /2 && sp1.radius/2  < h.x - h.width/2 ) {
-							xpos = h.getLeft()  - sp1.radius/2;
+					if (ypos + sp1.radius / 2 >= h.getTop() && ypos - sp1.radius / 2 <= h.getBottom()) {
+						if (h.getLeft() <= xpos + sp1.radius / 2 && sp1.radius / 2 < h.x - h.width / 2) {
+							xpos = h.getLeft() - sp1.radius / 2;
 							xbounce();
 						}
 					}
@@ -469,12 +539,12 @@ public class Wizzball extends PApplet {
 					// /Right collision
 				} else if (xspeed < 0) {
 					if (ypos >= h.getTop() && ypos <= h.getBottom()) {
-						if (h.getRight() >= xpos - sp1.radius /2 && sp1.radius/2  > h.x + h.width/2 ) {
-							xpos = h.getRight()  + sp1.radius/2;
+						if (h.getRight() >= xpos - sp1.radius / 2 && sp1.radius / 2 > h.x + h.width / 2) {
+							xpos = h.getRight() + sp1.radius / 2;
 							xbounce();
-										}
-							}
 						}
+					}
+				}
 			}
 		}
 	}
@@ -531,7 +601,7 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-		void paraDraw(PImage img, PVector pos, float vel) {
+	void paraDraw(PImage img, PVector pos, float vel) {
 		pos.sub(vel, 0, 0);
 
 		int r = (int) pos.x + img.width;
@@ -547,8 +617,6 @@ public class Wizzball extends PApplet {
 
 	}
 
-	 
-
 	public float getLimitX(char side) {
 		if (side == 'l')
 			return xpos - width / 2;
@@ -557,17 +625,18 @@ public class Wizzball extends PApplet {
 
 		return 0;
 	}
-	//Star class
+
+	// Star class
 	class Star {
-		//Location
+		// Location
 		PVector loc;
-		//Size
+		// Size
 		int size;
-		//Brightness
+		// Brightness
 		int bright;
 
 		Star() {
-			//Randomize all of the values
+			// Randomize all of the values
 			size = (int) random(1, 4);
 			loc = new PVector(random(width * map(size, 1, 7, 7, 1)), random(height * map(size, 1, 7, 7, 1)));
 			bright = (int) random(75, 150);
@@ -576,22 +645,23 @@ public class Wizzball extends PApplet {
 		void display() {
 			pushStyle();
 
-			//Setup the style
+			// Setup the style
 			stroke(bright);
 			strokeWeight(size);
 
-			//Find the actual location and constrain it to within the bounds of the screen
+			// Find the actual location and constrain it to within the bounds of the screen
 			int x = (int) (((loc.x - offset.x) * size / 8)) % width;
 			int y = (int) (((loc.y - offset.y) * size / 8)) % height;
-			if(x < 0) 
+			if (x < 0)
 				x += width;
-			if(y < 0) 
+			if (y < 0)
 				y += height;
 
-			//Display the point
+			// Display the point
 			point(x, y);
 
 			popStyle();
-		}}
+		}
+	}
 
 }
