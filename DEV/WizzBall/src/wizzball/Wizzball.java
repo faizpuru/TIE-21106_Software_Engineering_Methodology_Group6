@@ -59,6 +59,8 @@ public class Wizzball extends PApplet {
 	float yFont = 250;
 	float zFont = -200;
 	float xFont = 250;
+	
+	int nbBonus = 0 ;
 
 	float v = 0; // background velocity
 
@@ -113,6 +115,9 @@ public class Wizzball extends PApplet {
 			String[] words;
 
 			// Read File Line By Line
+			
+			nbBonus = 0 ;
+
 			while ((strLine = br.readLine()) != null) {
 				// Print the content on the console
 				words = strLine.split(" ");
@@ -146,7 +151,7 @@ public class Wizzball extends PApplet {
 						objects.addElement(new Hole(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
 					}
 					if (words[0].equals("B")) {
-
+						nbBonus++;
 						objects.addElement(new Bonus(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), parseFloat(words[3]), true));
 					}
 
@@ -337,7 +342,8 @@ public class Wizzball extends PApplet {
 			v = xpos - sp1.x;
 
 			manageObjectsCollision();
-			if (xpos >= end) {
+			
+			if (xpos >= end && nbBonus ==0) {
 				nextLevel();
 			}
 			text("distance : " + xpos, 50, 70);
@@ -552,6 +558,7 @@ public class Wizzball extends PApplet {
 
 	private void bonus(BasicObject p) {
 		objects.remove(p);
+		nbBonus--;
 		playBonusSound();
 	}
 
