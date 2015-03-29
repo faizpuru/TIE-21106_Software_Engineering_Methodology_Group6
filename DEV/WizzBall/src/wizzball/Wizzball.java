@@ -392,7 +392,8 @@ public class Wizzball extends PApplet {
 		currentLevel++;
 		// Reinitialize position
 		xpos = 0;
-		ypos = height / 2;
+		//ypos = height / 2;
+		gravity = (float) 0.5;
 
 		// reinitialize speed
 		xspeed = 0;
