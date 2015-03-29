@@ -210,6 +210,7 @@ public class Wizzball extends PApplet {
 	private void loadMusics() {
 		minim = new Minim(this);
 		musicPlayer = minim.loadFile("musics/music.mp3");
+
 		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
 		bonusPlayer = minim.loadFile("musics/bonus.wav");
 	}
@@ -486,8 +487,8 @@ public class Wizzball extends PApplet {
 					} else {
 						xpos = p.getRight() + sp1.radius;
 						ypos = p.getBottom() + sp1.radius;
+						bounceCorner();
 					}
-					bounceCorner();
 					continue;
 				}
 				// Top and bottom
