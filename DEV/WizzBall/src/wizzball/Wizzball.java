@@ -28,6 +28,7 @@ public class Wizzball extends PApplet {
 	boolean firstStep = false;
 	boolean enterTheGame = false;
 	boolean gameOver = false;
+	boolean changeLevel = false;
 	int count = 0;
 	int x = 50;
 	int rad = 60; // Width of the shape
@@ -122,11 +123,11 @@ public class Wizzball extends PApplet {
 					nbLine++;
 				} else if (nbLine == 1) {
 					end = parseInt(words[1]);
-					objects.addElement(new Platform(this, end+50, (float) (this.height * 0.7), 40, true));
+					objects.addElement(new Platform(this, end + 50, (float) (this.height * 0.7), 40, true));
 					objects.addElement(new Platform(this, begin, (float) (this.height * 0.7), 40, true));
 					nbLine++;
 				} else if (nbLine == 2) {
-					totalTime =millis() +  parseInt(words[1]) * 1000;
+					totalTime = millis() + parseInt(words[1]) * 1000;
 					nbLine++;
 				}
 
@@ -143,6 +144,10 @@ public class Wizzball extends PApplet {
 						if (words[4].equals("+"))
 							down = true;
 						objects.addElement(new Hole(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), down));
+					}
+					if (words[0].equals("B")) {
+
+						objects.addElement(new Bonus(this, parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]), parseFloat(words[3]), true));
 					}
 
 					if (words[0].equals("S")) {
@@ -330,7 +335,7 @@ public class Wizzball extends PApplet {
 			v = xpos - sp1.x;
 
 			manageObjectsCollision();
-			if(xpos>=end){				
+			if (xpos >= end) {
 				nextLevel();
 			}
 			text("distance : " + xpos, 50, 70);
@@ -383,16 +388,16 @@ public class Wizzball extends PApplet {
 
 	private void nextLevel() {
 		currentLevel++;
-		//Reinitialize position
+		// Reinitialize position
 		xpos = 0;
-		ypos = height/2;
-		
-		//reinitialize speed
-		xspeed=0;
+		ypos = height / 2;
+
+		// reinitialize speed
+		xspeed = 0;
 		yspeed = 5;
-		
-		//Load a new level
-		loadLevel();		
+
+		// Load a new level
+		loadLevel();
 	}
 
 	private void ybounce() {
@@ -430,35 +435,52 @@ public class Wizzball extends PApplet {
 	}
 
 	private void manageObjectsCollision() {
-		for (BasicObject p : objects) {
+		Vector<BasicObject> tmp = (Vector<BasicObject>) objects.clone();
+		for (BasicObject p : tmp) {
 			if (p.isDisplay()) {
 
 				// corners to implement
 				// racine_carre((x_point - x_centre)� + (y_centre - y_point)) < rayon
 				if (Math.sqrt(Math.pow((p.getLeft() - sp1.x), 2) + Math.pow((sp1.y - p.getTop()), 2)) <= sp1.radius) {
-					xpos = p.getLeft() - sp1.radius;
-					ypos = p.getTop() - sp1.radius;
-					bounceCorner();
+					if (p instanceof Bonus) {
+						objects.remove(p);
+					} else {
+						xpos = p.getLeft() - sp1.radius;
+						ypos = p.getTop() - sp1.radius;
+						bounceCorner();
+					}
 					continue;
 				}
 
 				if (Math.sqrt(Math.pow((p.getRight() - sp1.x), 2) + Math.pow((sp1.y - p.getTop()), 2)) <= sp1.radius) {
-					xpos = p.getRight() + sp1.radius;
-					ypos = p.getTop() - sp1.radius;
-					bounceCorner();
+					if (p instanceof Bonus) {
+						objects.remove(p);
+					} else {
+						xpos = p.getRight() + sp1.radius;
+						ypos = p.getTop() - sp1.radius;
+						bounceCorner();
+					}
 					continue;
 				}
 
 				if (Math.sqrt(Math.pow((p.getLeft() - sp1.x), 2) + Math.pow((sp1.y - p.getBottom()), 2)) <= sp1.radius) {
-					xpos = p.getLeft() - sp1.radius;
-					ypos = p.getBottom() + sp1.radius;
-					bounceCorner();
+					if (p instanceof Bonus) {
+						objects.remove(p);
+					} else {
+						xpos = p.getLeft() - sp1.radius;
+						ypos = p.getBottom() + sp1.radius;
+						bounceCorner();
+					}
 					continue;
 				}
 
 				if (Math.sqrt(Math.pow((p.getRight() - sp1.x), 2) + Math.pow((sp1.y - p.getBottom()), 2)) <= sp1.radius) {
-					xpos = p.getRight() + sp1.radius;
-					ypos = p.getBottom() + sp1.radius;
+					if (p instanceof Bonus) {
+						objects.remove(p);
+					} else {
+						xpos = p.getRight() + sp1.radius;
+						ypos = p.getBottom() + sp1.radius;
+					}
 					bounceCorner();
 					continue;
 				}
@@ -467,6 +489,8 @@ public class Wizzball extends PApplet {
 					if (p.getTop() >= ypos - sp1.radius && p.getTop() <= ypos + sp1.radius) {
 						if (p instanceof Hole) {
 							gameOver();
+						} else if (p instanceof Bonus) {
+							objects.remove(p);
 						} else {
 							ypos = p.getTop() - sp1.radius;
 							ybounce();
@@ -478,6 +502,8 @@ public class Wizzball extends PApplet {
 
 						if (p instanceof Hole) {
 							gameOver();
+						} else if (p instanceof Bonus) {
+							objects.remove(p);
 						} else {
 							ypos = p.getBottom() + sp1.radius;
 							ybounce();
@@ -490,8 +516,12 @@ public class Wizzball extends PApplet {
 				if (xspeed > 0) {
 					if (ypos + sp1.radius / 2 >= p.getTop() && ypos - sp1.radius / 2 <= p.getBottom()) {
 						if (p.getLeft() <= xpos + sp1.radius / 2 && sp1.radius / 2 < p.x - p.width / 2) {
-							xpos = p.getLeft() - sp1.radius / 2;
-							xbounce();
+							if (p instanceof Bonus) {
+								objects.remove(p);
+							} else {
+								xpos = p.getLeft() - sp1.radius / 2;
+								xbounce();
+							}
 						}
 					}
 
@@ -499,8 +529,12 @@ public class Wizzball extends PApplet {
 				} else if (xspeed < 0) {
 					if (ypos >= p.getTop() && ypos <= p.getBottom()) {
 						if (p.getRight() >= xpos - sp1.radius / 2 && sp1.radius / 2 > p.x + p.width / 2) {
-							xpos = p.getRight() + sp1.radius / 2;
-							xbounce();
+							if (p instanceof Bonus) {
+								objects.remove(p);
+							} else {
+								xpos = p.getRight() + sp1.radius / 2;
+								xbounce();
+							}
 						}
 					}
 				}
@@ -508,10 +542,9 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-
 	private void gameOver() {
-		gameOver = true; 
-		enterTheGame = false;		
+		gameOver = true;
+		enterTheGame = false;
 	}
 
 	public void accelerate() {
