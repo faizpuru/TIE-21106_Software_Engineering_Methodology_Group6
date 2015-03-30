@@ -1,14 +1,12 @@
 package wizzball;
 
-import processing.core.PApplet;
-
 public class Bonus extends BasicObject implements Collectable {
 
-	Bonus(PApplet p, float xpos, float height, float width, boolean down) {
+	Bonus(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
 	}
 	
-	public Bonus(PApplet p, float xpos, float ypos, float height, float width, boolean down){
+	public Bonus(Wizzball p, float xpos, float ypos, float height, float width, boolean down){
 		super(p, xpos, height, width, down);
 		y = ypos;
 	}
@@ -20,8 +18,8 @@ public class Bonus extends BasicObject implements Collectable {
 
 	@Override
 	public void effect(Wizzball wizz) {
-			wizz.objects.remove(this);
-			wizz.nbBonus--;
+			wizz.lvl.objects.remove(this);
+			wizz.lvl.nbBonus--;
 			wizz.playBonusSound();
 		
 	}

@@ -1,6 +1,5 @@
 package wizzball;
 
-import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 
@@ -8,12 +7,12 @@ public class BasicObject {
 
 	float x, y, width, height, xAbs;
 	boolean down; // if down, platform on floor, !down, platform on ceiling
-	PApplet parent;
+	Wizzball parent;
 	PImage image;
 
 	// Second version of the platform constructor;
 	// the fields are assigned with parameters
-	BasicObject(PApplet p, float xpos, float height, float width, boolean down) {
+	BasicObject(Wizzball p, float xpos, float height, float width, boolean down) {
 
 		parent = p;
 		xAbs = xpos;
@@ -26,7 +25,6 @@ public class BasicObject {
 
 	}
 
-	@SuppressWarnings("static-access")
 	public void loadImage() {
 		image = parent.createImage(100, 100, PConstants.RGB);
 	}
@@ -71,28 +69,28 @@ public class BasicObject {
 		return y + height;
 	}
 
-	private boolean isTopCollide(Wizzball wizz) {
-		if (wizz.xpos >= getLeft() && wizz.xpos <= getRight()) {
-			if (getTop() >= wizz.ypos - wizz.sp1.radius && getTop() <= wizz.ypos + wizz.sp1.radius) {
+	private boolean isTopCollide() {
+		if (parent.xpos >= getLeft() && parent.xpos <= getRight()) {
+			if (getTop() >= parent.ypos - parent.sp1.radius && getTop() <= parent.ypos + parent.sp1.radius) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean isBottomCollide(Wizzball wizz) {
-		if (wizz.xpos >= getLeft() && wizz.xpos <= getRight()) {
-			if (getBottom() <= wizz.ypos + wizz.sp1.radius && getBottom() >= wizz.ypos - wizz.sp1.radius) {
+	private boolean isBottomCollide() {
+		if (parent.xpos >= getLeft() && parent.xpos <= getRight()) {
+			if (getBottom() <= parent.ypos + parent.sp1.radius && getBottom() >= parent.ypos - parent.sp1.radius) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean isLeftCollide(Wizzball wizz) {
-		if (wizz.xspeed > 0) {
-			if (wizz.ypos + wizz.sp1.radius / 2 >= getTop() && wizz.ypos - wizz.sp1.radius / 2 <= getBottom()) {
-				if (getLeft() <= wizz.xpos + wizz.sp1.radius / 2 && wizz.sp1.radius / 2 < x - width / 2) {
+	private boolean isLeftCollide() {
+		if (parent.xspeed > 0) {
+			if (parent.ypos + parent.sp1.radius / 2 >= getTop() && parent.ypos - parent.sp1.radius / 2 <= getBottom()) {
+				if (getLeft() <= parent.xpos + parent.sp1.radius / 2 && parent.sp1.radius / 2 < x - width / 2) {
 					return true;
 				}
 			}
@@ -100,11 +98,11 @@ public class BasicObject {
 		return false;
 	}
 
-	private boolean isRightCollide(Wizzball wizz) {
+	private boolean isRightCollide() {
 
-		if (wizz.xspeed < 0) {
-			if (wizz.ypos >= getTop() && wizz.ypos <= getBottom()) {
-				if (getRight() >= wizz.xpos - wizz.sp1.radius / 2 && wizz.sp1.radius / 2 > x + width / 2) {
+		if (parent.xspeed < 0) {
+			if (parent.ypos >= getTop() && parent.ypos <= getBottom()) {
+				if (getRight() >= parent.xpos - parent.sp1.radius / 2 && parent.sp1.radius / 2 > x + width / 2) {
 					return true;
 				}
 			}
@@ -112,39 +110,39 @@ public class BasicObject {
 		return false;
 	}
 
-	private boolean isTopLeftCollide(Wizzball wizz) {
-		return Math.sqrt(Math.pow((getLeft() - wizz.sp1.x), 2) + Math.pow((wizz.sp1.y - getTop()), 2)) <= wizz.sp1.radius;
+	private boolean isTopLeftCollide() {
+		return Math.sqrt(Math.pow((getLeft() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getTop()), 2)) <= parent.sp1.radius;
 	}
 
-	private boolean isTopRightCollide(Wizzball wizz) {
-		return Math.sqrt(Math.pow((getRight() - wizz.sp1.x), 2) + Math.pow((wizz.sp1.y - getTop()), 2)) <= wizz.sp1.radius;
+	private boolean isTopRightCollide() {
+		return Math.sqrt(Math.pow((getRight() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getTop()), 2)) <= parent.sp1.radius;
 	}
 
-	private boolean isBottomLeftCollide(Wizzball wizz) {
-		return Math.sqrt(Math.pow((getLeft() - wizz.sp1.x), 2) + Math.pow((wizz.sp1.y - getBottom()), 2)) <= wizz.sp1.radius;
+	private boolean isBottomLeftCollide() {
+		return Math.sqrt(Math.pow((getLeft() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getBottom()), 2)) <= parent.sp1.radius;
 	}
 
-	private boolean isBottomRightCollide(Wizzball wizz) {
-		return Math.sqrt(Math.pow((getRight() - wizz.sp1.x), 2) + Math.pow((wizz.sp1.y - getBottom()), 2)) <= wizz.sp1.radius;
+	private boolean isBottomRightCollide() {
+		return Math.sqrt(Math.pow((getRight() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getBottom()), 2)) <= parent.sp1.radius;
 	}
 
-	boolean isCollide(Wizzball wizz, int edge) {
+	boolean isCollide(int edge) {
 		if (edge == Wizzball.TOP) {
-			return isTopCollide(wizz);
+			return isTopCollide();
 		} else if (edge == Wizzball.C_BOTTOM) {
-			return isBottomCollide(wizz);
+			return isBottomCollide();
 		} else if (edge == Wizzball.C_LEFT) {
-			return isLeftCollide(wizz);
+			return isLeftCollide();
 		} else if (edge == Wizzball.C_RIGHT) {
-			return isRightCollide(wizz);
+			return isRightCollide();
 		} else if (edge == Wizzball.C_TOP_LEFT) {
-			return isTopLeftCollide(wizz);
+			return isTopLeftCollide();
 		} else if (edge == Wizzball.C_TOP_RIGHT) {
-			return isTopRightCollide(wizz);
+			return isTopRightCollide();
 		} else if (edge == Wizzball.C_BOTTOM_LEFT) {
-			return isBottomLeftCollide(wizz);
+			return isBottomLeftCollide();
 		} else if (edge == Wizzball.C_BOTTOM_RIGHT) {
-			return isBottomRightCollide(wizz);
+			return isBottomRightCollide();
 		} else {
 			return false;
 		}
