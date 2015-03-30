@@ -18,6 +18,9 @@ public class Wizzball extends PApplet {
 	/**
 	 * 
 	 */
+	public static int TOP = 0, C_BOTTOM = 1, C_LEFT = 2, C_RIGHT = 3, 
+			C_TOP_LEFT = 4, C_TOP_RIGHT = 5, C_BOTTOM_LEFT = 6, C_BOTTOM_RIGHT = 7;
+
 	private static final long serialVersionUID = 1L;
 	private static final int MAX_SPEED = 20;
 	private static final double INCR_SPEED = 0.1;
@@ -59,8 +62,8 @@ public class Wizzball extends PApplet {
 	float yFont = 250;
 	float zFont = -200;
 	float xFont = 250;
-	
-	int nbBonus = 0 ;
+
+	int nbBonus = 0;
 
 	float v = 0; // background velocity
 
@@ -115,8 +118,8 @@ public class Wizzball extends PApplet {
 			String[] words;
 
 			// Read File Line By Line
-			
-			nbBonus = 0 ;
+
+			nbBonus = 0;
 
 			while ((strLine = br.readLine()) != null) {
 				// Print the content on the console
@@ -342,8 +345,8 @@ public class Wizzball extends PApplet {
 			v = xpos - sp1.x;
 
 			manageObjectsCollision();
-			
-			if (xpos >= end && nbBonus ==0) {
+
+			if (xpos >= end && nbBonus == 0) {
 				nextLevel();
 			}
 			text("distance : " + xpos, 50, 70);
@@ -398,7 +401,7 @@ public class Wizzball extends PApplet {
 		currentLevel++;
 		// Reinitialize position
 		xpos = 0;
-		//ypos = height / 2;
+		// ypos = height / 2;
 		gravity = (float) 0.5;
 
 		// reinitialize speed
@@ -442,8 +445,8 @@ public class Wizzball extends PApplet {
 		bouncingPlayer.rewind();
 		bouncingPlayer.play();
 	}
-	
-	private void playBonusSound() {
+
+	public void playBonusSound() {
 		bonusPlayer.rewind();
 		bonusPlayer.play();
 	}
@@ -453,12 +456,11 @@ public class Wizzball extends PApplet {
 		for (BasicObject p : tmp) {
 			if (p.isDisplay()) {
 
-				// corners to implement
 				// racine_carre((x_point - x_centre)� + (y_centre - y_point)) < rayon
-				if (Math.sqrt(Math.pow((p.getLeft() - sp1.x), 2) + Math.pow((sp1.y - p.getTop()), 2)) <= sp1.radius) {
-					if (p instanceof Bonus) {
-						bonus(p);
-					} else {
+				if (p.isCollide(this, C_TOP_LEFT)) {
+					if (p instanceof Collectable) {
+						((Collectable) p).effect(this);
+					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP_LEFT])) {
 						xpos = p.getLeft() - sp1.radius;
 						ypos = p.getTop() - sp1.radius;
 						bounceCorner();
@@ -466,10 +468,10 @@ public class Wizzball extends PApplet {
 					continue;
 				}
 
-				if (Math.sqrt(Math.pow((p.getRight() - sp1.x), 2) + Math.pow((sp1.y - p.getTop()), 2)) <= sp1.radius) {
-					if (p instanceof Bonus) {
-						bonus(p);
-					} else {
+				if (p.isCollide(this, C_TOP_RIGHT)) {
+					if (p instanceof Collectable) {
+						((Collectable) p).effect(this);
+					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP_RIGHT])) {
 						xpos = p.getRight() + sp1.radius;
 						ypos = p.getTop() - sp1.radius;
 						bounceCorner();
@@ -477,10 +479,10 @@ public class Wizzball extends PApplet {
 					continue;
 				}
 
-				if (Math.sqrt(Math.pow((p.getLeft() - sp1.x), 2) + Math.pow((sp1.y - p.getBottom()), 2)) <= sp1.radius) {
-					if (p instanceof Bonus) {
-						bonus(p);
-					} else {
+				if (p.isCollide(this, C_BOTTOM_LEFT)) {
+					if (p instanceof Collectable) {
+						((Collectable) p).effect(this);
+					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM_LEFT])) {
 						xpos = p.getLeft() - sp1.radius;
 						ypos = p.getBottom() + sp1.radius;
 						bounceCorner();
@@ -488,10 +490,10 @@ public class Wizzball extends PApplet {
 					continue;
 				}
 
-				if (Math.sqrt(Math.pow((p.getRight() - sp1.x), 2) + Math.pow((sp1.y - p.getBottom()), 2)) <= sp1.radius) {
-					if (p instanceof Bonus) {
-						bonus(p);
-					} else {
+				if (p.isCollide(this, C_BOTTOM_RIGHT)) {
+					if (p instanceof Collectable) {
+						((Collectable) p).effect(this);
+					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM_RIGHT])) {
 						xpos = p.getRight() + sp1.radius;
 						ypos = p.getBottom() + sp1.radius;
 						bounceCorner();
@@ -499,67 +501,49 @@ public class Wizzball extends PApplet {
 					continue;
 				}
 				// Top and bottom
-				if (xpos >= p.getLeft() && xpos <= p.getRight()) {
-					if (p.getTop() >= ypos - sp1.radius && p.getTop() <= ypos + sp1.radius) {
-						if (p instanceof Hole) {
-							gameOver();
-						} else if (p instanceof Bonus) {
-							bonus(p);
-						} else {
-							ypos = p.getTop() - sp1.radius;
-							ybounce();
-						}
-
-					}
-
-					if (p.getBottom() <= ypos + sp1.radius && p.getBottom() >= ypos - sp1.radius) {
-
-						if (p instanceof Hole) {
-							gameOver();
-						} else if (p instanceof Bonus) {
-							bonus(p);
-						} else {
-							ypos = p.getBottom() + sp1.radius;
-							ybounce();
-						}
-
+				if (p.isCollide(this, TOP)) {
+					if (p instanceof Collectable) {
+						((Collectable) p).effect(this);
+					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[TOP])) {
+						ypos = p.getTop() - sp1.radius;
+						ybounce();
+					} else if (p instanceof Hole) {
+						gameOver();
 					}
 				}
 
-				// /Left collision
-				if (xspeed > 0) {
-					if (ypos + sp1.radius / 2 >= p.getTop() && ypos - sp1.radius / 2 <= p.getBottom()) {
-						if (p.getLeft() <= xpos + sp1.radius / 2 && sp1.radius / 2 < p.x - p.width / 2) {
-							if (p instanceof Bonus) {
-								bonus(p);
-							} else {
-								xpos = p.getLeft() - sp1.radius / 2;
-								xbounce();
-							}
-						}
-					}
-
-					// /Right collision
-				} else if (xspeed < 0) {
-					if (ypos >= p.getTop() && ypos <= p.getBottom()) {
-						if (p.getRight() >= xpos - sp1.radius / 2 && sp1.radius / 2 > p.x + p.width / 2) {
-							if (p instanceof Bonus) {
-								bonus(p);
-							} else {
-								xpos = p.getRight() + sp1.radius / 2;
-								xbounce();
-							}
-						}
+				if (p.isCollide(this, C_BOTTOM)) {
+					if (p instanceof Collectable) {
+						((Collectable) p).effect(this);
+					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM])) {
+						ypos = p.getBottom() + sp1.radius;
+						ybounce();
+					} else if (p instanceof Hole) {
+						gameOver();
 					}
 				}
 			}
-		}
-	}
 
-	private void bonus(BasicObject p) {
-		objects.remove(p);
-		nbBonus--;
-		playBonusSound();
+			// /Left collision
+			if (p.isCollide(this, C_LEFT)) {
+				if (p instanceof Collectable) {
+					((Collectable) p).effect(this);
+				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_LEFT])) {
+					xpos = p.getLeft() - sp1.radius / 2;
+					xbounce();
+				}
+			}
+
+			// /Right collision
+			if (p.isCollide(this, C_RIGHT)) {
+				if (p instanceof Collectable) {
+					((Collectable) p).effect(this);
+				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_RIGHT])) {
+					xpos = p.getRight() + sp1.radius / 2;
+					xbounce();
+				}
+			}
+		}
 	}
 
 	private void gameOver() {
