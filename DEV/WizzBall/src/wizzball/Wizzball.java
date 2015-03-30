@@ -28,7 +28,7 @@ public class Wizzball extends PApplet {
 	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer;
 
 	PFont f, fontSW;
-	float yFont = 250, zFont = -200, xFont = 250;
+	float yFont = 250, zFont = -200;
 
 	Star[] stars;// The array of stars
 	PVector offset; // Global offset
@@ -60,7 +60,7 @@ public class Wizzball extends PApplet {
 	private void loadFonts() {
 		f = createFont("Arial", 16, true);
 		fontSW = loadFont("fonts/StarJedi-48.vlw");
-		
+
 	}
 
 	private void initDisplayParameters() {
@@ -135,19 +135,18 @@ public class Wizzball extends PApplet {
 	}
 
 	private void displayGame() {
-		
+
 		frameRate(25);
 		stroke(0);
 		strokeWeight(5);
 		background(0);
 		textAlign(LEFT);
-		textFont(fontSW,14);
-		
+		textFont(fontSW, 14);
+
 		clear();
 		image(floor, 0, (float) (height * 0.8));
 		image(ceiling, 0, 0);
 		displayStars();
-
 
 		// /CONTROL OF THE GRAVITY
 
@@ -167,7 +166,6 @@ public class Wizzball extends PApplet {
 		}
 
 		int countdown = (lvl.maximumTime - passedTime) / 1000;
-
 
 		sp1.x = xpos;
 		sp1.y = ypos;
@@ -192,16 +190,16 @@ public class Wizzball extends PApplet {
 		if (achieveLevel()) {
 			nextLevel();
 		}
-		
+
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + countdown, 50, 85);
-		text("distance : " + (int)(xpos), 50, 70);
+		text("distance : " + (int) (xpos), 50, 70);
 	}
 
 	private void displayStoryScreen() {
 		pushStyle();
 		pushMatrix();
-		  
+
 		frameRate(40);
 		background(0);
 		displayStars();
@@ -211,9 +209,9 @@ public class Wizzball extends PApplet {
 		strokeWeight(5);
 		directionalLight(250, 207, 63, 0, -200, -200);
 
-		textFont(fontSW,20);
+		textFont(fontSW, 20);
 		textAlign(CENTER);
-
+		int xFont = width/2;
 		text("Hello " + player + ", you will enter the game.", xFont, yFont, zFont);
 		text("enter the GAME.", xFont, yFont + 40, zFont);
 		text("You can rotate the character ", xFont, yFont + 80, zFont);
@@ -241,12 +239,12 @@ public class Wizzball extends PApplet {
 		directionalLight(250, 207, 63, 0, -200, -200);
 		background(0);
 		textAlign(CENTER);
-		textFont(fontSW,18);
+		textFont(fontSW, 18);
 		fill(200);
 		stroke(153);
-		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n",width/2,50);
-		textFont(fontSW,30);
-		text(typing, width/2, height/2);
+		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n", width / 2, 50);
+		textFont(fontSW, 30);
+		text(typing, width / 2, height / 2);
 		popStyle();
 		popMatrix();
 	}
@@ -480,7 +478,12 @@ public class Wizzball extends PApplet {
 
 		} else {
 			if (keyCode == BACKSPACE) {
-				typing = typing.substring(0, typing.length() - 1);
+				if (typing.length() > 1){
+					typing = typing.substring(0, typing.length() - 1);
+				}
+				else{
+					typing = "";
+				}
 			} else if (key != CODED)
 				typing += key;
 		}
