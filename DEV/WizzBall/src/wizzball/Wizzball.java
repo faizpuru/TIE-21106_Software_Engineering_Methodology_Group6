@@ -433,7 +433,7 @@ public class Wizzball extends PApplet {
 				if (p instanceof Collectable) {
 					((Collectable) p).effect(this);
 				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_LEFT])) {
-					xpos = p.getLeft() - sp1.radius / 2;
+					xpos = p.getLeft() - sp1.radius;
 					xbounce();
 				}
 			}
@@ -443,7 +443,7 @@ public class Wizzball extends PApplet {
 				if (p instanceof Collectable) {
 					((Collectable) p).effect(this);
 				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_RIGHT])) {
-					xpos = p.getRight() + sp1.radius / 2;
+					xpos = p.getRight() + sp1.radius;
 					xbounce();
 				}
 			}
