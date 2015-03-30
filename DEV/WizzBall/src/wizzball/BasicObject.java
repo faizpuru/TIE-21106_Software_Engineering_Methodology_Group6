@@ -127,7 +127,7 @@ public class BasicObject {
 	}
 
 	boolean isCollide(int edge) {
-		if (edge == Wizzball.TOP) {
+		if (edge == Wizzball.C_TOP) {
 			return isTopCollide();
 		} else if (edge == Wizzball.C_BOTTOM) {
 			return isBottomCollide();

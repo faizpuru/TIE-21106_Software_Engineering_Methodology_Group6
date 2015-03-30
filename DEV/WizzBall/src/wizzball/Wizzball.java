@@ -9,78 +9,72 @@ import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 
+@SuppressWarnings("serial")
 public class Wizzball extends PApplet {
-
-	public static int TOP = 0, C_BOTTOM = 1, C_LEFT = 2, C_RIGHT = 3, C_TOP_LEFT = 4, C_TOP_RIGHT = 5, C_BOTTOM_LEFT = 6, C_BOTTOM_RIGHT = 7;
-
-	private static final long serialVersionUID = 1L;
-
-	Level lvl;
 
 	private static final int MAX_SPEED = 20;
 	private static final double INCR_SPEED = 0.1;
+	private static final int rotationEffect = 40;
+	public static float gravity = (float) 0.5; // positive downwards --- negative upwards
 
-	PFont f;
-	String typing = "";
-	String player = "";
-	boolean firstStep = false;
-	boolean enterTheGame = false;
-	boolean gameOver = false;
-	int count = 0;
-	int x = 50;
-	int rad = 60; // Width of the shape
-	float xpos = 0, ypos; // Starting position of shape
+	public static int C_TOP = 0, C_BOTTOM = 1, C_LEFT = 2, C_RIGHT = 3, C_TOP_LEFT = 4, C_TOP_RIGHT = 5, C_BOTTOM_LEFT = 6, C_BOTTOM_RIGHT = 7;
 
-	// Timer
-	int actualTime;
+	Level lvl;
+	Spot sp1;
 
-	// The array of stars
-	Star[] stars;
-
-	// Global offset
-	PVector offset;
-
-	/*
-	 * NEGATIVE SPEED ---> GOING UP POSITIVE SPEED ---> GOING DOWN
-	 */
-	float xspeed = (float) 0; // Speed of the shape (initial = 0)
-	float yspeed = (float) 5; // Speed of the shape
-	Spot sp1 = null;
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
-	PVector vback = new PVector(0, 0), vmiddle = new PVector(150, 140), vfront;
-	int rotationEffect = 40;
-
-	float yFont = 250;
-	float zFont = -200;
-	float xFont = 250;
-
-	float gravity = (float) 0.5; // positive downwards --- negative upwards
 
 	Minim minim;
 	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer;
 
+	PFont f;
+	float yFont = 250, zFont = -200, xFont = 250;
+
+	Star[] stars;// The array of stars
+	PVector offset; // Global offset
+
+	int actualTime; // Timer
+
+	private static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3;
+	int state = TYPING;
+
+	String typing = "";
+	String player = "";
+
+	float xpos = 0, ypos; // Starting position of shape
+	// NEGATIVE SPEED ---> GOING UP POSITIVE SPEED ---> GOING DOWN
+	float xspeed = (float) 0; // Speed of the shape (initial = 0)
+	float yspeed = (float) 5; // Speed of the shape
+
 	public void setup() {
+		initDisplayParameters();
 		loadLevel();
 		loadMusics();
 		loadImages();
 		frameRate(24);
-		sp1 = new Spot(this, xpos, ypos, 15);
-		size(500, 500, OPENGL);
-		f = createFont("Arial", 16, true);
+		initSpot();
+		initStars();
+	}
+
+	private void initDisplayParameters() {
 		ellipseMode(RADIUS);
-		ypos = height / 2;
+		f = createFont("Arial", 16, true);
+		size(500, 500, OPENGL);
+		smooth();
+	}
 
-		// vfront = new PVector(0, 5); //just fixing the position of the image
+	private void initSpot() {
+		ypos = height / 2; // initial y position : in the middle
+		sp1 = new Spot(this, xpos, ypos, 15);
+	}
 
+	private void initStars() {
 		stars = new Star[200];
 		for (int i = 0; i < stars.length; i++)
 			stars[i] = new Star();
 
 		// Initialize the offset
 		offset = new PVector(width / 2, height / 2);
-
-		smooth();
-
 	}
 
 	private void loadLevel() {
@@ -108,132 +102,157 @@ public class Wizzball extends PApplet {
 	private void loadMusics() {
 		minim = new Minim(this);
 		musicPlayer = minim.loadFile("musics/music.mp3");
-
 		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
 		bonusPlayer = minim.loadFile("musics/bonus.wav");
 	}
 
 	public void draw() {
 
-		if (!musicPlayer.isPlaying())
-			musicPlayer.play();
+		loopThemeMusic();
+		imagesResizing();
+		
+		switch (state) {
+			case TYPING:
+				displayNameScreen();
+				break;
+			case STORY:
+				displayStoryScreen();
+				break;
+			case GAME:
+				displayGame();
+				break;
+			case GAME_OVER:
+				displayGameOver();
+				break;
+		}
 
-		// img.resize(width, height);
-		stars1.resize(width, height);
-		floor.resize(width, (int) (height * 0.2));
-		ceiling.resize(width, (int) (height * 0.1));
-		saturn.resize(width / 6, height / 6);
+	}
+
+	private void displayGame() {
+		clear();
+		image(floor, 0, (float) (height * 0.8));
+		image(ceiling, 0, 0);
+		displayStars();
+
+		fill(255, 0, 0);
+
+		// /CONTROL OF THE GRAVITY
+
+		float speedTmp = (float) Math.abs(yspeed + gravity); // Control
+		// MAX_SPEED
+		if (speedTmp <= MAX_SPEED) {
+			yspeed = (float) (yspeed + gravity);
+		}
+
+		// /CONTROL THE TIME
+
+		// Calculate how much time has passed
+		int passedTime = millis() - actualTime;
+
+		if (passedTime > lvl.maximumTime) { // After 60 seconds..
+			state = GAME_OVER;
+		}
+
+		int countdown = (lvl.maximumTime - passedTime) / 1000;
+
+		text("Time left: " + countdown, 50, 100);
+
+		sp1.x = xpos;
+		sp1.y = ypos;
+
+		sp1.display();
+
+		// Display platforms to the good position
+		for (BasicObject p : lvl.objects) {
+			if (p.isDisplay()) {
+				p.display();
+				p.recalculatePositionX(xpos);
+			}
+
+		}
+
+		xpos = (float) (xpos + xspeed * 0.2);
+		ypos = (float) (ypos + yspeed * 0.5);
+
+		manageFloorCollision();
+		manageObjectsCollision();
+
+		if (achieveLevel()) {
+			nextLevel();
+		}
+		text("distance : " + xpos, 50, 70);
+	}
+
+	private void displayStoryScreen() {
+		background(stars1);
+		textMode(MODEL);
+		fill(255, 255, 0);
+		textFont(f, 25);
+		pushMatrix();
+		rotateX(PI / 6);
+		popMatrix();
+		textAlign(CENTER);
+		stroke(0, 20);
+		// strokeWeight(5);
+
+		text("Hello " + player + ", you will enter the game.", xFont, yFont, zFont);
+		text("You can move the character using arrows keys.", xFont, yFont + 50, zFont);
+		text("When the ball bounces up,", xFont, yFont + 100, zFont);
+		text("you can decelerate it using up arrow", xFont, yFont + 150, zFont);
+		text("When the ball is coming down,", xFont, yFont + 200, zFont);
+		text("you can accelerate it using down arrow.", xFont, yFont + 250, zFont);
+		text("Press TAB to continue...", xFont, yFont + 300, zFont);
+
+		yFont--;
+		if (yFont < -300) {
+			state = GAME;
+			actualTime = millis();
+		}
+
+	}
+
+	private void displayNameScreen() {
 		background(0);
 		textFont(f, 15);
 		fill(200);
 		stroke(153);
 		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n", 50, 50);
 		text(typing, 50, 100);
-		if (firstStep) {
-			clear();
+	}
 
-			background(stars1);
-			textMode(MODEL);
-			fill(255, 255, 0);
-			textFont(f, 25);
-			pushMatrix();
-			rotateX(PI / 6);
-			popMatrix();
-			textAlign(CENTER);
-			stroke(0, 20);
-			// strokeWeight(5);
+	private void imagesResizing() {
+		// img.resize(width, height);
+		stars1.resize(width, height);
+		floor.resize(width, (int) (height * 0.2));
+		ceiling.resize(width, (int) (height * 0.1));
+		saturn.resize(width / 6, height / 6);
+	}
 
-			text("Hello " + player + ", you will enter the game.", xFont, yFont, zFont);
-			text("You can move the character using arrows keys.", xFont, yFont + 50, zFont);
-			text("When the ball bounces up,", xFont, yFont + 100, zFont);
-			text("you can decelerate it using up arrow", xFont, yFont + 150, zFont);
-			text("When the ball is coming down,", xFont, yFont + 200, zFont);
-			text("you can accelerate it using down arrow.", xFont, yFont + 250, zFont);
-			text("Press TAB to continue...", xFont, yFont + 300, zFont);
-
-			yFont--;
-			if (yFont < -300) {
-				enterTheGame = true;
-				actualTime = millis();
-				firstStep = false;
-			}
-
+	private void loopThemeMusic() {
+		if (!musicPlayer.isPlaying())
+			musicPlayer.play();
+		// In the end play again the song
+		if ((millis() % musicPlayer.length()) / 100 == 0) {
+			musicPlayer.rewind();
+			musicPlayer.play();
 		}
 
-		if (enterTheGame) {
+	}
 
-			clear();
+	private void displayStars() {
+		// Display the stars
 
-			image(floor, 0, (float) (height * 0.8));
-			image(ceiling, 0, 0);
+		for (int i = 0; i < stars.length; i++)
+			stars[i].display();
 
-			// Display the stars
+		// Modify the offset, using the center of the screen as a form of joystick
+		// Something should be changed HERE to use the position of the ball as the joystick
 
-			for (int i = 0; i < stars.length; i++)
-				stars[i].display();
+		PVector angle = new PVector(sp1.x - width / 2, sp1.y - height / 2);
+		angle.normalize();
+		angle.mult(dist(width / 2, height / 2, sp1.x, sp1.y) / 50);
 
-			// Modify the offset, using the center of the screen as a form of joystick
-			// Something should be changed HERE to use the position of the ball as the joystick
-
-			PVector angle = new PVector(sp1.x - width / 2, sp1.y - height / 2);
-			angle.normalize();
-			angle.mult(dist(width / 2, height / 2, sp1.x, sp1.y) / 50);
-
-			offset.add(angle);
-			fill(255, 0, 0);
-
-			// /CONTROL OF THE GRAVITY
-
-			float speedTmp = (float) Math.abs(yspeed + gravity); // Control
-			// MAX_SPEED
-			if (speedTmp <= MAX_SPEED) {
-				yspeed = (float) (yspeed + gravity);
-			}
-
-			// /CONTROL THE TIME
-
-			// Calculate how much time has passed
-			int passedTime = millis() - actualTime;
-
-			if (passedTime > lvl.maximumTime) { // After 60 seconds..
-				gameOver();
-			}
-
-			int countdown = (lvl.maximumTime - passedTime) / 1000;
-
-			text("Time left: " + countdown, 50, 100);
-
-			sp1.x = xpos;
-			sp1.y = ypos;
-
-			sp1.display();
-
-			// Display platforms to the good position
-			for (BasicObject p : lvl.objects) {
-				if (p.isDisplay()) {
-					p.display();
-					p.recalculatePositionX(xpos);
-				}
-
-			}
-
-			xpos = (float) (xpos + xspeed * 0.2);
-			ypos = (float) (ypos + yspeed * 0.5);
-
-
-			manageFloorCollision();
-			manageObjectsCollision();
-
-			if (achieveLevel()) {
-				nextLevel();
-			}
-			text("distance : " + xpos, 50, 70);
-
-		}
-		
-		if (gameOver) {
-			displayGameOver();
-		}
+		offset.add(angle);
 	}
 
 	private boolean achieveLevel() {
@@ -358,14 +377,14 @@ public class Wizzball extends PApplet {
 					continue;
 				}
 				// Top and bottom
-				if (p.isCollide(TOP)) {
+				if (p.isCollide(C_TOP)) {
 					if (p instanceof Collectable) {
 						((Collectable) p).effect(this);
-					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[TOP])) {
+					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP])) {
 						ypos = p.getTop() - sp1.radius;
 						ybounce();
 					} else if (p instanceof Hole) {
-						gameOver();
+						state = GAME_OVER;
 					}
 				}
 
@@ -376,7 +395,7 @@ public class Wizzball extends PApplet {
 						ypos = p.getBottom() + sp1.radius;
 						ybounce();
 					} else if (p instanceof Hole) {
-						gameOver();
+						state = GAME_OVER;
 					}
 				}
 			}
@@ -403,12 +422,7 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	private void gameOver() {
-		gameOver = true;
-		enterTheGame = false;
-	}
-	
-	private void displayGameOver(){
+	private void displayGameOver() {
 		clear();
 		image(gameover, width / 4, height / 4);
 	}
@@ -424,18 +438,15 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	/*
-	 * public void decelerate() { if (yspeed < 0) { yspeed = (float) (yspeed + 3); if (yspeed > 0) changeBounce(); } }
-	 */
-
 	public void keyPressed() {
 
-		if (key == '\n' && count == 0) {
+		if (key == '\n') {
+			if (state == TYPING) {
+				player = typing;
+				typing = "";
+				state = STORY;
+			}
 
-			count += 1;
-			player = typing;
-			typing = "";
-			firstStep = true;
 		} else {
 			if (keyCode == BACKSPACE) {
 				typing = typing.substring(0, typing.length() - 1);
@@ -443,8 +454,7 @@ public class Wizzball extends PApplet {
 				typing += key;
 		}
 		if (keyCode == TAB) {
-			count += 1;
-			enterTheGame = true;
+			state = GAME;
 		}
 
 		if (keyCode == RIGHT) {

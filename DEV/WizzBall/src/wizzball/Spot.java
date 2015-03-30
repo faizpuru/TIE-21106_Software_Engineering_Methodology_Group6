@@ -4,7 +4,7 @@ import processing.core.*;
 public class Spot {
 	
 	 float x, y, radius;
-	 PApplet parent;
+	 Wizzball parent;
 	 PImage ball;
 	 
 	 float currentAngle = 0;
@@ -17,7 +17,7 @@ public class Spot {
 	  
 	  // First version of the Spot constructor;
 	  // the fields are assigned default values
-	  Spot( PApplet p ) {
+	  Spot( Wizzball p ) {
 		  
 		  parent = p;
 		  radius = 20;
@@ -27,7 +27,7 @@ public class Spot {
 	  }
 	  // Second version of the Spot constructor;
 	  // the fields are assigned with parameters
-	  Spot( PApplet p, float xpos, float ypos, float r) {
+	  Spot( Wizzball p, float xpos, float ypos, float r) {
 		  
 		  parent = p;
 		  x = xpos;
@@ -38,7 +38,11 @@ public class Spot {
 	  }
 	  
 	  public void display() {
-		currentAngle = currentAngle+rotationSpeed;
+		  if(parent.gravity>0){
+				currentAngle = currentAngle+rotationSpeed;
+		  } else {
+				currentAngle = currentAngle-rotationSpeed;
+		  }
 		parent.pushMatrix();
 		parent.translate(parent.width/2, y);
 		parent.rotate(currentAngle);
