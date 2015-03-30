@@ -25,7 +25,7 @@ public class Wizzball extends PApplet {
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
 
 	Minim minim;
-	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer;
+	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer;
 
 	PFont f, fontSW;
 	float yFont = 250, zFont = -200;
@@ -70,7 +70,7 @@ public class Wizzball extends PApplet {
 	}
 
 	private void initSpot() {
-		ypos = height / 2; // initial y position : in the middle
+		initPositionAndSpeed();
 		sp1 = new Spot(this, xpos, ypos, 15);
 	}
 
@@ -110,6 +110,8 @@ public class Wizzball extends PApplet {
 		musicPlayer = minim.loadFile("musics/music.mp3");
 		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
 		bonusPlayer = minim.loadFile("musics/bonus.wav");
+		keyPlayer = minim.loadFile("musics/keySound.mp3");
+
 	}
 
 	public void draw() {
@@ -211,7 +213,7 @@ public class Wizzball extends PApplet {
 
 		textFont(fontSW, 20);
 		textAlign(CENTER);
-		int xFont = width/2;
+		int xFont = width / 2;
 		text("Hello " + player + ", you will enter the game.", xFont, yFont, zFont);
 		text("enter the GAME.", xFont, yFont + 40, zFont);
 		text("You can rotate the character ", xFont, yFont + 80, zFont);
@@ -290,17 +292,9 @@ public class Wizzball extends PApplet {
 
 	private void nextLevel() {
 		lvl.currentLevel++;
-		// Reinitialize position
-		xpos = 0;
-		// ypos = height / 2;
-		gravity = (float) 0.5;
+		initPositionAndSpeed(); // Reinitialize position
+		loadLevel(); // Load a new level
 
-		// reinitialize speed
-		xspeed = 0;
-		yspeed = 5;
-
-		// Load a new level
-		loadLevel();
 	}
 
 	private void ybounce() {
@@ -340,6 +334,11 @@ public class Wizzball extends PApplet {
 	public void playBonusSound() {
 		bonusPlayer.rewind();
 		bonusPlayer.play();
+	}
+
+	public void playKeySound() {
+		keyPlayer.rewind();
+		keyPlayer.play();
 	}
 
 	private void manageFloorCollision() {
@@ -468,28 +467,27 @@ public class Wizzball extends PApplet {
 	}
 
 	public void keyPressed() {
-
-		if (key == '\n') {
-			if (state == TYPING) {
-				player = typing;
-				typing = "";
-				state = STORY;
-			}
-
-		} else {
-			if (keyCode == BACKSPACE) {
-				if (typing.length() > 1){
-					typing = typing.substring(0, typing.length() - 1);
-				}
-				else{
+		if (state == TYPING) {
+			if (key == '\n') {
+					player = typing;
 					typing = "";
+					state = STORY;
+			} else {
+				if (keyCode == BACKSPACE) {
+					if (typing.length() > 1) {
+						typing = typing.substring(0, typing.length() - 1);
+					} else {
+						typing = "";
+					}
+				} else if (key != CODED) {
+					typing += key;
+					playKeySound();
 				}
-			} else if (key != CODED)
-				typing += key;
+			}
 		}
 		if (keyCode == TAB) {
 			state = GAME;
-			actualTime = millis();
+			initPositionAndSpeed();
 		}
 
 		if (keyCode == RIGHT) {
@@ -508,6 +506,14 @@ public class Wizzball extends PApplet {
 		if (keyCode == 71) {
 			gravity = gravity * (-1);
 		}
+	}
+
+	private void initPositionAndSpeed() {
+		xpos = 0;
+		ypos = height / 2;
+		xspeed = 0;
+		yspeed = 5;
+		gravity = (float) 0.5;
 	}
 
 	void paraDraw(PImage img, PVector pos, float vel) {
