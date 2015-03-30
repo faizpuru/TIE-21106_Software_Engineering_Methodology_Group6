@@ -27,7 +27,7 @@ public class Wizzball extends PApplet {
 	Minim minim;
 	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer;
 
-	PFont f;
+	PFont f, fontSW;
 	float yFont = 250, zFont = -200, xFont = 250;
 
 	Star[] stars;// The array of stars
@@ -48,6 +48,7 @@ public class Wizzball extends PApplet {
 
 	public void setup() {
 		initDisplayParameters();
+		loadFonts();
 		loadLevel();
 		loadMusics();
 		loadImages();
@@ -56,9 +57,14 @@ public class Wizzball extends PApplet {
 		initStars();
 	}
 
+	private void loadFonts() {
+		f = createFont("Arial", 16, true);
+		fontSW = loadFont("fonts/StarJedi-48.vlw");
+		
+	}
+
 	private void initDisplayParameters() {
 		ellipseMode(RADIUS);
-		f = createFont("Arial", 16, true);
 		size(500, 500, OPENGL);
 		smooth();
 	}
@@ -110,31 +116,38 @@ public class Wizzball extends PApplet {
 
 		loopThemeMusic();
 		imagesResizing();
-		
+
 		switch (state) {
-			case TYPING:
-				displayNameScreen();
-				break;
-			case STORY:
-				displayStoryScreen();
-				break;
-			case GAME:
-				displayGame();
-				break;
-			case GAME_OVER:
-				displayGameOver();
-				break;
+		case TYPING:
+			displayNameScreen();
+			break;
+		case STORY:
+			displayStoryScreen();
+			break;
+		case GAME:
+			displayGame();
+			break;
+		case GAME_OVER:
+			displayGameOver();
+			break;
 		}
 
 	}
 
 	private void displayGame() {
+		
+		frameRate(25);
+		stroke(0);
+		strokeWeight(5);
+		background(0);
+		textAlign(LEFT);
+		textFont(fontSW,14);
+		
 		clear();
 		image(floor, 0, (float) (height * 0.8));
 		image(ceiling, 0, 0);
 		displayStars();
 
-		fill(255, 0, 0);
 
 		// /CONTROL OF THE GRAVITY
 
@@ -155,7 +168,6 @@ public class Wizzball extends PApplet {
 
 		int countdown = (lvl.maximumTime - passedTime) / 1000;
 
-		text("Time left: " + countdown, 50, 100);
 
 		sp1.x = xpos;
 		sp1.y = ypos;
@@ -180,28 +192,35 @@ public class Wizzball extends PApplet {
 		if (achieveLevel()) {
 			nextLevel();
 		}
-		text("distance : " + xpos, 50, 70);
+		
+		text("Stars left: " + lvl.nbBonus, 50, 100);
+		text("Time left: " + countdown, 50, 85);
+		text("distance : " + (int)(xpos), 50, 70);
 	}
 
 	private void displayStoryScreen() {
-		background(stars1);
-		textMode(MODEL);
-		fill(255, 255, 0);
-		textFont(f, 25);
+		pushStyle();
 		pushMatrix();
-		rotateX(PI / 6);
-		popMatrix();
+		  
+		frameRate(40);
+		background(0);
+		displayStars();
+		rotateX(PI / 4);
+
+		stroke(0);
+		strokeWeight(5);
+		directionalLight(250, 207, 63, 0, -200, -200);
+
+		textFont(fontSW,20);
 		textAlign(CENTER);
-		stroke(0, 20);
-		// strokeWeight(5);
 
 		text("Hello " + player + ", you will enter the game.", xFont, yFont, zFont);
-		text("You can move the character using arrows keys.", xFont, yFont + 50, zFont);
-		text("When the ball bounces up,", xFont, yFont + 100, zFont);
-		text("you can decelerate it using up arrow", xFont, yFont + 150, zFont);
-		text("When the ball is coming down,", xFont, yFont + 200, zFont);
-		text("you can accelerate it using down arrow.", xFont, yFont + 250, zFont);
-		text("Press TAB to continue...", xFont, yFont + 300, zFont);
+		text("enter the GAME.", xFont, yFont + 40, zFont);
+		text("You can rotate the character ", xFont, yFont + 80, zFont);
+		text("using arrows keys.", xFont, yFont + 120, zFont);
+		text("Use G to change the ", xFont, yFont + 160, zFont);
+		text("GRAVITY ", xFont, yFont + 200, zFont);
+		text("Press TAB to continue...", xFont, yFont + 240, zFont);
 
 		yFont--;
 		if (yFont < -300) {
@@ -209,15 +228,27 @@ public class Wizzball extends PApplet {
 			actualTime = millis();
 		}
 
+		popStyle();
+		popMatrix();
+
 	}
 
 	private void displayNameScreen() {
+		pushStyle();
+		pushMatrix();
+		stroke(0);
+		strokeWeight(5);
+		directionalLight(250, 207, 63, 0, -200, -200);
 		background(0);
-		textFont(f, 15);
+		textAlign(CENTER);
+		textFont(fontSW,18);
 		fill(200);
 		stroke(153);
-		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n", 50, 50);
-		text(typing, 50, 100);
+		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n",width/2,50);
+		textFont(fontSW,30);
+		text(typing, width/2, height/2);
+		popStyle();
+		popMatrix();
 	}
 
 	private void imagesResizing() {
@@ -455,6 +486,7 @@ public class Wizzball extends PApplet {
 		}
 		if (keyCode == TAB) {
 			state = GAME;
+			actualTime = millis();
 		}
 
 		if (keyCode == RIGHT) {
