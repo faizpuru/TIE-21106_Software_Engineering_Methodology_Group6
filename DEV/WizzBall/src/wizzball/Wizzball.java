@@ -130,12 +130,19 @@ public class Wizzball extends PApplet {
 			displayGame();
 			break;
 		case GAME_OVER:
+			if(sp1.lives>0){
+				sp1.lives--;
+				initPositionAndSpeed();
+				state = GAME;
+				return;
+			}
 			displayGameOver();
 			break;
 		}
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private void displayGame() {
 
 		frameRate(25);
@@ -175,7 +182,7 @@ public class Wizzball extends PApplet {
 		sp1.display();
 
 		// Display platforms to the good position
-		for (BasicObject p : lvl.objects) {
+		for (BasicObject p : (Vector<BasicObject>)lvl.objects.clone()) {
 			if (p.isDisplay()) {
 				p.display();
 				p.recalculatePositionX(xpos);
@@ -195,7 +202,7 @@ public class Wizzball extends PApplet {
 
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + countdown, 50, 85);
-		text("distance : " + (int) (xpos), 50, 70);
+		text("Lives : " + sp1.lives, 50, 70);
 	}
 
 	private void displayStoryScreen() {
@@ -354,16 +361,14 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void manageObjectsCollision() {
-		Vector<BasicObject> tmp = (Vector<BasicObject>) lvl.objects.clone();
-		for (BasicObject p : tmp) {
+		for (BasicObject p : lvl.objects) {
 			if (p.isDisplay()) {
 
 				// racine_carre((x_point - x_centre)� + (y_centre - y_point)) < rayon
 				if (p.isCollide(C_TOP_LEFT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect(this);
+						((Collectable) p).effect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP_LEFT])) {
 						xpos = p.getLeft() - sp1.radius;
 						ypos = p.getTop() - sp1.radius;
@@ -374,7 +379,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_TOP_RIGHT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect(this);
+						((Collectable) p).effect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP_RIGHT])) {
 						xpos = p.getRight() + sp1.radius;
 						ypos = p.getTop() - sp1.radius;
@@ -385,7 +390,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_BOTTOM_LEFT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect(this);
+						((Collectable) p).effect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM_LEFT])) {
 						xpos = p.getLeft() - sp1.radius;
 						ypos = p.getBottom() + sp1.radius;
@@ -396,7 +401,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_BOTTOM_RIGHT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect(this);
+						((Collectable) p).effect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM_RIGHT])) {
 						xpos = p.getRight() + sp1.radius;
 						ypos = p.getBottom() + sp1.radius;
@@ -407,7 +412,7 @@ public class Wizzball extends PApplet {
 				// Top and bottom
 				if (p.isCollide(C_TOP)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect(this);
+						((Collectable) p).effect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP])) {
 						ypos = p.getTop() - sp1.radius;
 						ybounce();
@@ -418,7 +423,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_BOTTOM)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect(this);
+						((Collectable) p).effect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM])) {
 						ypos = p.getBottom() + sp1.radius;
 						ybounce();
@@ -431,7 +436,7 @@ public class Wizzball extends PApplet {
 			// /Left collision
 			if (p.isCollide(C_LEFT)) {
 				if (p instanceof Collectable) {
-					((Collectable) p).effect(this);
+					((Collectable) p).effect();
 				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_LEFT])) {
 					xpos = p.getLeft() - sp1.radius;
 					xbounce();
@@ -441,7 +446,7 @@ public class Wizzball extends PApplet {
 			// /Right collision
 			if (p.isCollide(C_RIGHT)) {
 				if (p instanceof Collectable) {
-					((Collectable) p).effect(this);
+					((Collectable) p).effect();
 				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_RIGHT])) {
 					xpos = p.getRight() + sp1.radius;
 					xbounce();

@@ -12,6 +12,8 @@ public class Spot {
 	 float maxspeed = (float) 0.5;
 	 float friction = (float) 0.01;
 	 
+	 int lives = 3;
+	 
 
 	
 	  
@@ -38,7 +40,7 @@ public class Spot {
 	  }
 	  
 	  public void display() {
-		  if(parent.gravity>0){
+		  if(Wizzball.gravity>0){
 				currentAngle = currentAngle+rotationSpeed;
 		  } else {
 				currentAngle = currentAngle-rotationSpeed;
