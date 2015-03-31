@@ -202,7 +202,13 @@ public class Wizzball extends PApplet {
 
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + countdown, 50, 85);
+		pushStyle();;
+		if(sp1.lives==0)
+			fill(240,7,30);
 		text("Lives : " + sp1.lives, 50, 70);
+		popStyle();
+		
+		
 	}
 
 	private void displayStoryScreen() {
