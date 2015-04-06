@@ -32,6 +32,8 @@ public class Wizzball extends PApplet {
 	public Level lvl;
 	public Spot sp1;
 
+
+
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
 
 	Minim minim;
@@ -42,6 +44,9 @@ public class Wizzball extends PApplet {
 
 	Star[] stars;// The array of stars
 	PVector offset; // Global offset
+	PVector vback = new PVector(0, 0);
+	PVector vmiddle = new PVector(0, 0);
+	PVector vfront = new PVector(0, 5);
 
 	int actualTime; // Timer
 
@@ -66,6 +71,7 @@ public class Wizzball extends PApplet {
 		frameRate(24);
 		initSpot();
 		initStars();
+
 	}
 
 	private void loadFonts() {
@@ -164,8 +170,10 @@ public class Wizzball extends PApplet {
 		textFont(fontSW, 14);
 
 		clear();
-		image(floor, 0, (float) (height * 0.8));
-		image(ceiling, 0, 0);
+
+		paraDrawCeiling(ceiling, 500, xpos);
+		paraDrawFloor(floor, 500, xpos);
+		
 		displayStars();
 
 		// /CONTROL OF THE GRAVITY
@@ -278,10 +286,11 @@ public class Wizzball extends PApplet {
 	private void imagesResizing() {
 		// img.resize(width, height);
 		stars1.resize(width, height);
-		floor.resize(width, (int) (height * 0.2));
-		ceiling.resize(width, (int) (height * 0.1));
+		ceiling.resize(width*9, (int) (height * 0.1));
+		floor.resize(width*9, (int) (height*0.2));
 		saturn.resize(width / 6, height / 6);
 	}
+
 
 	private void loopThemeMusic() {
 		if (!musicPlayer.isPlaying())
@@ -538,22 +547,14 @@ public class Wizzball extends PApplet {
 		gravity = (float) 0.5;
 	}
 
-	void paraDraw(PImage img, PVector pos, float vel) {
-		pos.sub(vel, 0, 0);
-
-		int r = (int) pos.x + img.width;
-
-		if (r < width)
-			image(img, r, pos.y);
-		if (pos.x < width)
-			image(img, pos.x - img.width, pos.y);
-		if (pos.x < -img.width)
-			pos.x = width;
-
-		image(img, pos.x, pos.y);
-
+	void paraDrawCeiling(PImage img, float imgX, float imgY) {
+		
+		if(imgX>0)image(img, -imgY-1000,0);
 	}
-
+	void paraDrawFloor(PImage img, float imgX, float imgY) {
+		
+			if(imgX>0)image(img, -imgY-1000,height-img.height);
+		}
 	public float getLimitX(char side) {
 		if (side == 'l')
 			return xpos - width / 2;
