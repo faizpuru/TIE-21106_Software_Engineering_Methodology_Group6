@@ -45,8 +45,8 @@ public class Wizzball extends PApplet {
 
 	int actualTime; // Timer
 
-	private static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3;
-	int state = TYPING;
+	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3;
+	public int state = TYPING;
 
 	String typing = "";
 	String player = "";
@@ -56,6 +56,7 @@ public class Wizzball extends PApplet {
 	// NEGATIVE SPEED ---> GOING UP POSITIVE SPEED ---> GOING DOWN
 	public float xspeed = (float) 0; // Speed of the shape (initial = 0)
 	float yspeed = (float) 5; // Speed of the shape
+	private boolean isInGame = true;
 
 	public void setup() {
 		initDisplayParameters();
@@ -81,7 +82,7 @@ public class Wizzball extends PApplet {
 	}
 
 	private void initSpot() {
-		initPositionAndSpeed();
+		restartTheLevel();
 		sp1 = new Spot(this, xpos, ypos, 15);
 	}
 
@@ -143,7 +144,7 @@ public class Wizzball extends PApplet {
 		case GAME_OVER:
 			if (sp1.lives > 0) {
 				sp1.lives--;
-				initPositionAndSpeed();
+				restartTheLevel();
 				state = GAME;
 				return;
 			}
@@ -167,7 +168,15 @@ public class Wizzball extends PApplet {
 		image(floor, 0, (float) (height * 0.8));
 		image(ceiling, 0, 0);
 		displayStars();
+		
+		if(!isInGame){
+			xpos -= lvl.xEnd/40;
+			if(xpos<0){
+				reinitPositionAndSpeed();
+			}
+		}
 
+		
 		// /CONTROL OF THE GRAVITY
 
 		float speedTmp = (float) Math.abs(yspeed + gravity); // Control
@@ -185,12 +194,13 @@ public class Wizzball extends PApplet {
 			state = GAME_OVER;
 		}
 
-		int countdown = (lvl.maximumTime - passedTime) / 1000;
 
 		sp1.x = xpos;
 		sp1.y = ypos;
 
-		sp1.display();
+		if(isInGame ){
+			sp1.display();
+		}
 
 		// Display platforms to the good position
 		for (BasicObject p : (Vector<BasicObject>) lvl.objects.clone()) {
@@ -200,6 +210,8 @@ public class Wizzball extends PApplet {
 			}
 
 		}
+		
+
 
 		xpos = (float) (xpos + xspeed * 0.2);
 		ypos = (float) (ypos + yspeed * 0.5);
@@ -210,16 +222,38 @@ public class Wizzball extends PApplet {
 		if (achieveLevel()) {
 			nextLevel();
 		}
+		
+		displayTextBoxGame();
 
+	}
+
+	/**
+	 * 
+	 */
+	private void reinitPositionAndSpeed() {
+		xpos = 0;
+		ypos = height / 2;
+		xspeed = 0;
+		yspeed = 5;
+		gravity = (float) 0.5;
+		isInGame = true;		
+	}
+
+	/**
+	 * 
+	 */
+	private void displayTextBoxGame() {
+		int countdown = (lvl.maximumTime - millis() - actualTime) / 1000;
+
+		
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + countdown, 50, 85);
 		pushStyle();
-		;
+		
 		if (sp1.lives == 0)
 			fill(240, 7, 30);
 		text("Lives : " + sp1.lives, 50, 70);
-		popStyle();
-
+		popStyle();		
 	}
 
 	private void displayStoryScreen() {
@@ -316,7 +350,7 @@ public class Wizzball extends PApplet {
 
 	private void nextLevel() {
 		lvl.currentLevel++;
-		initPositionAndSpeed(); // Reinitialize position
+		restartTheLevel(); // Reinitialize position
 		loadLevel(); // Load a new level
 
 	}
@@ -509,7 +543,7 @@ public class Wizzball extends PApplet {
 		}
 		if (keyCode == TAB) {
 			state = GAME;
-			initPositionAndSpeed();
+			restartTheLevel();
 		}
 
 		if (keyCode == RIGHT) {
@@ -530,12 +564,8 @@ public class Wizzball extends PApplet {
 		}
 	}
 
-	private void initPositionAndSpeed() {
-		xpos = 0;
-		ypos = height / 2;
-		xspeed = 0;
-		yspeed = 5;
-		gravity = (float) 0.5;
+	private void restartTheLevel() {
+		isInGame = false;
 	}
 
 	void paraDraw(PImage img, PVector pos, float vel) {
@@ -591,9 +621,10 @@ public class Wizzball extends PApplet {
 			int y = (int) (((loc.y - offset.y) * size / 8)) % height;
 			if (x < 0)
 				x += width;
-			if (y < 0)
-				y += height;
-
+			if (y < height*0.1)
+				y += (int) (height*0.7);
+			if (y > height*0.8)
+				y -= (int) (height*0.7);
 			// Display the point
 			point(x, y);
 
