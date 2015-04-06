@@ -1,4 +1,8 @@
-package wizzball;
+package wizzball.objects.collectable;
+
+import wizzball.Wizzball;
+import wizzball.objects.basics.BasicObject;
+import wizzball.objects.basics.Collectable;
 
 public class Bonus extends BasicObject implements Collectable {
 
@@ -7,7 +11,7 @@ public class Bonus extends BasicObject implements Collectable {
 	double smallerFactor = 0.9;
 	boolean destroy = false;
 
-	Bonus(Wizzball p, float xpos, float height, float width, boolean down) {
+	public Bonus(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
 	}
 

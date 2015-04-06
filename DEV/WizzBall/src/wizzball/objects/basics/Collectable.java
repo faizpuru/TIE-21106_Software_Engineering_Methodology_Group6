@@ -1,4 +1,4 @@
-package wizzball;
+package wizzball.objects.basics;
 
 public interface Collectable {
 

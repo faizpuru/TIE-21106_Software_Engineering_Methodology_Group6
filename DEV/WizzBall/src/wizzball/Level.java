@@ -5,7 +5,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Vector;
+
 import processing.core.PApplet;
+import wizzball.objects.basics.BasicObject;
+import wizzball.objects.collectable.Bonus;
+import wizzball.objects.collidable.Hole;
+import wizzball.objects.collidable.Platform;
 
 public class Level {
 	
@@ -13,8 +18,8 @@ public class Level {
 	int maximumTime = 0;
 	int xBegin = 0;
 	int xEnd = 0;
-	int nbBonus = 0;
-	Vector<BasicObject> objects = null;
+	public int nbBonus = 0;
+	public Vector<BasicObject> objects = null;
 	
 	Wizzball wizz;
 

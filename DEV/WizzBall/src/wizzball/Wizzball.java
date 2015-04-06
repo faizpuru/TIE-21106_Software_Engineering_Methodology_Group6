@@ -8,6 +8,10 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
+import wizzball.objects.basics.BasicObject;
+import wizzball.objects.basics.Collectable;
+import wizzball.objects.basics.Collidable;
+import wizzball.objects.collidable.Hole;
 
 @SuppressWarnings("serial")
 public class Wizzball extends PApplet {
@@ -19,8 +23,8 @@ public class Wizzball extends PApplet {
 
 	public static int C_TOP = 0, C_BOTTOM = 1, C_LEFT = 2, C_RIGHT = 3, C_TOP_LEFT = 4, C_TOP_RIGHT = 5, C_BOTTOM_LEFT = 6, C_BOTTOM_RIGHT = 7;
 
-	Level lvl;
-	Spot sp1;
+	public Level lvl;
+	public Spot sp1;
 
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
 
@@ -41,9 +45,10 @@ public class Wizzball extends PApplet {
 	String typing = "";
 	String player = "";
 
-	float xpos = 0, ypos; // Starting position of shape
+	public float xpos = 0; // Starting position of shape
+	public float ypos;
 	// NEGATIVE SPEED ---> GOING UP POSITIVE SPEED ---> GOING DOWN
-	float xspeed = (float) 0; // Speed of the shape (initial = 0)
+	public float xspeed = (float) 0; // Speed of the shape (initial = 0)
 	float yspeed = (float) 5; // Speed of the shape
 
 	public void setup() {

@@ -1,18 +1,23 @@
-package wizzball;
+package wizzball.objects.basics;
 
 import processing.core.PConstants;
 import processing.core.PImage;
+import wizzball.Wizzball;
 
 public class BasicObject {
 
-	float x, y, width, height, xAbs;
-	boolean down; // if down, platform on floor, !down, platform on ceiling
-	Wizzball parent;
-	PImage image;
+	protected float x;
+	protected float y;
+	protected float width;
+	protected float height;
+	protected float xAbs;
+	protected boolean down; // if down, platform on floor, !down, platform on ceiling
+	protected Wizzball parent;
+	protected PImage image;
 
 	// Second version of the platform constructor;
 	// the fields are assigned with parameters
-	BasicObject(Wizzball p, float xpos, float height, float width, boolean down) {
+	protected BasicObject(Wizzball p, float xpos, float height, float width, boolean down) {
 
 		parent = p;
 		xAbs = xpos;
@@ -126,7 +131,7 @@ public class BasicObject {
 		return Math.sqrt(Math.pow((getRight() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getBottom()), 2)) <= parent.sp1.radius;
 	}
 
-	boolean isCollide(int edge) {
+	public boolean isCollide(int edge) {
 		if (edge == Wizzball.C_TOP) {
 			return isTopCollide();
 		} else if (edge == Wizzball.C_BOTTOM) {

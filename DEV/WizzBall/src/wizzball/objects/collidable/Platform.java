@@ -1,4 +1,8 @@
-package wizzball;
+package wizzball.objects.collidable;
+
+import wizzball.Wizzball;
+import wizzball.objects.basics.BasicObject;
+import wizzball.objects.basics.Collidable;
 
 public class Platform extends BasicObject implements Collidable{
 
@@ -6,7 +10,7 @@ public class Platform extends BasicObject implements Collidable{
 			topLeft = true, topRight = true, bottomLeft = true, bottomRight = true;
 
 	
-	Platform(Wizzball p, float xpos, float height, float width, boolean down) {
+	public Platform(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
 	}
 
