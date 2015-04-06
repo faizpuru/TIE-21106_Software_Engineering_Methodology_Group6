@@ -4,6 +4,7 @@ import processing.core.*;
 
 public class Spot {
 
+	private static final int MAX_LIVES = 5;
 	public float x;
 	public float y;
 	public float radius;
@@ -15,7 +16,7 @@ public class Spot {
 	float maxspeed = (float) 0.5;
 	float friction = (float) 0.01;
 
-	int lives = 3;
+	public int lives = 3;
 
 	// First version of the Spot constructor;
 	// the fields are assigned default values
@@ -81,5 +82,12 @@ public class Spot {
 	public void accelerateRotation(double d) {
 		if ((d > 0 && rotationSpeed + d < maxspeed) || (d < 0 && rotationSpeed + d > -maxspeed))
 			rotationSpeed += d;
+	}
+
+	public void incrementLives() {
+		if(lives<MAX_LIVES){
+			lives++;
+		}
+		
 	}
 }

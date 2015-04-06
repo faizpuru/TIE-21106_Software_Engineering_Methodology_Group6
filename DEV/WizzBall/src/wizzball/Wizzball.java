@@ -379,7 +379,7 @@ public class Wizzball extends PApplet {
 				// racine_carre((x_point - x_centre)� + (y_centre - y_point)) < rayon
 				if (p.isCollide(C_TOP_LEFT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect();
+						((Collectable) p).collect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP_LEFT])) {
 						xpos = p.getLeft() - sp1.radius;
 						ypos = p.getTop() - sp1.radius;
@@ -390,7 +390,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_TOP_RIGHT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect();
+						((Collectable) p).collect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP_RIGHT])) {
 						xpos = p.getRight() + sp1.radius;
 						ypos = p.getTop() - sp1.radius;
@@ -401,7 +401,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_BOTTOM_LEFT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect();
+						((Collectable) p).collect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM_LEFT])) {
 						xpos = p.getLeft() - sp1.radius;
 						ypos = p.getBottom() + sp1.radius;
@@ -412,7 +412,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_BOTTOM_RIGHT)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect();
+						((Collectable) p).collect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM_RIGHT])) {
 						xpos = p.getRight() + sp1.radius;
 						ypos = p.getBottom() + sp1.radius;
@@ -423,7 +423,7 @@ public class Wizzball extends PApplet {
 				// Top and bottom
 				if (p.isCollide(C_TOP)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect();
+						((Collectable) p).collect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_TOP])) {
 						ypos = p.getTop() - sp1.radius;
 						ybounce();
@@ -434,7 +434,7 @@ public class Wizzball extends PApplet {
 
 				if (p.isCollide(C_BOTTOM)) {
 					if (p instanceof Collectable) {
-						((Collectable) p).effect();
+						((Collectable) p).collect();
 					} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_BOTTOM])) {
 						ypos = p.getBottom() + sp1.radius;
 						ybounce();
@@ -447,7 +447,7 @@ public class Wizzball extends PApplet {
 			// /Left collision
 			if (p.isCollide(C_LEFT)) {
 				if (p instanceof Collectable) {
-					((Collectable) p).effect();
+					((Collectable) p).collect();
 				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_LEFT])) {
 					xpos = p.getLeft() - sp1.radius;
 					xbounce();
@@ -457,7 +457,7 @@ public class Wizzball extends PApplet {
 			// /Right collision
 			if (p.isCollide(C_RIGHT)) {
 				if (p instanceof Collectable) {
-					((Collectable) p).effect();
+					((Collectable) p).collect();
 				} else if (p instanceof Collidable && (((Collidable) (p)).getCollidablesEdges()[C_RIGHT])) {
 					xpos = p.getRight() + sp1.radius;
 					xbounce();
