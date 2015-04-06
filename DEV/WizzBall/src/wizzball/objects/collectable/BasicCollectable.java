@@ -1,16 +1,27 @@
+/**
+ * TUT _ Tampere
+ * TIE-21106_Software_Engineering_Methodology
+ * Group 6
+ */
+
 package wizzball.objects.collectable;
 
 import wizzball.Wizzball;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 
+/**
+ * BasicCollectable is a very easy way to create a collectable object
+ * To use it : - Override loadimage to change the image 
+ * 			   - Override effect and add an effect
+ */
 public abstract class BasicCollectable extends BasicObject implements Collectable {
 	float maxSize;
 	boolean smaller = true;
 	double smallerFactor = 0.9;
 	boolean destroy = false;
 
-	public BasicCollectable(Wizzball p, float xpos, float height, float width, boolean down) {
+	private BasicCollectable(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
 	}
 

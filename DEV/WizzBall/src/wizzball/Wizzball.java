@@ -1,9 +1,13 @@
+/**
+ * TUT _ Tampere
+ * TIE-21106_Software_Engineering_Methodology
+ * Group 6
+ */
+
 package wizzball;
 
 import java.util.Vector;
 
-import ddf.minim.AudioPlayer;
-import ddf.minim.Minim;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -12,6 +16,8 @@ import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;
 import wizzball.objects.collidable.Hole;
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 
 @SuppressWarnings("serial")
 public class Wizzball extends PApplet {
@@ -135,7 +141,7 @@ public class Wizzball extends PApplet {
 			displayGame();
 			break;
 		case GAME_OVER:
-			if(sp1.lives>0){
+			if (sp1.lives > 0) {
 				sp1.lives--;
 				initPositionAndSpeed();
 				state = GAME;
@@ -187,7 +193,7 @@ public class Wizzball extends PApplet {
 		sp1.display();
 
 		// Display platforms to the good position
-		for (BasicObject p : (Vector<BasicObject>)lvl.objects.clone()) {
+		for (BasicObject p : (Vector<BasicObject>) lvl.objects.clone()) {
 			if (p.isDisplay()) {
 				p.display();
 				p.recalculatePositionX(xpos);
@@ -207,13 +213,13 @@ public class Wizzball extends PApplet {
 
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + countdown, 50, 85);
-		pushStyle();;
-		if(sp1.lives==0)
-			fill(240,7,30);
+		pushStyle();
+		;
+		if (sp1.lives == 0)
+			fill(240, 7, 30);
 		text("Lives : " + sp1.lives, 50, 70);
 		popStyle();
-		
-		
+
 	}
 
 	private void displayStoryScreen() {
@@ -485,9 +491,9 @@ public class Wizzball extends PApplet {
 	public void keyPressed() {
 		if (state == TYPING) {
 			if (key == '\n') {
-					player = typing;
-					typing = "";
-					state = STORY;
+				player = typing;
+				typing = "";
+				state = STORY;
 			} else {
 				if (keyCode == BACKSPACE) {
 					if (typing.length() > 1) {

@@ -1,6 +1,12 @@
+/**
+ * TUT _ Tampere
+ * TIE-21106_Software_Engineering_Methodology
+ * Group 6
+ */
+
 package wizzball;
 
-import processing.core.*;
+import processing.core.PImage;
 
 public class Spot {
 
@@ -85,9 +91,9 @@ public class Spot {
 	}
 
 	public void incrementLives() {
-		if(lives<MAX_LIVES){
+		if (lives < MAX_LIVES) {
 			lives++;
 		}
-		
+
 	}
 }

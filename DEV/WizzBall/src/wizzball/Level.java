@@ -1,3 +1,9 @@
+/**
+ * TUT _ Tampere
+ * TIE-21106_Software_Engineering_Methodology
+ * Group 6
+ */
+
 package wizzball;
 
 import java.io.BufferedReader;
@@ -14,21 +20,20 @@ import wizzball.objects.collidable.Hole;
 import wizzball.objects.collidable.Platform;
 
 public class Level {
-	
+
 	int currentLevel = 1;
 	int maximumTime = 0;
 	int xBegin = 0;
 	int xEnd = 0;
 	public int nbBonus = 0;
 	public Vector<BasicObject> objects = null;
-	
+
 	Wizzball wizz;
 
-	
 	public Level(Wizzball wizz) {
 		this.wizz = wizz;
 	}
-	
+
 	/**
 	 * Load the level corresponding to the txt file
 	 */
@@ -87,11 +92,13 @@ public class Level {
 					}
 					if (words[0].equals("B")) {
 						nbBonus++;
-						objects.addElement(new Bonus(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]), true));
+						objects.addElement(new Bonus(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
+								true));
 					}
-					
+
 					if (words[0].equals("L")) {
-						objects.addElement(new Life(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]), true));
+						objects.addElement(new Life(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
+								true));
 					}
 
 					if (words[0].equals("S")) {

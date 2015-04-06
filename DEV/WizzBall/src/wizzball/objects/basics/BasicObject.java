@@ -1,3 +1,9 @@
+/**
+ * TUT _ Tampere
+ * TIE-21106_Software_Engineering_Methodology
+ * Group 6
+ */
+
 package wizzball.objects.basics;
 
 import processing.core.PConstants;
@@ -95,7 +101,7 @@ public class BasicObject {
 	private boolean isLeftCollide() {
 		if (parent.xspeed > 0) {
 			if (parent.ypos + parent.sp1.radius >= getTop() && parent.ypos - parent.sp1.radius <= getBottom()) {
-				if (getLeft() <= parent.xpos + parent.sp1.radius && parent.sp1.radius  < x - width / 2) {
+				if (getLeft() <= parent.xpos + parent.sp1.radius && parent.sp1.radius < x - width / 2) {
 					return true;
 				}
 			}
@@ -107,7 +113,7 @@ public class BasicObject {
 
 		if (parent.xspeed < 0) {
 			if (parent.ypos >= getTop() && parent.ypos <= getBottom()) {
-				if (getRight() >= parent.xpos - parent.sp1.radius  && parent.sp1.radius > x + width / 2) {
+				if (getRight() >= parent.xpos - parent.sp1.radius && parent.sp1.radius > x + width / 2) {
 					return true;
 				}
 			}
