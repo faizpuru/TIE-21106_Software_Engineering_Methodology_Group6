@@ -16,6 +16,7 @@ import processing.core.PApplet;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.collectable.Bonus;
 import wizzball.objects.collectable.Life;
+import wizzball.objects.collectable.PowerUp;
 import wizzball.objects.collidable.Hole;
 import wizzball.objects.collidable.Platform;
 import wizzball.objects.enemies.StaticEnemy;
@@ -104,6 +105,11 @@ public class Level {
 
 					if (words[0].equals("L")) {
 						objects.addElement(new Life(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
+								true));
+					}
+					
+					if (words[0].equals("PU")) {
+						objects.addElement(new PowerUp(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
 								true));
 					}
 
