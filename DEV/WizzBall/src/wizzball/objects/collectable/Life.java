@@ -16,7 +16,7 @@ public class Life extends BasicCollectable {
 	
 	@Override
 	public void effect() {
-		//parent.sp1.incrementLives();
+		parent.sp1.incrementLives();
 	}
 	
 	@Override
