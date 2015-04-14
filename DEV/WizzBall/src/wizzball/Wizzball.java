@@ -25,6 +25,11 @@ public class Wizzball extends PApplet {
 	private static final int MAX_SPEED = 20;
 	private static final double INCR_SPEED = 0.1;
 	private static final int rotationEffect = 40;
+	
+	private static final int STARS_POINTS=100;
+	private static final int POWER_POINTS=50;
+	private static final int NASTIES_POINTS=500;
+
 	public static float gravity = (float) 0.5; // positive downwards --- negative upwards
 
 	public static int C_TOP = 0, C_BOTTOM = 1, C_LEFT = 2, C_RIGHT = 3, C_TOP_LEFT = 4, C_TOP_RIGHT = 5, C_BOTTOM_LEFT = 6, C_BOTTOM_RIGHT = 7;
@@ -115,7 +120,7 @@ public class Wizzball extends PApplet {
 		stars1 = loadImage("starsBack.jpg");
 		saturn = loadImage("saturn.png");
 		starsOver = loadImage("goscreen.png");
-		gameover = loadImage("logo.png");
+		gameover = loadImage("gover.png");
 	}
 
 	@Override
@@ -193,7 +198,7 @@ public class Wizzball extends PApplet {
 			yspeed = (float) (yspeed + gravity);
 		}
 
-		// /CONTROL THE TIME
+		// /CONTROL THE  
 
 		// Calculate how much time has passed
 		int passedTime = millis() - actualTime;
@@ -517,7 +522,7 @@ public class Wizzball extends PApplet {
 
 	private void displayGameOver() {
 		clear();
-		image(gameover, width / 4, height / 4);
+		image(gameover, width / 7, height / 7);
 	}
 
 	public void accelerate() {
