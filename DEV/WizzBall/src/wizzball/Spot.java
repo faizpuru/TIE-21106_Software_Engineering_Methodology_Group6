@@ -31,6 +31,7 @@ public class Spot {
 	float friction = (float) 0.01;
 
 	public int lives = 3;
+	public int score = 0;
 
 	// First version of the Spot constructor;
 	// the fields are assigned default values
@@ -40,7 +41,6 @@ public class Spot {
 		radius = 20;
 		x = (float) 0;
 		y = (float) (p.height * 0.5);
-
 	}
 
 	// Second version of the Spot constructor;

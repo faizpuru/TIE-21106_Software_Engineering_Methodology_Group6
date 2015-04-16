@@ -6,12 +6,15 @@
 
 package wizzball;
 
+import java.io.File;
 import java.util.Vector;
 
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
+import processing.data.Table;
+import processing.data.TableRow;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;
@@ -26,9 +29,9 @@ public class Wizzball extends PApplet {
 	private static final double INCR_SPEED = 0.1;
 	private static final int rotationEffect = 40;
 	
-	private static final int STARS_POINTS=100;
-	private static final int POWER_POINTS=50;
-	private static final int NASTIES_POINTS=500;
+	public static final int STARS_POINTS=100;
+	public static final int POWER_POINTS=50;
+	public static final int NASTIES_POINTS=500;
 
 	public static float gravity = (float) 0.5; // positive downwards --- negative upwards
 
@@ -37,7 +40,7 @@ public class Wizzball extends PApplet {
 	public Level lvl;
 	public Spot sp1;
 
-
+	public Table table; //Scores table
 
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover;
 
@@ -203,7 +206,7 @@ public class Wizzball extends PApplet {
 		// Calculate how much time has passed
 		int passedTime = millis() - actualTime;
 
-		if (passedTime > lvl.maximumTime) { // After 60 seconds..
+		if (passedTime > lvl.maximumTime) { // After level time..
 			state = GAME_OVER;
 		}
 
@@ -258,7 +261,7 @@ public class Wizzball extends PApplet {
 	private void displayTextBoxGame() {
 		int countdown = (lvl.maximumTime - millis() - actualTime) / 1000;
 
-		
+		text("Score: " + sp1.score, 50, 55);
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + countdown, 50, 85);
 		pushStyle();
