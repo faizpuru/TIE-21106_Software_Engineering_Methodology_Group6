@@ -22,6 +22,6 @@ public class Bonus extends BasicCollectable {
 	@Override
 	public void effect() {
 		parent.lvl.nbBonus--;
-		parent.sp1.score+=parent.STARS_POINTS;
+		parent.sp1.score+=Wizzball.STARS_POINTS;
 	}
 }

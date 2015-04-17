@@ -6,15 +6,8 @@
 
 package wizzball;
 
-import processing.core.PImage;
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PImage;
-import processing.core.PVector;
-
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 
 public class Spot {
 
@@ -106,7 +99,7 @@ public class Spot {
 	}
 
 	public void changeColour() {
-		ball.filter(parent.INVERT);;
+		ball.filter(PApplet.INVERT);;
 	}
 
 	    

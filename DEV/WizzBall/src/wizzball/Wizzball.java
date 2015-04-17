@@ -6,7 +6,6 @@
 
 package wizzball;
 
-import java.io.File;
 import java.util.Vector;
 
 import processing.core.PApplet;
@@ -14,7 +13,6 @@ import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.data.Table;
-import processing.data.TableRow;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;

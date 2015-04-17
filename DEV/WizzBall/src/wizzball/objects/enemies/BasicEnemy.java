@@ -6,8 +6,6 @@
 package wizzball.objects.enemies;
 
 import wizzball.Wizzball;
-import wizzball.objects.basics.BasicObject;
-import wizzball.objects.basics.Collectable;
 import wizzball.objects.collectable.BasicCollectable;
 
 /**
