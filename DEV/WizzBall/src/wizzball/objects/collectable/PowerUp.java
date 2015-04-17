@@ -16,8 +16,9 @@ public class PowerUp extends BasicCollectable {
 	
 	@Override
 	public void effect() {
-	
 		parent.sp1.changeColour();
+		parent.sp1.score+=parent.POWER_POINTS;
+
 	}
 	
 	@Override
