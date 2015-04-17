@@ -19,6 +19,7 @@ import wizzball.objects.collectable.Life;
 import wizzball.objects.collectable.PowerUp;
 import wizzball.objects.collidable.Hole;
 import wizzball.objects.collidable.Platform;
+import wizzball.objects.enemies.MovingEnemy;
 import wizzball.objects.enemies.StaticEnemy;
 
 public class Level {
@@ -100,6 +101,11 @@ public class Level {
 					
 					if (words[0].equals("SE")) {
 						objects.addElement(new StaticEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
+								true));
+					}
+					
+					if (words[0].equals("ME")) {
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[4]),PApplet.parseFloat(words[5]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
 								true));
 					}
 
