@@ -106,25 +106,8 @@ public class Spot {
 	}
 
 	public void changeColour() {
-		// TODO Auto-generated method stub
-		SetInvertir(ball);
-		
+		ball.filter(parent.INVERT);;
 	}
-	 public void SetInvertir(PImage f){
-	        this.ball = f;
-	        Color color;
-	        for(int i=0;i<ball.width;i++){
-	          for(int j=0;j< ball.height;j++){
-	                //se obtiene el color del pixel
-	                color = new Color(ball.get(i, j));
-	                //se extraen los valores RGB
-	               int r = color.getRed(); 
-	               int g = color.getGreen();
-	               int b = color.getBlue();
-	                //se coloca en la nueva imagen con los valores invertidos
-	                ball.set(i, j, new Color(255-r,255-g,255-b).getRGB());                                                                    
-	          }
-	        }        
-	    }
+
 	    
 }

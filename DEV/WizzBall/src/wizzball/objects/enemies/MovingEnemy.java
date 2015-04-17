@@ -32,36 +32,26 @@ public class MovingEnemy extends BasicEnemy {
 	}
 
 	public MovingEnemy(Wizzball p, float xpos, float ypos, float x2, float y2, float height, float width, boolean down) {
-		
-		
+
 		super(p, xpos, ypos, height, width, down);
-		if(!isGreater(xpos,x2)){
-			this.x1 = xpos;
-			this.y1 = ypos;
-			this.x2 = x2;
-			this.y2 = y2;
-		} else {
-			this.x1 = xpos;
-			this.y1 = ypos;
-			this.x2 = x2;
-			this.y2 = y2;
-			direction = !direction;
-		}	
-		
+		this.x1 = xpos;
+		this.y1 = ypos;
+		this.x2 = x2;
+		this.y2 = y2;
 
 		directorCoeff = (y2 - y1) / (x2 - x1);
-		
-		if(x1==x2){
-			vertical  = true;
+
+		if (x1 == x2) {
+			vertical = true;
 		}
 
 	}
-	
+
 	/**
 	 * 
 	 */
 	public boolean isGreater(float a, float b) {
-		if(a>b){
+		if (a > b) {
 			return true;
 		} else {
 			return false;
@@ -89,35 +79,43 @@ public class MovingEnemy extends BasicEnemy {
 		super.display();
 
 		if (!vertical) {
-			if (xAbs > x2) {
-				direction = !direction;
-				xAbs = x2;
-			} else if (xAbs < x1) {
-				direction = !direction;
-				xAbs = x1;
+			if (!isGreater(x1, x2)) {
+				if (xAbs > x2) {
+					direction = !direction;
+					xAbs = x2;
+				} else if (xAbs < x1) {
+					direction = !direction;
+					xAbs = x1;
+				}
+			} else {
+				if (xAbs > x1) {
+					direction = !direction;
+					xAbs = x1;
+				} else if (xAbs < x2) {
+					direction = !direction;
+					xAbs = x2;
+				}
 			}
 		} else {
-			if(isGreater(y1, y2)){
-				if(y>y1){
+			if (isGreater(y1, y2)) {
+				if (y > y1) {
 					direction = !direction;
 					y = y1;
-				} else if(y<y2){
+				} else if (y < y2) {
 					direction = !direction;
 					y = y2;
 				}
 			} else {
-				if(y>y2){
+				if (y > y2) {
 					direction = !direction;
 					y = y2;
-				} else if(y<y1){
+				} else if (y < y1) {
 					direction = !direction;
 					y = y1;
 				}
 			}
 		}
 
-		
-		
 		if (direction) {
 			if (!vertical) {
 				xAbs = xAbs + 1;
