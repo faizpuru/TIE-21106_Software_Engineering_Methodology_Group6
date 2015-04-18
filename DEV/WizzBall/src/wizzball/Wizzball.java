@@ -232,7 +232,13 @@ public class Wizzball extends PApplet {
 
 		manageFloorCollision();
 		manageObjectsCollision();
-
+		
+		if ( sp1.score >= 300 )
+		{
+			sp1.lives += 1;
+			sp1.score = 0;
+		}
+		
 		if (achieveLevel()) {
 			nextLevel();
 		}
