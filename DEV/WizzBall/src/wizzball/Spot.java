@@ -25,6 +25,7 @@ public class Spot {
 
 	public int lives = 3;
 	public int score = 0;
+	public boolean power=false;
 
 	// First version of the Spot constructor;
 	// the fields are assigned default values
@@ -99,7 +100,8 @@ public class Spot {
 	}
 
 	public void changeColour() {
-		ball.filter(PApplet.INVERT);;
+		ball.filter(PApplet.INVERT);
+		power=!power;
 	}
 
 	    

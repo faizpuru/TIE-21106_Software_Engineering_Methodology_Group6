@@ -29,7 +29,13 @@ public abstract class BasicEnemy extends BasicCollectable{
 
 	@Override
 	public void effect() {
-		parent.state = Wizzball.GAME_OVER;
+		if(parent.sp1.power){
+			parent.sp1.score+=Wizzball.NASTIES_POINTS;
+			parent.sp1.changeColour();
+		}
+		else{
+			parent.state = Wizzball.GAME_OVER;
+		}
 	}
 
 }
