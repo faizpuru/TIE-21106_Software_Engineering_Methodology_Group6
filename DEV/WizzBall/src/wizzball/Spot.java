@@ -53,6 +53,12 @@ public class Spot {
 
 	}
 
+	public void initSpot() {
+		lives = 3;
+		score = 0;
+		power = false;
+	}
+
 	public void display() {
 		if (Wizzball.gravity > 0) {
 			currentAngle = currentAngle + rotationSpeed;
@@ -101,7 +107,7 @@ public class Spot {
 			case 3:
 				mouth = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
 				break;
-			case 4 :
+			case 4:
 				custom = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
 				break;
 			}
@@ -168,7 +174,7 @@ public class Spot {
 		Vector<Integer> v = new Vector<Integer>();
 		for (int i = 5; i <= 23; i++) {
 			v.add(i);
-		} 
+		}
 		v.add(175);
 		int nextIndex = v.indexOf(eyesCoord) + 1;
 		nextIndex = nextIndex <= v.size() - 1 ? nextIndex : 0;
@@ -189,20 +195,20 @@ public class Spot {
 		mouthCoord = v.get(nextIndex);
 		setImage(mouthCoord, 3);
 	}
-	
+
 	public void changeCustom() {
 		Vector<Integer> v = new Vector<Integer>();
 		for (int i = 152; i <= 156; i++) {
 			v.add(i);
-		} 
+		}
 		v.add(159);
 		v.add(161);
 		v.add(165);
 		v.add(166);
 		v.add(170);
 		v.add(174);
-		v.add(175);		
-		
+		v.add(175);
+
 		int nextIndex = v.indexOf(customCoord) + 1;
 		nextIndex = nextIndex <= v.size() - 1 ? nextIndex : 0;
 		customCoord = v.get(nextIndex);

@@ -40,7 +40,7 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 	public void effect() {
 	}
 
-	private void delete() {
+	protected void delete() {
 		parent.lvl.objects.remove(this);
 		parent.playBonusSound();
 		effect();
@@ -52,12 +52,7 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 		parent.image(image, (x - width / 2 + parent.width / 2), y, width, width);
 
 		if (destroy) {
-			width -= maxSize / 5;
-			x = parent.xpos;
-			y = parent.ypos;
-			if (width < maxSize / 10) {
-				delete();
-			}
+			destroyAnimation();	
 			return;
 		}
 
@@ -71,5 +66,19 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 			smaller = !smaller;
 		}
 
+	}
+
+	/**
+	 * Override to change the animation 
+	 */
+	protected void destroyAnimation() {
+		width -= maxSize / 5;
+		x = parent.xpos;
+		y = parent.ypos;
+		if (width < maxSize / 10) {
+			delete();
+		}
+		return;		// TODO Auto-generated method stub
+		
 	}
 }

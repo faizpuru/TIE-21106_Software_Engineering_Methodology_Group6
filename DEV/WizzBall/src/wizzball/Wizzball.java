@@ -68,7 +68,7 @@ public class Wizzball extends PApplet {
 	public float xspeed = (float) 0; // Speed of the shape (initial = 0)
 	float yspeed = (float) 5; // Speed of the shape
 	private boolean isInGame = true;
-	private boolean buttonGame, buttonAvatar, buttonBall, buttonEyes, buttonMouth, buttonCustom, buttonBack, buttonSound;
+	private boolean buttonGame, buttonAvatar, buttonBall, buttonEyes, buttonMouth, buttonCustom, buttonBack, buttonSound, buttonRestart;
 
 	public void setup() {
 		initDisplayParameters();
@@ -686,8 +686,33 @@ public class Wizzball extends PApplet {
 	}
 
 	private void displayGameOver() {
+		buttonRestart = false;
+		
 		clear();
-		image(gameover, width / 7, height / 7);
+		pushStyle();
+		background(50);
+		fill(50);
+		textFont(fontSW, 40);
+		textAlign(CENTER);
+		stroke(40);
+		strokeWeight(5);
+		
+		
+		
+		image(gameover, width / 2 - gameover.width/2, height / 2 - gameover.height/2);
+		
+		pushStyle();
+		if (mouseY >= height-70) {
+			fill(100,100,100);
+			buttonRestart = true;
+		}
+		rect(20, height-70, width-40, 60);
+		popStyle();
+
+		fill(200, 226, 9, 240);
+		text("RESTART", width/2, height-25);
+		
+		popStyle();
 	}
 
 	public void accelerate() {
@@ -731,7 +756,21 @@ public class Wizzball extends PApplet {
 				switchSound();
 			}
 			
+		} else if(state == GAME_OVER){
+			if(buttonRestart){
+				restartGame();
+			}
 		}
+	}
+
+	/**
+	 * restart the game
+	 */
+	private void restartGame() {
+		lvl = new Level(this);
+		sp1.initSpot();
+		loadLevel();
+		state = GAME;
 	}
 
 	/**
