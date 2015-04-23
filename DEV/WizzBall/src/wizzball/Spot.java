@@ -93,7 +93,7 @@ public class Spot {
 			switch (image) {
 			case 1:
 				ball = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
-				ball = ball.get(9, 15, 88, 90);
+				ball = ball.get(9, 15, 90, 90);
 				break;
 			case 2:
 				eyes = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);

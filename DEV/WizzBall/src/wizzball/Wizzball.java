@@ -196,6 +196,7 @@ public class Wizzball extends PApplet {
 		displayStars();
 
 		if (!isInGame) {
+			ypos = height+2*sp1.radius;
 			xpos -= lvl.xEnd / 40;
 			if (xpos < 0) {
 				reinitPositionAndSpeed();
