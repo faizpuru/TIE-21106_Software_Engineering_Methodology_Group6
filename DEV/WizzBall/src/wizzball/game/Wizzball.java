@@ -4,7 +4,7 @@
  * Group 6
  */
 
-package wizzball;
+package wizzball.game;
 
 import java.util.Vector;
 
@@ -17,6 +17,7 @@ import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;
 import wizzball.objects.collidable.Hole;
+import wizzball.utilities.Timer;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
@@ -54,9 +55,8 @@ public class Wizzball extends PApplet {
 	PVector vmiddle = new PVector(0, 0);
 	PVector vfront = new PVector(0, 5);
 
-	int actualTime; // Timer
 
-	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43;
+	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43, PAUSE = 44;
 	public int state = MENU;
 
 	String typing = "";
@@ -68,8 +68,10 @@ public class Wizzball extends PApplet {
 	public float xspeed = (float) 0; // Speed of the shape (initial = 0)
 	float yspeed = (float) 5; // Speed of the shape
 	private boolean isInGame = true;
-	private boolean buttonGame, buttonAvatar, buttonBall, buttonEyes, buttonMouth, buttonCustom, buttonBack, buttonSound, buttonRestart;
+	private boolean buttonGame, buttonSettings, buttonBall, buttonEyes, buttonMouth, buttonCustom, buttonBack, buttonSound, buttonRestart;
 
+	public Timer timer = new Timer(this);
+	
 	public void setup() {
 		initDisplayParameters();
 		loadFonts();
@@ -165,6 +167,9 @@ public class Wizzball extends PApplet {
 		case GAME:
 			displayGame();
 			break;
+		case PAUSE:
+			displayPause();
+			break;
 		case GAME_OVER:
 			if (sp1.lives > 0) {
 				sp1.lives--;
@@ -196,7 +201,7 @@ public class Wizzball extends PApplet {
 		displayStars();
 
 		if (!isInGame) {
-			ypos = height+2*sp1.radius;
+			ypos = height + 2 * sp1.radius;
 			xpos -= lvl.xEnd / 40;
 			if (xpos < 0) {
 				reinitPositionAndSpeed();
@@ -213,10 +218,9 @@ public class Wizzball extends PApplet {
 
 		// /CONTROL THE
 
-		// Calculate how much time has passed
-		int passedTime = millis() - actualTime;
+		
 
-		if (passedTime > lvl.maximumTime) { // After level time..
+		if (timer.getSecondsLeft() <= 0) { // After level time..
 			state = GAME_OVER;
 		}
 
@@ -274,7 +278,7 @@ public class Wizzball extends PApplet {
 		buttonMouth = false;
 		buttonBack = false;
 		buttonSound = false;
-		
+
 		pushStyle();
 		background(50);
 		fill(50);
@@ -288,48 +292,43 @@ public class Wizzball extends PApplet {
 		text("SETTINGS", width / 2, 50);
 		popStyle();
 
-
 		float h = 40;
-		float border = 10 ;
-		float y1 = height-(h+border);
-		float y2 = y1-(h+border);
-		float y3 = y2-(h+border);
-		float y4 = y3-(h+border);
-		
+		float border = 10;
+		float y1 = height - (h + border);
+		float y2 = y1 - (h + border);
+		float y3 = y2 - (h + border);
+		float y4 = y3 - (h + border);
+
 		pushStyle();
-		if (mouseY <= 60 && mouseX<=60) {
-			fill(100,100,100);
+		if (mouseY <= 60 && mouseX <= 60) {
+			fill(100, 100, 100);
 			buttonBack = true;
 		}
-		triangle(10, 35, 60, 10, 60, 60);		
+		triangle(10, 35, 60, 10, 60, 60);
 		popStyle();
-		
-		image(current_sound,width-10 - 60,10,60,60);
-		if (mouseX >= width-70 && mouseY<=70) {
+
+		image(current_sound, width - 10 - 60, 10, 60, 60);
+		if (mouseX >= width - 70 && mouseY <= 70) {
 			buttonSound = true;
 		}
-		
+
 		float tmpRadius = sp1.radius;
 		float tmpx = sp1.x;
 		float tmpy = sp1.y;
 
-		sp1.radius = (y4-40-100)/2;
-		sp1.x = width/2 - sp1.radius;
+		sp1.radius = (y4 - 40 - 100) / 2;
+		sp1.x = width / 2 - sp1.radius;
 		sp1.y = sp1.radius + 40 + 50;
 		sp1.display();
 
-
-
-		
-		
 		if (mouseX >= 50 && mouseX <= width - 50) {
 			if (mouseY >= y1 && mouseY <= y1 + h) {
 				buttonCustom = true;
 			} else if (mouseY >= y2 && mouseY <= y2 + h) {
 				buttonMouth = true;
-			}else if (mouseY >= y3 && mouseY <= y3 + h) {
+			} else if (mouseY >= y3 && mouseY <= y3 + h) {
 				buttonEyes = true;
-			}else if (mouseY >= y4 && mouseY <= y4 + h) {
+			} else if (mouseY >= y4 && mouseY <= y4 + h) {
 				buttonBall = true;
 			}
 		}
@@ -345,13 +344,13 @@ public class Wizzball extends PApplet {
 			fill(100, 100, 100);
 		rect(50, y3, width - 100, h, 10);
 		popStyle();
-		
+
 		pushStyle();
 		if (buttonMouth)
 			fill(100, 100, 100);
 		rect(50, y2, width - 100, h, 10);
 		popStyle();
-		
+
 		pushStyle();
 		if (buttonCustom)
 			fill(100, 100, 100);
@@ -361,28 +360,27 @@ public class Wizzball extends PApplet {
 		fill(200, 226, 9, 240);
 		textFont(fontSW, 30);
 
-		text("Body", width / 2, y4+h - 10);
-		text("Eyes", width / 2,  y3+h - 10);
-		text("Mouth", width / 2,  y2+h - 10);
-		text("Custom", width / 2,  y1+h - 10);
+		text("Body", width / 2, y4 + h - 10);
+		text("Eyes", width / 2, y3 + h - 10);
+		text("Mouth", width / 2, y2 + h - 10);
+		text("Custom", width / 2, y1 + h - 10);
 
 		popStyle();
-		
+
 		sp1.x = tmpx;
 		sp1.y = tmpy;
 		sp1.radius = tmpRadius;
 
 	}
 
-	private void displayMenu() {
-
+	private void displayPause() {
 		pushStyle();
 
 		float y1 = height / 2 - 75 - 42.5f;
 		float y2 = height / 2 + 75 - 42.5f;
 		float h = 60;
 		buttonGame = false;
-		buttonAvatar = false;
+		buttonSettings = false;
 
 		fill(0);
 		background(0);
@@ -395,7 +393,7 @@ public class Wizzball extends PApplet {
 			if (mouseY >= y1 && mouseY <= y1 + h) {
 				buttonGame = true;
 			} else if (mouseY >= y2 && mouseY <= y2 + h) {
-				buttonAvatar = true;
+				buttonSettings = true;
 			}
 		}
 
@@ -406,7 +404,51 @@ public class Wizzball extends PApplet {
 		popStyle();
 
 		pushStyle();
-		if (buttonAvatar)
+		if (buttonSettings)
+			fill(100, 100, 100);
+		rect(50, y2, width - 100, h, 10);
+		popStyle();
+
+		fill(200, 226, 9, 240);
+		text("RESUME", width / 2, height / 2 - 75);
+		text("SETTINGS", width / 2, height / 2 + 75);
+
+		popStyle();
+	}
+
+	private void displayMenu() {
+
+		pushStyle();
+
+		float y1 = height / 2 - 75 - 42.5f;
+		float y2 = height / 2 + 75 - 42.5f;
+		float h = 60;
+		buttonGame = false;
+		buttonSettings = false;
+
+		fill(0);
+		background(0);
+		textFont(fontSW, 40);
+		textAlign(CENTER);
+		stroke(40);
+		strokeWeight(5);
+
+		if (mouseX >= 50 && mouseX <= width - 50) {
+			if (mouseY >= y1 && mouseY <= y1 + h) {
+				buttonGame = true;
+			} else if (mouseY >= y2 && mouseY <= y2 + h) {
+				buttonSettings = true;
+			}
+		}
+
+		pushStyle();
+		if (buttonGame)
+			fill(100, 100, 100);
+		rect(50, y1, width - 100, h, 10);
+		popStyle();
+
+		pushStyle();
+		if (buttonSettings)
 			fill(100, 100, 100);
 		rect(50, y2, width - 100, h, 10);
 		popStyle();
@@ -422,11 +464,10 @@ public class Wizzball extends PApplet {
 	 * 
 	 */
 	private void displayTextBoxGame() {
-		int countdown = (lvl.maximumTime - millis() - actualTime) / 1000;
 
 		text("Score: " + sp1.score, 50, 55);
 		text("Stars left: " + lvl.nbBonus, 50, 100);
-		text("Time left: " + countdown, 50, 85);
+		text("Time left: " + timer.getSecondsLeft(), 50, 85);
 		pushStyle();
 
 		if (sp1.lives == 0)
@@ -462,7 +503,7 @@ public class Wizzball extends PApplet {
 		yFont--;
 		if (yFont < -300) {
 			state = GAME;
-			actualTime = millis();
+			timer.start();
 		}
 
 		popStyle();
@@ -687,7 +728,7 @@ public class Wizzball extends PApplet {
 
 	private void displayGameOver() {
 		buttonRestart = false;
-		
+
 		clear();
 		pushStyle();
 		background(50);
@@ -696,22 +737,20 @@ public class Wizzball extends PApplet {
 		textAlign(CENTER);
 		stroke(40);
 		strokeWeight(5);
-		
-		
-		
-		image(gameover, width / 2 - gameover.width/2, height / 2 - gameover.height/2);
-		
+
+		image(gameover, width / 2 - gameover.width / 2, height / 2 - gameover.height / 2);
+
 		pushStyle();
-		if (mouseY >= height-70) {
-			fill(100,100,100);
+		if (mouseY >= height - 70) {
+			fill(100, 100, 100);
 			buttonRestart = true;
 		}
-		rect(20, height-70, width-40, 60);
+		rect(20, height - 70, width - 40, 60);
 		popStyle();
 
 		fill(200, 226, 9, 240);
-		text("RESTART", width/2, height-25);
-		
+		text("RESTART", width / 2, height - 25);
+
 		popStyle();
 	}
 
@@ -735,31 +774,44 @@ public class Wizzball extends PApplet {
 	public void mouseClicked() {
 		super.mouseClicked();
 
-		if (state == MENU) {
+		switch (state) {
+		case MENU:
 			if (buttonGame) {
 				state = TYPING;
-			} else if (buttonAvatar) {
+			} else if (buttonSettings) {
 				state = SETTINGS;
 			}
-		} else if(state == SETTINGS){
-			if(buttonBall){
+			break;
+		case SETTINGS:
+			if (buttonBall) {
 				sp1.changeBall();
-			} else if(buttonMouth){
-				 sp1.changeMouth();
-			} else if(buttonEyes){
+			} else if (buttonMouth) {
+				sp1.changeMouth();
+			} else if (buttonEyes) {
 				sp1.changeEyes();
-			} else if(buttonCustom){
+			} else if (buttonCustom) {
 				sp1.changeCustom();
-			}else if(buttonBack){
+			} else if (buttonBack) {
 				state = MENU;
-			}else if(buttonSound){
+			} else if (buttonSound) {
 				switchSound();
 			}
-			
-		} else if(state == GAME_OVER){
-			if(buttonRestart){
+			break;
+
+		case PAUSE:
+			if (buttonGame) {
+				state = GAME;
+				timer.unpause();
+			} else if (buttonSettings) {
+				state = SETTINGS;
+			}
+			break;
+
+		case GAME_OVER:
+			if (buttonRestart) {
 				restartGame();
 			}
+			break;
 		}
 	}
 
@@ -777,18 +829,19 @@ public class Wizzball extends PApplet {
 	 * 
 	 */
 	private void switchSound() {
-		if(current_sound.equals(sound_on)){
+		if (current_sound.equals(sound_on)) {
 			current_sound = sound_off;
 			musicPlayer.mute();
 		} else {
 			current_sound = sound_on;
 			musicPlayer.unmute();
 		}
-		
+
 	}
 
 	public void keyPressed() {
-		if (state == TYPING) {
+		switch (state) {
+		case TYPING:
 			if (key == '\n') {
 				player = typing;
 				typing = "";
@@ -805,28 +858,50 @@ public class Wizzball extends PApplet {
 					playKeySound();
 				}
 			}
+			break;
+		case GAME:
+			if (key == ESC) {
+				key = 0; // Avoid killing process
+				state = PAUSE;
+				timer.pause();
+			}
+			if (keyCode == RIGHT) {
+				sp1.accelerateRotation(INCR_SPEED);
+			}
+			if (keyCode == LEFT) {
+				sp1.accelerateRotation(-INCR_SPEED);
+			}
+			if (keyCode == 71) {
+				gravity = gravity * (-1);
+			}
+			
+			//To debug -- DELETE IT AFTER
+			if (keyCode == TAB) {
+				state = GAME;
+				restartTheLevel();
+			}
+			break;
+			
+		case STORY :
+			if (keyCode == TAB) {
+				state = GAME;
+				timer.start();
+			}
+			
+		default:
+			if (key == ESC) {
+				key = 0; // Avoid killing process
+			}
+			
+			//To debug -- DELETE IT AFTER
+			if (keyCode == TAB) {
+				state = GAME;
+				restartTheLevel();
+			}
+			break;
 		}
-		if (keyCode == TAB) {
-			state = GAME;
-			restartTheLevel();
-		}
+		
 
-		if (keyCode == RIGHT) {
-			sp1.accelerateRotation(INCR_SPEED);
-		}
-		if (keyCode == LEFT) {
-			sp1.accelerateRotation(-INCR_SPEED);
-		}
-
-		/*
-		 * if ( keyCode == UP ) { if ( isBounceUp ) accelerate(); else if(isBounceDown) decelerate(); }
-		 */
-		/*
-		 * if ( keyCode == DOWN ) { if(isBounceUp) decelerate(); }
-		 */
-		if (keyCode == 71) {
-			gravity = gravity * (-1);
-		}
 	}
 
 	private void restartTheLevel() {

@@ -4,7 +4,7 @@
  * Group 6
  */
 
-package wizzball;
+package wizzball.game;
 
 import java.util.Vector;
 

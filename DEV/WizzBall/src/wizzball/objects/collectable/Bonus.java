@@ -6,7 +6,7 @@
 
 package wizzball.objects.collectable;
 
-import wizzball.Wizzball;
+import wizzball.game.Wizzball;
 
 public class Bonus extends BasicCollectable {
 

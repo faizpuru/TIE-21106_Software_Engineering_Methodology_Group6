@@ -8,7 +8,7 @@ package wizzball.objects.basics;
 
 import processing.core.PConstants;
 import processing.core.PImage;
-import wizzball.Wizzball;
+import wizzball.game.Wizzball;
 
 public class BasicObject {
 

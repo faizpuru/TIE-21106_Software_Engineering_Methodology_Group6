@@ -6,7 +6,7 @@
 
 package wizzball.objects.collectable;
 
-import wizzball.Wizzball;
+import wizzball.game.Wizzball;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 

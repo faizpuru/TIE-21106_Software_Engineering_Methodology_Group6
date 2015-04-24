@@ -5,7 +5,7 @@
  */
 package wizzball.objects.enemies;
 
-import wizzball.Wizzball;
+import wizzball.game.Wizzball;
 
 /**
  * Enemy who don't move

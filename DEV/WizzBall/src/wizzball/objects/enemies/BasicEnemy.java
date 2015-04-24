@@ -6,7 +6,7 @@
 package wizzball.objects.enemies;
 
 import processing.core.PImage;
-import wizzball.Wizzball;
+import wizzball.game.Wizzball;
 import wizzball.objects.collectable.BasicCollectable;
 
 /**

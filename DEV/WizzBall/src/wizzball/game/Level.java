@@ -4,7 +4,7 @@
  * Group 6
  */
 
-package wizzball;
+package wizzball.game;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -75,7 +75,7 @@ public class Level {
 					objects.addElement(new Platform(wizz, xBegin, (float) (wizz.height * 0.7), 40, true));
 					nbLine++;
 				} else if (nbLine == 2) {
-					maximumTime = wizz.millis() + PApplet.parseInt(words[1]) * 1000;
+					wizz.timer.init(PApplet.parseInt(words[1]));
 					nbLine++;
 				}
 
