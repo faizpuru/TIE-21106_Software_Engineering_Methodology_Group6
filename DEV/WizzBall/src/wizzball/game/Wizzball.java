@@ -55,7 +55,6 @@ public class Wizzball extends PApplet {
 	PVector vmiddle = new PVector(0, 0);
 	PVector vfront = new PVector(0, 5);
 
-
 	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43, PAUSE = 44;
 	public int state = MENU;
 
@@ -71,7 +70,7 @@ public class Wizzball extends PApplet {
 	private boolean buttonGame, buttonSettings, buttonBall, buttonEyes, buttonMouth, buttonCustom, buttonBack, buttonSound, buttonRestart;
 
 	public Timer timer = new Timer(this);
-	
+
 	public void setup() {
 		initDisplayParameters();
 		loadFonts();
@@ -165,7 +164,8 @@ public class Wizzball extends PApplet {
 			displayStoryScreen();
 			break;
 		case GAME:
-			displayGame();
+			if (!lvl.isLoading())
+				displayGame();
 			break;
 		case PAUSE:
 			displayPause();
@@ -219,8 +219,6 @@ public class Wizzball extends PApplet {
 		}
 
 		// /CONTROL THE
-
-		
 
 		if (timer.getSecondsLeft() <= 0) { // After level time..
 			state = GAME_OVER;
@@ -877,34 +875,33 @@ public class Wizzball extends PApplet {
 			if (keyCode == 71) {
 				gravity = gravity * (-1);
 			}
-			
-			//To debug -- DELETE IT AFTER
+
+			// To debug -- DELETE IT AFTER
 			if (keyCode == TAB) {
 				timer.pause();
 				state = GAME;
 				restartTheLevel();
 			}
 			break;
-			
-		case STORY :
+
+		case STORY:
 			if (keyCode == TAB) {
 				state = GAME;
 				timer.start();
 			}
-			
+
 		default:
 			if (key == ESC) {
 				key = 0; // Avoid killing process
 			}
-			
-			//To debug -- DELETE IT AFTER
+
+			// To debug -- DELETE IT AFTER
 			if (keyCode == TAB) {
 				state = GAME;
 				restartTheLevel();
 			}
 			break;
 		}
-		
 
 	}
 

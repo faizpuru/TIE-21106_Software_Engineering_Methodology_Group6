@@ -11,9 +11,7 @@ import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 
 /**
- * BasicCollectable is a very easy way to create a collectable object
- * To use it : - Override loadimage to change the image 
- * 			   - Override effect and add an effect
+ * BasicCollectable is a very easy way to create a collectable object To use it : - Override loadimage to change the image - Override effect and add an effect
  */
 public abstract class BasicCollectable extends BasicObject implements Collectable {
 	float maxSize;
@@ -30,9 +28,11 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 		y = ypos;
 		maxSize = height;
 	}
-	
+
 	@Override
-	public void collect(){
+	public void collect() {
+		if (!destroy)
+			effect();
 		destroy = true;
 	}
 
@@ -43,7 +43,6 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 	protected void delete() {
 		parent.lvl.objects.remove(this);
 		parent.playBonusSound();
-		effect();
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 		parent.image(image, (x - width / 2 + parent.width / 2), y, width, width);
 
 		if (destroy) {
-			destroyAnimation();	
+			destroyAnimation();
 			return;
 		}
 
@@ -69,7 +68,7 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 	}
 
 	/**
-	 * Override to change the animation 
+	 * Override to change the animation
 	 */
 	protected void destroyAnimation() {
 		width -= maxSize / 5;
@@ -78,7 +77,7 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 		if (width < maxSize / 10) {
 			delete();
 		}
-		return;		// TODO Auto-generated method stub
-		
+		return; // TODO Auto-generated method stub
+
 	}
 }

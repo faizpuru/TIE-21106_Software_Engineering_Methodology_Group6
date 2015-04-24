@@ -32,15 +32,23 @@ public class Level {
 	public Vector<BasicObject> objects = null;
 
 	Wizzball wizz;
+	private boolean loading;
 
 	public Level(Wizzball wizz) {
 		this.wizz = wizz;
 	}
 
+	public boolean isLoading(){
+		return loading;
+	}
+	
 	/**
 	 * Load the level corresponding to the txt file
 	 */
 	public void loadLevel() {
+		
+		loading = true;
+		
 		// Open the file
 		try {
 			FileInputStream fstream = new FileInputStream("data/levels/level" + currentLevel + ".txt");
@@ -149,11 +157,11 @@ public class Level {
 
 					}
 				}
-				System.out.println(strLine);
 			}
 
 			// Close the input stream
 			br.close();
+			loading  = false;
 
 		} catch (IOException e) {
 			System.out.println("SUCCESS");
