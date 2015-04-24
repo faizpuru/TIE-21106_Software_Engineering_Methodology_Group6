@@ -41,11 +41,14 @@ public class Timer {
 	}
 
 	public void init(int secs) {
+		startTime = parent.millis();
 		timeLeft = secs*1000;
 	}
 
 	public int getSecondsLeft() {
-		return (timeLeft - (parent.millis() - startTime)) / 1000;
+		if(pause)
+			return timeLeft;
+		return (timeLeft - (parent.millis() - startTime)) / 1000 + 1;
 	}
 
 	public boolean isPaused() {

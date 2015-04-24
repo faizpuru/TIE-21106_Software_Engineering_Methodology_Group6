@@ -173,6 +173,7 @@ public class Wizzball extends PApplet {
 		case GAME_OVER:
 			if (sp1.lives > 0) {
 				sp1.lives--;
+				timer.pause();
 				restartTheLevel();
 				state = GAME;
 				return;
@@ -205,6 +206,7 @@ public class Wizzball extends PApplet {
 			xpos -= lvl.xEnd / 40;
 			if (xpos < 0) {
 				reinitPositionAndSpeed();
+				timer.unpause();
 			}
 		}
 
@@ -569,6 +571,7 @@ public class Wizzball extends PApplet {
 	}
 
 	private void nextLevel() {
+		timer.pause();
 		lvl.currentLevel++;
 		restartTheLevel(); // Reinitialize position
 		loadLevel(); // Load a new level
@@ -877,6 +880,7 @@ public class Wizzball extends PApplet {
 			
 			//To debug -- DELETE IT AFTER
 			if (keyCode == TAB) {
+				timer.pause();
 				state = GAME;
 				restartTheLevel();
 			}
