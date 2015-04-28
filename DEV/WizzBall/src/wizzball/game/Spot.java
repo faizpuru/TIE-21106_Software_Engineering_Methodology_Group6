@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import wizzball.objects.weapons.BasicWeapon;
 
 public class Spot {
 
@@ -29,6 +30,7 @@ public class Spot {
 	public int lives = 3;
 	public int score = 0;
 	public boolean power = false;
+	private BasicWeapon weapon;
 
 	// First version of the Spot constructor;
 	// the fields are assigned default values
@@ -213,6 +215,13 @@ public class Spot {
 		nextIndex = nextIndex <= v.size() - 1 ? nextIndex : 0;
 		customCoord = v.get(nextIndex);
 		setImage(customCoord, 4);
+	}
+
+	/**
+	 * @param basicWeapon
+	 */
+	public void switchWeapon(BasicWeapon weapon) {
+		this.weapon = weapon;
 	}
 
 }
