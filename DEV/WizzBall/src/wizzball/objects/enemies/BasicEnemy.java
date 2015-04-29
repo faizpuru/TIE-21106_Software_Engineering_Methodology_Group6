@@ -31,6 +31,12 @@ public abstract class BasicEnemy extends BasicCollectable {
 		destroySprite = parent.loadImage("explosion.png");
 	}
 
+	public void shoot(){
+		parent.sp1.score += Wizzball.NASTIES_POINTS;
+		destroy = true;
+
+	}
+	
 	@Override
 	public void effect() {
 		if (parent.sp1.power) {

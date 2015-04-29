@@ -35,6 +35,13 @@ public class Spot {
 
 	// First version of the Spot constructor;
 	// the fields are assigned default values
+	public char getDirection(){
+		if(rotationSpeed>=0){
+			return 'r';
+		}
+		return 'l';
+	}
+	
 	Spot(Wizzball p) {
 
 		parent = p;

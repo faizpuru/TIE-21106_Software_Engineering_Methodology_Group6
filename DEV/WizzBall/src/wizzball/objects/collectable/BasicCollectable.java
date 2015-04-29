@@ -17,7 +17,7 @@ public abstract class BasicCollectable extends BasicObject implements Collectabl
 	float maxSize;
 	boolean smaller = true;
 	double smallerFactor = 0.9;
-	boolean destroy = false;
+	protected boolean destroy = false;
 
 	private BasicCollectable(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
