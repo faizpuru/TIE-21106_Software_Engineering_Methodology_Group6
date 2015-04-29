@@ -11,6 +11,7 @@ import java.util.Vector;
 import processing.core.PApplet;
 import processing.core.PImage;
 import wizzball.objects.weapons.BasicWeapon;
+import wizzball.objects.weapons.LaserPistol;
 
 public class Spot {
 
@@ -51,7 +52,7 @@ public class Spot {
 		y = ypos;
 		radius = r;
 		ball = p.loadImage("Smiley.png");
-		// setAvatar();
+		weapon = new LaserPistol(parent, 0, 0, 0, 0, true);
 
 	}
 
@@ -78,7 +79,13 @@ public class Spot {
 		if (custom != null)
 			parent.image(custom, -radius, -radius, radius * 2, radius * 2);
 
+		
 		parent.popMatrix();
+		if(weapon!=null){
+			if(weapon.isShooting()){
+				weapon.weaponEffectAndAnimation();
+			}
+		}
 
 		friction();
 
@@ -151,9 +158,17 @@ public class Spot {
 
 	}
 
-	public void changeColour() {
-		ball.filter(PApplet.INVERT);
+	public void switchPower() {
+		changeColour();
 		power = !power;
+	}
+	
+
+	/**
+	 * 
+	 */
+	private void changeColour() {
+		ball.filter(PApplet.INVERT);		
 	}
 
 	/**
@@ -222,6 +237,15 @@ public class Spot {
 	 */
 	public void switchWeapon(BasicWeapon weapon) {
 		this.weapon = weapon;
+	}
+
+	/**
+	 * 
+	 */
+	public void activateWeapon() {
+		if(weapon!=null){
+			weapon.activateWeapon();
+		}
 	}
 
 }

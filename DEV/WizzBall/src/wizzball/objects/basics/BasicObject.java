@@ -159,5 +159,9 @@ public class BasicObject {
 		}
 
 	}
+	
+	public float getX(){
+		return xAbs;
+	}
 
 }

@@ -22,6 +22,8 @@ public abstract class BasicWeapon extends BasicCollectable {
 	 * @param width
 	 * @param down
 	 */
+	boolean isShooting = false;
+	
 	public BasicWeapon(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
 		super(p, xpos, ypos, height, width, down);
 		// TODO Auto-generated constructor stub
@@ -34,6 +36,11 @@ public abstract class BasicWeapon extends BasicCollectable {
 	@Override
 	public void effect() {
 		parent.sp1.switchWeapon(this);
+	}
+	
+	public void weaponEffectAndAnimation(){
+		weaponEffect();
+		weaponAnimation();
 	}
 	
 	/**
@@ -54,8 +61,14 @@ public abstract class BasicWeapon extends BasicCollectable {
 	 * Override to create the effect of the weapon
 	 */
 	public void activateWeapon(){
-		weaponAnimation();
-		weaponEffect();
+		isShooting=true;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isShooting() {
+		return isShooting;
 	}
 	
 	

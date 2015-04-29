@@ -70,6 +70,7 @@ public class Wizzball extends PApplet {
 	private boolean buttonGame, buttonSettings, buttonBall, buttonEyes, buttonMouth, buttonCustom, buttonBack, buttonSound, buttonRestart;
 
 	public Timer timer = new Timer(this);
+	private Hole trapInHole = null;
 
 	public void setup() {
 		initDisplayParameters();
@@ -210,6 +211,16 @@ public class Wizzball extends PApplet {
 			}
 		}
 
+		if (trapInHole != null) {
+			xpos = trapInHole.getX();
+			ypos = ypos - 1;
+
+			if (ypos <= (trapInHole.getTop() + sp1.radius)) {
+				state = GAME_OVER;
+				trapInHole = null;
+			}
+		}
+
 		// /CONTROL OF THE GRAVITY
 
 		float speedTmp = (float) Math.abs(yspeed + gravity); // Control
@@ -239,12 +250,13 @@ public class Wizzball extends PApplet {
 			}
 
 		}
+		if (trapInHole == null && state != GAME_OVER) {
+			xpos = (float) (xpos + xspeed * 0.2);
+			ypos = (float) (ypos + yspeed * 0.5);
 
-		xpos = (float) (xpos + xspeed * 0.2);
-		ypos = (float) (ypos + yspeed * 0.5);
-
-		manageFloorCollision();
-		manageObjectsCollision();
+			manageFloorCollision();
+			manageObjectsCollision();
+		}
 
 		if (sp1.score >= 300) {
 			sp1.lives += 1;
@@ -378,9 +390,11 @@ public class Wizzball extends PApplet {
 
 		float y1 = height / 2 - 75 - 42.5f;
 		float y2 = height / 2 + 75 - 42.5f;
+		float y3 = height / 2 - 42.5f;
 		float h = 60;
 		buttonGame = false;
 		buttonSettings = false;
+		buttonRestart = false;
 
 		fill(0);
 		background(0);
@@ -394,6 +408,8 @@ public class Wizzball extends PApplet {
 				buttonGame = true;
 			} else if (mouseY >= y2 && mouseY <= y2 + h) {
 				buttonSettings = true;
+			} else if (mouseY >= y3 && mouseY <= y3 + h) {
+				buttonRestart = true;
 			}
 		}
 
@@ -404,6 +420,12 @@ public class Wizzball extends PApplet {
 		popStyle();
 
 		pushStyle();
+		if (buttonRestart)
+			fill(100, 100, 100);
+		rect(50, y3, width - 100, h, 10);
+		popStyle();
+
+		pushStyle();
 		if (buttonSettings)
 			fill(100, 100, 100);
 		rect(50, y2, width - 100, h, 10);
@@ -411,6 +433,7 @@ public class Wizzball extends PApplet {
 
 		fill(200, 226, 9, 240);
 		text("RESUME", width / 2, height / 2 - 75);
+		text("RESTART", width / 2, height / 2);
 		text("SETTINGS", width / 2, height / 2 + 75);
 
 		popStyle();
@@ -689,7 +712,7 @@ public class Wizzball extends PApplet {
 						ypos = p.getTop() - sp1.radius;
 						ybounce();
 					} else if (p instanceof Hole) {
-						state = GAME_OVER;
+						trapInHole = (Hole) p;
 					}
 				}
 
@@ -700,7 +723,7 @@ public class Wizzball extends PApplet {
 						ypos = p.getBottom() + sp1.radius;
 						ybounce();
 					} else if (p instanceof Hole) {
-						state = GAME_OVER;
+						trapInHole = (Hole) p;
 					}
 				}
 			}
@@ -805,6 +828,9 @@ public class Wizzball extends PApplet {
 				timer.unpause();
 			} else if (buttonSettings) {
 				state = SETTINGS;
+			} else if (buttonRestart) {
+				timer.unpause();
+				restartGame();
 			}
 			break;
 
@@ -872,6 +898,10 @@ public class Wizzball extends PApplet {
 			if (keyCode == LEFT) {
 				sp1.accelerateRotation(-INCR_SPEED);
 			}
+			if (key == ' ') {
+				sp1.activateWeapon();
+			}
+
 			if (keyCode == 71) {
 				gravity = gravity * (-1);
 			}
