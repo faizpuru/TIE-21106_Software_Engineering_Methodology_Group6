@@ -7,12 +7,10 @@ package wizzball.objects.weapons;
 
 import java.util.Vector;
 
-import processing.core.PApplet;
-import processing.core.PImage;
 import wizzball.game.Wizzball;
 import wizzball.objects.basics.BasicObject;
+import wizzball.objects.basics.Collidable;
 import wizzball.objects.enemies.BasicEnemy;
-import wizzball.utilities.Timer;
 
 /**
  * @author francois
@@ -34,9 +32,10 @@ public class Pistol extends BasicWeapon {
 	static private int maximumNbBullets = 15;
 
 	class Bullet {
+		boolean right;
 		float xBullet = 0;
 		float yBullet = 0;
-		static final float sBullet = 5;
+		static final float sBullet = 10;
 		static final int limitX = 200;
 
 		/**
@@ -44,15 +43,21 @@ public class Pistol extends BasicWeapon {
 		 */
 		public Bullet(float yB) {
 			yBullet = yB;
-			xBullet = parent.sp1.radius;
+			if(parent.sp1.getDirection()=='r'){
+				right = true;
+				xBullet = parent.sp1.radius;
+			} else {
+				right = false;
+				xBullet = -parent.sp1.radius;
+			}
 
 		}
 
 		/**
 		 * 
 		 */
-		private boolean isAlive( ) {
-			return xBullet<parent.width/2;
+		private boolean isAlive() {
+			return xBullet < 3 * parent.width / 8 || xBullet > -3*parent.width/8;
 		}
 
 		/**
@@ -61,9 +66,14 @@ public class Pistol extends BasicWeapon {
 		private void display() {
 			parent.pushStyle();
 			parent.strokeWeight(0);
-			parent.fill(100);
-			parent.rect(xBullet+parent.width/2, yBullet, wBullet, hBullet,3);
-			xBullet += sBullet;
+			parent.fill(255);
+			if (right) {
+				parent.rect(xBullet + parent.width / 2, yBullet, wBullet, hBullet, 3);
+				xBullet += sBullet - parent.xspeed*0.2;
+			} else {
+				parent.rect(xBullet + wBullet + parent.width / 2, yBullet, wBullet, hBullet, 3);
+				xBullet -= sBullet + parent.xspeed*0.2;
+			}
 			parent.popStyle();
 		}
 	}
@@ -105,18 +115,34 @@ public class Pistol extends BasicWeapon {
 	 * 
 	 * @see wizzball.objects.weapons.BasicWeapon#weaponEffect()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void weaponEffect() {
-
+		for (Bullet b : (Vector<Bullet>) bullets.clone()) {
+			float sup = b.right ? 0 : wBullet;
+			for (BasicObject o : parent.lvl.objects) {
+				if (o instanceof Collidable || o instanceof BasicEnemy) {
+					if (b.xBullet + sup + parent.xpos >= o.getLeft() && b.xBullet + sup + parent.xpos <= o.getRight()) {
+						if (b.yBullet <= o.getBottom() && b.yBullet >= o.getTop()) {
+							bullets.remove(b);
+							if (o instanceof BasicEnemy) {
+								((BasicEnemy) o).shoot();
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see wizzball.objects.weapons.BasicWeapon#activateWeapon()
 	 */
 	@Override
 	public void activateWeapon() {
-		if(bullets.size()<maximumNbBullets )
-		bullets.addElement(new Bullet(parent.ypos));
+		if (bullets.size() < maximumNbBullets)
+			bullets.addElement(new Bullet(parent.ypos));
 	}
 }
