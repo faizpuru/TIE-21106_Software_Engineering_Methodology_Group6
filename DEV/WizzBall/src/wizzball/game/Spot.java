@@ -12,6 +12,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import wizzball.objects.weapons.BasicWeapon;
 import wizzball.objects.weapons.LaserPistol;
+import wizzball.objects.weapons.Pistol;
 
 public class Spot {
 
@@ -59,7 +60,7 @@ public class Spot {
 		y = ypos;
 		radius = r;
 		ball = p.loadImage("Smiley.png");
-		weapon = new LaserPistol(parent, 0, 0, 0, 0, true);
+		weapon = new Pistol(parent, 0, 0, 0, 0, true);
 
 	}
 

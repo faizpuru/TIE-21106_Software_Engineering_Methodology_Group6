@@ -213,7 +213,7 @@ public class Wizzball extends PApplet {
 
 		if (trapInHole != null) {
 			xpos = trapInHole.getX();
-			ypos = ypos - 1;
+			ypos = ypos - 2;
 
 			if (ypos <= (trapInHole.getTop() + sp1.radius)) {
 				state = GAME_OVER;
@@ -257,6 +257,8 @@ public class Wizzball extends PApplet {
 			manageFloorCollision();
 			manageObjectsCollision();
 		}
+		
+		
 
 		if (sp1.score >= 300) {
 			sp1.lives += 1;
