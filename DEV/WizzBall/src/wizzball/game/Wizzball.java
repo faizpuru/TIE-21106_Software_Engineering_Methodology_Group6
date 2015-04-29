@@ -6,6 +6,7 @@
 
 package wizzball.game;
 
+import java.io.File;
 import java.util.Vector;
 
 import processing.core.PApplet;
@@ -13,6 +14,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.data.Table;
+import processing.data.TableRow;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;
@@ -40,6 +42,7 @@ public class Wizzball extends PApplet {
 	public Spot sp1;
 
 	public Table table; // Scores table
+	public boolean scoreSaved=false;
 
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
 
@@ -71,6 +74,7 @@ public class Wizzball extends PApplet {
 
 	public Timer timer = new Timer(this);
 	private Hole trapInHole = null;
+	
 
 	public void setup() {
 		initDisplayParameters();
@@ -81,9 +85,22 @@ public class Wizzball extends PApplet {
 		frameRate(24);
 		initSpot();
 		initStars();
+		initTable();
 
 	}
 
+	private void initTable(){
+		File f = new File("tables/scores.csv");
+	    if (!f.exists()) {
+		    table = new processing.data.Table();
+		    table.addColumn("Id");
+		    table.addColumn("Name");
+		    table.addColumn("Score");
+	    } 
+	  else 
+	    table = loadTable("tables/scores.csv", "header, csv");
+	}
+	
 	private void loadFonts() {
 		f = createFont("Arial", 16, true);
 		fontSW = loadFont("fonts/StarJedi-48.vlw");
@@ -145,6 +162,13 @@ public class Wizzball extends PApplet {
 		keyPlayer = minim.loadFile("musics/keySound.mp3");
 
 	}
+	private void saveScore(){
+		 TableRow newRow = table.addRow();
+		 newRow.setInt("Id", table.lastRowIndex());
+		 newRow.setString("Name", player);
+		 newRow.setInt("Score", sp1.score);
+		 saveTable(table,"tables/scores.csv","csv");
+	}
 
 	public void draw() {
 
@@ -178,6 +202,10 @@ public class Wizzball extends PApplet {
 				restartTheLevel();
 				state = GAME;
 				return;
+			}
+			if(!scoreSaved){
+				saveScore();
+				scoreSaved=true;
 			}
 			displayGameOver();
 			break;
@@ -759,13 +787,25 @@ public class Wizzball extends PApplet {
 		pushStyle();
 		background(50);
 		fill(50);
-		textFont(fontSW, 40);
 		textAlign(CENTER);
+		int w=width / 2 - gameover.width / 2;
+		int h=height / 4 - gameover.height / 2;
+		for (TableRow row : table.rows()) {
+		    
+		    int id = row.getInt("Id");
+		    String name = row.getString("Name");
+		    int score = row.getInt("Score");
+		    
+			text(id + " --- " + name + " --- " + score, w+200, h+200+id*15);
+		}
+		textFont(fontSW, 40);
 		stroke(40);
 		strokeWeight(5);
 
-		image(gameover, width / 2 - gameover.width / 2, height / 2 - gameover.height / 2);
+		image(gameover, w, h);
 
+		
+		
 		pushStyle();
 		if (mouseY >= height - 70) {
 			fill(100, 100, 100);
@@ -779,6 +819,8 @@ public class Wizzball extends PApplet {
 
 		popStyle();
 	}
+	
+	
 
 	public void accelerate() {
 		float speedTmp = Math.abs(yspeed) + 3; // Control MAX_SPEED
