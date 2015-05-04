@@ -18,7 +18,7 @@ public class PowerUp extends BasicCollectable {
 	public void effect() {
 		parent.sp1.switchPower();
 		parent.sp1.score+=Wizzball.POWER_POINTS;
-
+		parent.sp1.acumulativeScore+=Wizzball.POWER_POINTS;
 	}
 	
 	@Override

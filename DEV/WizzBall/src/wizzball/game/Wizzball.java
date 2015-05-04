@@ -168,7 +168,7 @@ public class Wizzball extends PApplet {
 		 TableRow newRow = table.addRow();
 		 newRow.setInt("Id", table.lastRowIndex());
 		 newRow.setString("Name", player);
-		 newRow.setInt("Score", sp1.score);
+		 newRow.setInt("Score", sp1.acumulativeScore);
 		 saveTable(table,"tables/scores.csv","csv");
 	}
 

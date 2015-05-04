@@ -30,6 +30,7 @@ public class Spot {
 
 	public int lives = 3;
 	public int score = 0;
+	public int acumulativeScore=0;
 	public boolean power = false;
 	private BasicWeapon weapon;
 	private boolean appearing = true;

@@ -23,5 +23,7 @@ public class Bonus extends BasicCollectable {
 	public void effect() {
 		parent.lvl.nbBonus--;
 		parent.sp1.score+=Wizzball.STARS_POINTS;
+		parent.sp1.acumulativeScore+=Wizzball.STARS_POINTS;
+
 	}
 }

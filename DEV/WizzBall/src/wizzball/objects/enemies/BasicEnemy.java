@@ -41,6 +41,7 @@ public abstract class BasicEnemy extends BasicCollectable {
 	public void effect() {
 		if (parent.sp1.power) {
 			parent.sp1.score += Wizzball.NASTIES_POINTS;
+			parent.sp1.acumulativeScore += Wizzball.NASTIES_POINTS;
 			parent.sp1.switchPower();
 		} else {
 			parent.state = Wizzball.GAME_OVER;
