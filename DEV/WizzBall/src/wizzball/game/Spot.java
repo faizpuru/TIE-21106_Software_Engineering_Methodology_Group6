@@ -11,7 +11,6 @@ import java.util.Vector;
 import processing.core.PApplet;
 import processing.core.PImage;
 import wizzball.objects.weapons.BasicWeapon;
-import wizzball.objects.weapons.Pistol;
 
 public class Spot {
 
@@ -19,6 +18,7 @@ public class Spot {
 	public float x;
 	public float y;
 	public float radius;
+	private float tmpRadius = 0;
 	Wizzball parent;
 	PImage ball, eyes, mouth, custom;
 	int ballCoord, eyesCoord, mouthCoord, customCoord;
@@ -32,16 +32,17 @@ public class Spot {
 	public int score = 0;
 	public boolean power = false;
 	private BasicWeapon weapon;
+	private boolean appearing = true;
 
 	// First version of the Spot constructor;
 	// the fields are assigned default values
-	public char getDirection(){
-		if(rotationSpeed>=0){
+	public char getDirection() {
+		if (rotationSpeed >= 0) {
 			return 'r';
 		}
 		return 'l';
 	}
-	
+
 	Spot(Wizzball p) {
 
 		parent = p;
@@ -69,32 +70,58 @@ public class Spot {
 	}
 
 	public void display() {
-		if (Wizzball.gravity > 0) {
-			currentAngle = currentAngle + rotationSpeed;
-		} else {
-			currentAngle = currentAngle - rotationSpeed;
-		}
-		parent.pushMatrix();
-		parent.translate(parent.width / 2, y);
-		parent.rotate(currentAngle);
-		parent.image(ball, -radius, -radius, radius * 2, radius * 2);
-		if (eyes != null)
-			parent.image(eyes, -radius, -radius, radius * 2, radius * 2);
-		if (mouth != null)
-			parent.image(mouth, -radius, -radius, radius * 2, radius * 2);
-		if (custom != null)
-			parent.image(custom, -radius, -radius, radius * 2, radius * 2);
 
-		
-		parent.popMatrix();
-		if(weapon!=null){
-			if(weapon.isShooting()){
-				weapon.weaponEffectAndAnimation();
+		if (isAppearing()) {
+			parent.pushMatrix();
+			parent.translate(parent.width / 2, y);
+			parent.image(ball, -tmpRadius, -tmpRadius, tmpRadius * 2, tmpRadius * 2);
+			if (eyes != null)
+				parent.image(eyes, -tmpRadius, -tmpRadius, tmpRadius * 2, tmpRadius * 2);
+			if (mouth != null)
+				parent.image(mouth, -tmpRadius, -tmpRadius, tmpRadius * 2, tmpRadius * 2);
+			if (custom != null)
+				parent.image(custom, -tmpRadius, -tmpRadius, tmpRadius * 2, tmpRadius * 2);
+			parent.popMatrix();
+			tmpRadius += radius / 10;
+			if(tmpRadius>=radius){
+				appearing = false;
+				tmpRadius = 0;
 			}
+			
+		} else {
+			if (Wizzball.gravity > 0) {
+				currentAngle = currentAngle + rotationSpeed;
+			} else {
+				currentAngle = currentAngle - rotationSpeed;
+			}
+			parent.pushMatrix();
+			parent.translate(parent.width / 2, y);
+			parent.rotate(currentAngle);
+			parent.image(ball, -radius, -radius, radius * 2, radius * 2);
+			if (eyes != null)
+				parent.image(eyes, -radius, -radius, radius * 2, radius * 2);
+			if (mouth != null)
+				parent.image(mouth, -radius, -radius, radius * 2, radius * 2);
+			if (custom != null)
+				parent.image(custom, -radius, -radius, radius * 2, radius * 2);
+
+			parent.popMatrix();
+			if (weapon != null) {
+				if (weapon.isShooting()) {
+					weapon.weaponEffectAndAnimation();
+				}
+			}
+
+			friction();
 		}
 
-		friction();
+	}
 
+	/**
+	 * @return
+	 */
+	public boolean isAppearing() {
+		return appearing;
 	}
 
 	/**
@@ -168,13 +195,12 @@ public class Spot {
 		changeColour();
 		power = !power;
 	}
-	
 
 	/**
 	 * 
 	 */
 	private void changeColour() {
-		ball.filter(PApplet.INVERT);		
+		ball.filter(PApplet.INVERT);
 	}
 
 	/**
@@ -249,9 +275,13 @@ public class Spot {
 	 * 
 	 */
 	public void activateWeapon() {
-		if(weapon!=null){
+		if (weapon != null) {
 			weapon.activateWeapon();
 		}
+	}
+
+	public void appearAnimation() {
+		appearing = true;
 	}
 
 }

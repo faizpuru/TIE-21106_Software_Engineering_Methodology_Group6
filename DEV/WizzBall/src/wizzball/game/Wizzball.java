@@ -240,9 +240,11 @@ public class Wizzball extends PApplet {
 			xpos -= lvl.xEnd / 40;
 			if (xpos < 0) {
 				reinitPositionAndSpeed();
+				sp1.appearAnimation();
 				timer.unpause();
 			}
 		}
+		
 
 		if (trapInHole != null) {
 			xpos = trapInHole.getX();
@@ -283,7 +285,7 @@ public class Wizzball extends PApplet {
 			}
 
 		}
-		if (trapInHole == null && state != GAME_OVER) {
+		if (trapInHole == null && state != GAME_OVER  && !sp1.isAppearing()) {
 			xpos = (float) (xpos + xspeed * 0.2);
 			ypos = (float) (ypos + yspeed * 0.5);
 
@@ -315,6 +317,7 @@ public class Wizzball extends PApplet {
 		xspeed = 0;
 		yspeed = 5;
 		gravity = (float) 0.5;
+		sp1.appearAnimation();
 		isInGame = true;
 	}
 

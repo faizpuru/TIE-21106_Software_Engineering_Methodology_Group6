@@ -40,10 +40,10 @@ public class Level {
 		this.wizz = wizz;
 	}
 
-	public boolean isLoading(){
+	public boolean isLoading() {
 		return loading;
 	}
-	
+
 	/**
 	 * Load the level corresponding to the txt file
 	 */
@@ -88,8 +88,18 @@ public class Level {
 					wizz.timer.init(PApplet.parseInt(words[1]));
 					nbLine++;
 				}
+				
+				
 
 				else {// Create platforms, stairs and holes
+					for(int i = 0; i < words.length ; i++){
+						try {
+							
+							words[i] = words[i].split(":")[1];
+						} catch(Exception e){
+							//No description
+						}
+					}
 					if (words[0].equals("P")) {
 						boolean down = false;
 						if (words[4].equals("+"))
@@ -125,7 +135,7 @@ public class Level {
 					}
 					
 					if (words[0].equals("ME")) {
-						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[4]),PApplet.parseFloat(words[5]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]),PApplet.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]),
 								true));
 					}
 
@@ -180,5 +190,4 @@ public class Level {
 			return false;
 		}
 	}
-
 }
