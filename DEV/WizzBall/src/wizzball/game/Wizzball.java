@@ -891,6 +891,7 @@ public class Wizzball extends PApplet {
 			if (buttonGame) {
 				state = TYPING;
 			} else if (buttonSettings) {
+				sp1.appearAnimation();
 				state = SETTINGS;
 			}
 			break;

@@ -60,6 +60,8 @@ public class Spot {
 		y = ypos;
 		radius = r;
 		ball = p.loadImage("Smiley.png");
+		mouth = p.loadImage("mouth.png");
+		eyes = p.loadImage("eyes.png");
 
 	}
 
@@ -83,11 +85,11 @@ public class Spot {
 				parent.image(custom, -tmpRadius, -tmpRadius, tmpRadius * 2, tmpRadius * 2);
 			parent.popMatrix();
 			tmpRadius += radius / 10;
-			if(tmpRadius>=radius){
+			if (tmpRadius >= radius) {
 				appearing = false;
 				tmpRadius = 0;
 			}
-			
+
 		} else {
 			if (Wizzball.gravity > 0) {
 				currentAngle = currentAngle + rotationSpeed;
@@ -128,33 +130,40 @@ public class Spot {
 	 * 
 	 */
 	private void setImage(int coord, int image) {
-		if (coord == -1) {
-			ball = parent.loadImage("Smiley.png");
-		} else {
+		int xAvatar = coord % 8;
+		int yAvatar = (coord - xAvatar) / 8;
 
-			int xAvatar = coord % 8;
-			int yAvatar = (coord - xAvatar) / 8;
+		int w = 106;
+		int h = 120;
 
-			int w = 106;
-			int h = 120;
-
-			switch (image) {
-			case 1:
+		switch (image) {
+		case 1:
+			if (coord == -1) {
+				ball = parent.loadImage("Smiley.png");
+			} else {
 				ball = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
 				ball = ball.get(9, 15, 90, 90);
-				break;
-			case 2:
-				eyes = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
-				break;
-			case 3:
-				mouth = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
-				break;
-			case 4:
-				custom = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
-				break;
 			}
-
+			break;
+		case 2:
+			if (coord == -1) {
+				eyes = parent.loadImage("eyes.png");
+			} else {
+				eyes = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
+			}
+			break;
+		case 3:
+			if (coord == -1) {
+				mouth = parent.loadImage("mouth.png");
+			} else {
+				mouth = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
+			}
+			break;
+		case 4:
+			custom = parent.avatars.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
+			break;
 		}
+
 	}
 
 	/**
@@ -212,9 +221,17 @@ public class Spot {
 			v.add(i);
 		}
 
-		int nextIndex = v.indexOf(ballCoord) + 1;
-		nextIndex = nextIndex <= v.size() - 1 ? nextIndex : 0;
-		ballCoord = v.get(nextIndex);
+		int nextIndex = 0;
+
+		if (!(ballCoord == -1)) {
+			nextIndex = v.indexOf(ballCoord) + 1;
+			nextIndex = nextIndex <= v.size() - 1 ? nextIndex : -1;
+		}
+		if (nextIndex == -1) {
+			ballCoord = -1;
+		} else {
+			ballCoord = v.get(nextIndex);
+		}
 		setImage(ballCoord, 1);
 
 	}
@@ -225,9 +242,17 @@ public class Spot {
 			v.add(i);
 		}
 		v.add(175);
-		int nextIndex = v.indexOf(eyesCoord) + 1;
-		nextIndex = nextIndex <= v.size() - 1 ? nextIndex : 0;
-		eyesCoord = v.get(nextIndex);
+		int nextIndex = 0;
+
+		if (!(eyesCoord == -1)) {
+			nextIndex = v.indexOf(eyesCoord) + 1;
+			nextIndex = nextIndex <= v.size() - 1 ? nextIndex : -1;
+		}
+		if (nextIndex == -1) {
+			eyesCoord = -1;
+		} else {
+			eyesCoord = v.get(nextIndex);
+		}
 		setImage(eyesCoord, 2);
 
 	}
@@ -239,9 +264,17 @@ public class Spot {
 		}
 		v.add(175);
 
-		int nextIndex = v.indexOf(mouthCoord) + 1;
-		nextIndex = nextIndex <= v.size() - 1 ? nextIndex : 0;
-		mouthCoord = v.get(nextIndex);
+		int nextIndex = 0;
+
+		if (!(mouthCoord == -1)) {
+			nextIndex = v.indexOf(mouthCoord) + 1;
+			nextIndex = nextIndex <= v.size() - 1 ? nextIndex : -1;
+		}
+		if (nextIndex == -1) {
+			mouthCoord = -1;
+		} else {
+			mouthCoord = v.get(nextIndex);
+		}
 		setImage(mouthCoord, 3);
 	}
 
