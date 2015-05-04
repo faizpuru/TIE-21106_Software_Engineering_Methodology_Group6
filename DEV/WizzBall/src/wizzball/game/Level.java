@@ -47,7 +47,7 @@ public class Level {
 	/**
 	 * Load the level corresponding to the txt file
 	 */
-	public void loadLevel() {
+	public boolean loadLevel() {
 		
 		loading = true;
 		
@@ -174,9 +174,10 @@ public class Level {
 			// Close the input stream
 			br.close();
 			loading  = false;
+			return true;
 
 		} catch (IOException e) {
-			System.out.println("SUCCESS");
+			return false;
 		}
 	}
 

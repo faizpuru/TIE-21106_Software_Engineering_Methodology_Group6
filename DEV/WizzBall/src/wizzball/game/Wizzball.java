@@ -58,7 +58,7 @@ public class Wizzball extends PApplet {
 	PVector vmiddle = new PVector(0, 0);
 	PVector vfront = new PVector(0, 5);
 
-	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43, PAUSE = 44;
+	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43, PAUSE = 44, SUCCESS = 45;
 	public int state = MENU;
 
 	String typing = "";
@@ -131,7 +131,9 @@ public class Wizzball extends PApplet {
 		if (lvl == null) {
 			lvl = new Level(this);
 		}
-		lvl.loadLevel();
+		if(!lvl.loadLevel()){
+			state = SUCCESS;
+		}
 	}
 
 	private void loadImages() {
@@ -208,6 +210,9 @@ public class Wizzball extends PApplet {
 				scoreSaved=true;
 			}
 			displayGameOver();
+			break;
+		case SUCCESS :
+			displaySuccessScreen();
 			break;
 		}
 
@@ -779,6 +784,42 @@ public class Wizzball extends PApplet {
 			}
 		}
 	}
+	
+	private void displaySuccessScreen(){
+		state = SUCCESS;
+		buttonRestart = false;
+
+		clear();
+		pushStyle();
+		background(50);
+		fill(50);
+		textAlign(CENTER);
+		int w=width / 2 - gameover.width / 2;
+		int h=height / 4 - gameover.height / 2;
+		textFont(fontSW, 40);
+		stroke(40);
+		strokeWeight(5);
+
+		pushStyle();
+		fill(200, 226, 9, 240);
+		text("SUCCESS", w, h);
+		popStyle();
+		
+		
+		pushStyle();
+		if (mouseY >= height - 70) {
+			fill(100, 100, 100);
+			buttonRestart = true;
+		}
+		rect(20, height - 70, width - 40, 60);
+		popStyle();
+
+		fill(200, 226, 9, 240);
+		text("RESTART", width / 2, height - 25);
+
+		popStyle();
+
+	}
 
 	private void displayGameOver() {
 		buttonRestart = false;
@@ -879,6 +920,12 @@ public class Wizzball extends PApplet {
 			break;
 
 		case GAME_OVER:
+			if (buttonRestart) {
+				restartGame();
+			}
+			break;
+			
+		case SUCCESS:
 			if (buttonRestart) {
 				restartGame();
 			}
