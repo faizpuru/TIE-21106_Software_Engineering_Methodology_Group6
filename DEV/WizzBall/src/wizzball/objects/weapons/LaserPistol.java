@@ -101,4 +101,12 @@ public class LaserPistol extends BasicWeapon {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see wizzball.objects.basics.BasicObject#loadImage()
+	 */
+	@Override
+	public void loadImage() {
+		image = parent.loadImage("lasergun.png");
+	}
+	
 }

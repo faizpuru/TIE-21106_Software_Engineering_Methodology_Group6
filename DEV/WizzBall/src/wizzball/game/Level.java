@@ -21,6 +21,8 @@ import wizzball.objects.collidable.Hole;
 import wizzball.objects.collidable.Platform;
 import wizzball.objects.enemies.MovingEnemy;
 import wizzball.objects.enemies.StaticEnemy;
+import wizzball.objects.weapons.LaserPistol;
+import wizzball.objects.weapons.Pistol;
 
 public class Level {
 
@@ -104,6 +106,16 @@ public class Level {
 					if (words[0].equals("B")) {
 						nbBonus++;
 						objects.addElement(new Bonus(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
+								true));
+					}
+					
+					if (words[0].equals("LW")) {
+						objects.addElement(new LaserPistol(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
+								true));
+					}
+					
+					if (words[0].equals("PW")) {
+						objects.addElement(new Pistol(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
 								true));
 					}
 					

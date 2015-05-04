@@ -134,6 +134,14 @@ public class Pistol extends BasicWeapon {
 			}
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see wizzball.objects.basics.BasicObject#loadImage()
+	 */
+	@Override
+	public void loadImage() {
+		image = parent.loadImage("pistol.png");
+	}
 
 	/*
 	 * (non-Javadoc)
