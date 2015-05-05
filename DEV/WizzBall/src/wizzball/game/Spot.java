@@ -11,6 +11,8 @@ import java.util.Vector;
 import processing.core.PApplet;
 import processing.core.PImage;
 import wizzball.objects.weapons.BasicWeapon;
+import wizzball.objects.weapons.LaserPistol;
+import wizzball.objects.weapons.Pistol;
 
 public class Spot {
 
@@ -311,6 +313,12 @@ public class Spot {
 	public void activateWeapon() {
 		if (weapon != null) {
 			weapon.activateWeapon();
+			if(weapon instanceof Pistol){
+				parent.playGunSound();
+			}
+			else if(weapon instanceof LaserPistol){
+				parent.playRaySound();
+			}
 		}
 	}
 

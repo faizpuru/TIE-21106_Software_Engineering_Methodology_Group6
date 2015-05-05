@@ -47,7 +47,7 @@ public class Wizzball extends PApplet {
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
 
 	Minim minim;
-	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer;
+	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer,gunPlayer,rayPlayer;
 
 	PFont f, fontSW;
 	float yFont = 250, zFont = -200;
@@ -162,6 +162,9 @@ public class Wizzball extends PApplet {
 		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
 		bonusPlayer = minim.loadFile("musics/bonus.wav");
 		keyPlayer = minim.loadFile("musics/keySound.mp3");
+		gunPlayer= minim.loadFile("musics/Gun.mp3");
+		rayPlayer=minim.loadFile("musics/Ray_gun.mp3");
+		
 
 	}
 	private void saveScore(){
@@ -670,6 +673,17 @@ public class Wizzball extends PApplet {
 		bouncingPlayer.rewind();
 		bouncingPlayer.play();
 	}
+	
+	public void playGunSound() {
+		gunPlayer.rewind();
+		gunPlayer.play();
+	}
+	
+	public void playRaySound() {
+		rayPlayer.rewind();
+		rayPlayer.play();
+	}
+
 
 	public void playBonusSound() {
 		bonusPlayer.rewind();

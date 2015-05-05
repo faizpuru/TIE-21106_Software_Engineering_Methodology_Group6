@@ -82,6 +82,7 @@ public class LaserPistol extends BasicWeapon {
 
 				float topBullet = parent.ypos - hBullet / 2;
 				float bottomBullet = parent.ypos + hBullet / 2;
+				
 
 				if (parent.sp1.getDirection() == 'r') {
 					if (bottomBullet >= t && topBullet <= b) {
