@@ -19,7 +19,7 @@ public class Bomb extends MovingEnemy {
 	 */
 	@Override
 	public void loadImage() {
-		image = parent.nasty;
+		image = parent.enemy;
 	}
 
 }

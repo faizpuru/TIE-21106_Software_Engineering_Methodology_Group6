@@ -21,6 +21,7 @@ import wizzball.objects.collidable.Hole;
 import wizzball.objects.collidable.Platform;
 import wizzball.objects.enemies.Bomb;
 import wizzball.objects.enemies.MovingEnemy;
+import wizzball.objects.enemies.Nasty;
 import wizzball.objects.enemies.StaticEnemy;
 import wizzball.objects.weapons.LaserPistol;
 import wizzball.objects.weapons.Pistol;
@@ -135,8 +136,13 @@ public class Level {
 								true));
 					}
 					
-					if (words[0].equals("ME")) {
+					if (words[0].equals("BO")) {
 						objects.addElement(new Bomb(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]),PApplet.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]),
+								true));
+					}
+					
+					if (words[0].equals("N")) {
+						objects.addElement(new Nasty(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]),PApplet.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]),
 								true));
 					}
 
