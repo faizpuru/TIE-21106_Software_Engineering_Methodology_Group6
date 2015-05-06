@@ -28,7 +28,6 @@ import ddf.minim.Minim;
 @SuppressWarnings("serial")
 public class Wizzball extends PApplet {
 
-
 	private static final int MAX_SPEED = 20;
 	private static final double INCR_SPEED = 0.1;
 	private static final int rotationEffect = 40;
@@ -49,7 +48,6 @@ public class Wizzball extends PApplet {
 
 	private LinkedList<Integer> sequence = new LinkedList<Integer>();
 	private LinkedList<Integer> KONAMI = new LinkedList<Integer>(Arrays.asList(97, 98, 39, 37, 39, 37, 40, 40, 38, 38));
-
 
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
 
@@ -82,7 +80,14 @@ public class Wizzball extends PApplet {
 	public Timer timer = new Timer(this);
 	private Hole trapInHole = null;
 	private boolean pause = false;
-	private boolean nyancatmode = false;
+	public boolean nyancatmode = false;
+	private boolean buttonGameKeyboard = false;
+	private boolean buttonSettingsKeyboard = false;
+	private boolean buttonRestartKeyboard = false;
+	private boolean buttonBallKeyboard = false;
+	private boolean buttonEyesKeyboard = false;
+	private boolean buttonMouthKeyboard = false;
+	private boolean buttonCustomKeyboard = false;
 
 	public void setup() {
 		initDisplayParameters();
@@ -184,8 +189,6 @@ public class Wizzball extends PApplet {
 
 	public void draw() {
 
-		
-		
 		if (sequence.equals(KONAMI)) {
 			nyancatMode();
 		}
@@ -238,16 +241,17 @@ public class Wizzball extends PApplet {
 	 * 
 	 */
 	private void nyancatMode() {
-		
-		if(!nyancatmode ){
-		
-		sp1.ball = loadImage("nyancat.png");
-		sp1.mouth = null;
-		sp1.eyes = null;
-		sp1.custom = null;
-		
-		musicPlayer = minim.loadFile("musics/nyancat.mp3");
-		nyancatmode = true;
+
+		if (!nyancatmode) {
+
+			sp1.ball = loadImage("nyancat.png");
+			sp1.mouth = null;
+			sp1.eyes = null;
+			sp1.custom = null;
+
+			musicPlayer.close();
+			musicPlayer = minim.loadFile("musics/nyancat.mp3");
+			nyancatmode = true;
 		}
 
 	}
@@ -259,15 +263,13 @@ public class Wizzball extends PApplet {
 		frameRate(25);
 		stroke(0);
 		strokeWeight(5);
-		if(!nyancatmode){
+		if (!nyancatmode) {
 			background(0);
 		} else {
-			background(249,58,166);
+			background(239, 89, 123);
 		}
 		textAlign(LEFT);
 		textFont(fontSW, 14);
-
-
 
 		paraDrawCeiling(ceiling, 500, xpos);
 		paraDrawFloor(floor, 500, xpos);
@@ -420,25 +422,25 @@ public class Wizzball extends PApplet {
 		}
 
 		pushStyle();
-		if (buttonBall)
+		if (buttonBall || buttonBallKeyboard)
 			fill(100, 100, 100);
 		rect(50, y4, width - 100, h, 10);
 		popStyle();
 
 		pushStyle();
-		if (buttonEyes)
+		if (buttonEyes || buttonEyesKeyboard)
 			fill(100, 100, 100);
 		rect(50, y3, width - 100, h, 10);
 		popStyle();
 
 		pushStyle();
-		if (buttonMouth)
+		if (buttonMouth || buttonMouthKeyboard)
 			fill(100, 100, 100);
 		rect(50, y2, width - 100, h, 10);
 		popStyle();
 
 		pushStyle();
-		if (buttonCustom)
+		if (buttonCustom || buttonCustomKeyboard)
 			fill(100, 100, 100);
 		rect(50, y1, width - 100, h, 10);
 		popStyle();
@@ -488,19 +490,19 @@ public class Wizzball extends PApplet {
 		}
 
 		pushStyle();
-		if (buttonGame)
+		if (buttonGame || buttonGameKeyboard)
 			fill(100, 100, 100);
 		rect(50, y1, width - 100, h, 10);
 		popStyle();
 
 		pushStyle();
-		if (buttonRestart)
+		if (buttonRestart || buttonRestartKeyboard)
 			fill(100, 100, 100);
 		rect(50, y3, width - 100, h, 10);
 		popStyle();
 
 		pushStyle();
-		if (buttonSettings)
+		if (buttonSettings || buttonSettingsKeyboard)
 			fill(100, 100, 100);
 		rect(50, y2, width - 100, h, 10);
 		popStyle();
@@ -539,13 +541,13 @@ public class Wizzball extends PApplet {
 		}
 
 		pushStyle();
-		if (buttonGame)
+		if (buttonGame || buttonGameKeyboard)
 			fill(100, 100, 100);
 		rect(50, y1, width - 100, h, 10);
 		popStyle();
 
 		pushStyle();
-		if (buttonSettings)
+		if (buttonSettings || buttonSettingsKeyboard)
 			fill(100, 100, 100);
 		rect(50, y2, width - 100, h, 10);
 		popStyle();
@@ -1014,13 +1016,14 @@ public class Wizzball extends PApplet {
 
 	public void keyPressed() {
 
-		
-		int keyCode = this.keyCode;
+		/*
+		 * Store the sequence -> Easter Egg
+		 */
 
 		if (sequence.size() == 10) {
 			sequence.removeLast();
 		}
-		if(key == CODED){
+		if (key == CODED) {
 			sequence.push(keyCode);
 		} else {
 			sequence.push((int) key);
@@ -1079,6 +1082,123 @@ public class Wizzball extends PApplet {
 				state = GAME;
 				timer.start();
 			}
+			break;
+
+		case MENU:
+			if (keyCode == DOWN || keyCode == UP) {
+				if (buttonGameKeyboard == false && buttonSettingsKeyboard == false) {
+					buttonGameKeyboard = true;
+				}
+
+				else if (buttonGameKeyboard == true && buttonSettingsKeyboard == false) {
+					buttonGameKeyboard = false;
+					buttonSettingsKeyboard = true;
+				} else if (buttonGameKeyboard == false && buttonSettingsKeyboard == true) {
+					buttonGameKeyboard = true;
+					buttonSettingsKeyboard = false;
+				}
+			}
+
+			else if (keyCode == ENTER || key == ' ') {
+				if (buttonGameKeyboard) {
+					buttonGameKeyboard = false;
+					state = TYPING;
+				} else if (buttonSettingsKeyboard) {
+					state = SETTINGS;
+					buttonSettingsKeyboard = false;
+				}
+			}
+
+			break;
+
+		case PAUSE:
+			if (keyCode == DOWN || keyCode == UP) {
+				if (buttonGameKeyboard == false && buttonSettingsKeyboard == false && buttonRestartKeyboard == false) {
+					buttonGameKeyboard = true;
+				}
+
+				else if (buttonGameKeyboard == true) {
+					buttonGameKeyboard = false;
+					buttonRestartKeyboard = keyCode==DOWN;
+					buttonSettingsKeyboard = !(keyCode==DOWN);
+				} else if (buttonRestartKeyboard == true) {
+					buttonSettingsKeyboard = (keyCode==DOWN);
+					buttonGameKeyboard = !(keyCode==DOWN);
+					buttonRestartKeyboard = false;
+				} else if (buttonSettingsKeyboard == true) {
+					buttonGameKeyboard = (keyCode==DOWN);
+					buttonRestartKeyboard =!(keyCode==DOWN);
+					buttonSettingsKeyboard = false;
+				}
+			}
+
+			else if (keyCode == ENTER || key == ' ') {
+				if (buttonGameKeyboard) {
+					state = GAME;
+					timer.unpause();
+					buttonGameKeyboard = false;
+				} else if (buttonSettingsKeyboard) {
+					state = SETTINGS;
+					buttonSettingsKeyboard = false;
+				} else if (buttonRestartKeyboard) {
+					buttonRestartKeyboard = false;
+					timer.unpause();
+					restartGame();
+				}
+			} else if (key == ESC) {
+				key = 0; // Avoid killing process
+				buttonGameKeyboard = false;
+				buttonSettingsKeyboard = false;
+				buttonRestartKeyboard = false;
+				timer.unpause();
+				state = GAME;
+			}
+
+			break;
+			
+		case SETTINGS:
+			if (keyCode == DOWN || keyCode == UP) {
+				if (!buttonBallKeyboard&& !buttonEyesKeyboard&& !buttonMouthKeyboard && !buttonCustomKeyboard) {
+					buttonBallKeyboard = true;
+				} else if (buttonBallKeyboard == true) {
+					buttonBallKeyboard = false;
+					buttonEyesKeyboard = keyCode==DOWN;
+					buttonCustomKeyboard = !(keyCode==DOWN);
+				} else if (buttonEyesKeyboard == true) {
+					buttonMouthKeyboard = (keyCode==DOWN);
+					buttonBallKeyboard = !(keyCode==DOWN);
+					buttonEyesKeyboard = false;
+				} else if (buttonMouthKeyboard == true) {
+					buttonCustomKeyboard = (keyCode==DOWN);
+					buttonEyesKeyboard =!(keyCode==DOWN);
+					buttonMouthKeyboard = false;
+				}  else if (buttonCustomKeyboard == true) {
+					buttonBallKeyboard = (keyCode==DOWN);
+					buttonMouthKeyboard =!(keyCode==DOWN);
+					buttonCustomKeyboard = false;
+				}
+			}
+
+			else if (keyCode == ENTER || key == ' ') {
+				if (buttonBallKeyboard) {
+					sp1.changeBall();
+				} else if (buttonEyesKeyboard) {
+					sp1.changeEyes();
+				} else if (buttonMouthKeyboard) {
+					sp1.changeMouth();
+				} else if(buttonCustomKeyboard){
+					sp1.changeCustom();
+				}
+			} else if (key == ESC) {
+				key = 0; // Avoid killing process
+				if (pause) {
+					state = PAUSE;
+				} else {
+					state = MENU;
+				}
+			}
+
+			break;
 
 		default:
 			if (key == ESC) {

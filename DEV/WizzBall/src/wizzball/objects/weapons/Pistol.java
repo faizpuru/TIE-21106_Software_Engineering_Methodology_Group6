@@ -7,6 +7,7 @@ package wizzball.objects.weapons;
 
 import java.util.Vector;
 
+import processing.core.PImage;
 import wizzball.game.Wizzball;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collidable;
@@ -37,6 +38,7 @@ public class Pistol extends BasicWeapon {
 		float yBullet = 0;
 		static final float sBullet = 10;
 		static final int limitX = 200;
+		private PImage rainbow;
 
 		/**
 		 * X and Y
@@ -49,7 +51,8 @@ public class Pistol extends BasicWeapon {
 			} else {
 				right = false;
 				xBullet = -parent.sp1.radius;
-			}
+			} 
+			rainbow = parent.loadImage("rainbow.jpg");
 
 		}
 
@@ -68,10 +71,17 @@ public class Pistol extends BasicWeapon {
 			parent.strokeWeight(0);
 			parent.fill(255);
 			if (right) {
+				if(!parent.nyancatmode)
 				parent.rect(xBullet + parent.width / 2, yBullet, wBullet, hBullet, 3);
+				else
+					parent.image(rainbow, xBullet + parent.width / 2, yBullet, wBullet, hBullet);
 				xBullet += sBullet - parent.xspeed*0.2;
 			} else {
+				if(!parent.nyancatmode)
 				parent.rect(xBullet + wBullet + parent.width / 2, yBullet, wBullet, hBullet, 3);
+				else
+					parent.image(rainbow, xBullet + parent.width / 2, yBullet, wBullet, hBullet);
+				
 				xBullet -= sBullet + parent.xspeed*0.2;
 			}
 			parent.popStyle();
