@@ -20,7 +20,6 @@ import wizzball.objects.collectable.PowerUp;
 import wizzball.objects.collidable.Hole;
 import wizzball.objects.collidable.Platform;
 import wizzball.objects.enemies.Bomb;
-import wizzball.objects.enemies.MovingEnemy;
 import wizzball.objects.enemies.Nasty;
 import wizzball.objects.enemies.StaticEnemy;
 import wizzball.objects.weapons.LaserPistol;

@@ -34,7 +34,7 @@ public class LaserPistol extends BasicWeapon {
 	public LaserPistol(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
 		super(p, xpos, ypos, height, width, down);
 		if (sprite == null) {
-			sprite = parent.loadImage("laser.png");
+			sprite = parent.laserSprite;
 		}
 	}
 
