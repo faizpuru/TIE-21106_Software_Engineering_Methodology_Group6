@@ -74,6 +74,7 @@ public class Wizzball extends PApplet {
 
 	public Timer timer = new Timer(this);
 	private Hole trapInHole = null;
+	private boolean pause = false;
 	
 
 	public void setup() {
@@ -331,6 +332,7 @@ public class Wizzball extends PApplet {
 		buttonMouth = false;
 		buttonBack = false;
 		buttonSound = false;
+		
 
 		pushStyle();
 		background(50);
@@ -925,7 +927,11 @@ public class Wizzball extends PApplet {
 			} else if (buttonCustom) {
 				sp1.changeCustom();
 			} else if (buttonBack) {
-				state = MENU;
+				if(pause){
+					state = PAUSE;
+				} else {
+					state = MENU;
+				}
 			} else if (buttonSound) {
 				switchSound();
 			}
@@ -1004,6 +1010,7 @@ public class Wizzball extends PApplet {
 		case GAME:
 			if (key == ESC) {
 				key = 0; // Avoid killing process
+				pause = true;
 				state = PAUSE;
 				timer.pause();
 			}
