@@ -69,7 +69,7 @@ public class Timer {
 		parent.pushStyle();
 		parent.strokeWeight(2);
 		parent.stroke(100);
-		parent.smooth(8);
+		parent.smooth(4);
 
 		if (percent >= 0.75){
 			parent.stroke(0);

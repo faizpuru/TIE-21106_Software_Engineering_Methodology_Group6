@@ -7,6 +7,8 @@
 package wizzball.game;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Vector;
 
 import processing.core.PApplet;
@@ -26,6 +28,7 @@ import ddf.minim.Minim;
 @SuppressWarnings("serial")
 public class Wizzball extends PApplet {
 
+
 	private static final int MAX_SPEED = 20;
 	private static final double INCR_SPEED = 0.1;
 	private static final int rotationEffect = 40;
@@ -42,12 +45,16 @@ public class Wizzball extends PApplet {
 	public Spot sp1;
 
 	public Table table; // Scores table
-	public boolean scoreSaved=false;
+	public boolean scoreSaved = false;
+
+	private LinkedList<Integer> sequence = new LinkedList<Integer>();
+	private LinkedList<Integer> KONAMI = new LinkedList<Integer>(Arrays.asList(97, 98, 39, 37, 39, 37, 40, 40, 38, 38));
+
 
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
 
 	Minim minim;
-	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer,gunPlayer,rayPlayer;
+	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer, rayPlayer;
 
 	PFont f, fontSW;
 	float yFont = 250, zFont = -200;
@@ -75,7 +82,7 @@ public class Wizzball extends PApplet {
 	public Timer timer = new Timer(this);
 	private Hole trapInHole = null;
 	private boolean pause = false;
-	
+	private boolean nyancatmode = false;
 
 	public void setup() {
 		initDisplayParameters();
@@ -90,18 +97,17 @@ public class Wizzball extends PApplet {
 
 	}
 
-	private void initTable(){
+	private void initTable() {
 		File f = new File("tables/scores.csv");
-	    if (!f.exists()) {
-		    table = new processing.data.Table();
-		    table.addColumn("Id");
-		    table.addColumn("Name");
-		    table.addColumn("Score");
-	    } 
-	  else 
-	    table = loadTable("tables/scores.csv", "header, csv");
+		if (!f.exists()) {
+			table = new processing.data.Table();
+			table.addColumn("Id");
+			table.addColumn("Name");
+			table.addColumn("Score");
+		} else
+			table = loadTable("tables/scores.csv", "header, csv");
 	}
-	
+
 	private void loadFonts() {
 		f = createFont("Arial", 16, true);
 		fontSW = loadFont("fonts/StarJedi-48.vlw");
@@ -132,7 +138,7 @@ public class Wizzball extends PApplet {
 		if (lvl == null) {
 			lvl = new Level(this);
 		}
-		if(!lvl.loadLevel()){
+		if (!lvl.loadLevel()) {
 			state = SUCCESS;
 		}
 	}
@@ -163,20 +169,26 @@ public class Wizzball extends PApplet {
 		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
 		bonusPlayer = minim.loadFile("musics/bonus.wav");
 		keyPlayer = minim.loadFile("musics/keySound.mp3");
-		gunPlayer= minim.loadFile("musics/Gun.mp3");
-		rayPlayer=minim.loadFile("musics/Ray_gun.mp3");
-		
+		gunPlayer = minim.loadFile("musics/Gun.mp3");
+		rayPlayer = minim.loadFile("musics/Ray_gun.mp3");
 
 	}
-	private void saveScore(){
-		 TableRow newRow = table.addRow();
-		 newRow.setInt("Id", table.lastRowIndex());
-		 newRow.setString("Name", player);
-		 newRow.setInt("Score", sp1.acumulativeScore);
-		 saveTable(table,"tables/scores.csv","csv");
+
+	private void saveScore() {
+		TableRow newRow = table.addRow();
+		newRow.setInt("Id", table.lastRowIndex());
+		newRow.setString("Name", player);
+		newRow.setInt("Score", sp1.acumulativeScore);
+		saveTable(table, "tables/scores.csv", "csv");
 	}
 
 	public void draw() {
+
+		
+		
+		if (sequence.equals(KONAMI)) {
+			nyancatMode();
+		}
 
 		loopThemeMusic();
 		imagesResizing();
@@ -209,15 +221,33 @@ public class Wizzball extends PApplet {
 				state = GAME;
 				return;
 			}
-			if(!scoreSaved){
+			if (!scoreSaved) {
 				saveScore();
-				scoreSaved=true;
+				scoreSaved = true;
 			}
 			displayGameOver();
 			break;
-		case SUCCESS :
+		case SUCCESS:
 			displaySuccessScreen();
 			break;
+		}
+
+	}
+
+	/**
+	 * 
+	 */
+	private void nyancatMode() {
+		
+		if(!nyancatmode ){
+		
+		sp1.ball = loadImage("nyancat.png");
+		sp1.mouth = null;
+		sp1.eyes = null;
+		sp1.custom = null;
+		
+		musicPlayer = minim.loadFile("musics/nyancat.mp3");
+		nyancatmode = true;
 		}
 
 	}
@@ -225,14 +255,19 @@ public class Wizzball extends PApplet {
 	@SuppressWarnings("unchecked")
 	private void displayGame() {
 
+		clear();
 		frameRate(25);
 		stroke(0);
 		strokeWeight(5);
-		background(0);
+		if(!nyancatmode){
+			background(0);
+		} else {
+			background(249,58,166);
+		}
 		textAlign(LEFT);
 		textFont(fontSW, 14);
 
-		clear();
+
 
 		paraDrawCeiling(ceiling, 500, xpos);
 		paraDrawFloor(floor, 500, xpos);
@@ -248,7 +283,6 @@ public class Wizzball extends PApplet {
 				timer.unpause();
 			}
 		}
-		
 
 		if (trapInHole != null) {
 			xpos = trapInHole.getX();
@@ -289,15 +323,13 @@ public class Wizzball extends PApplet {
 			}
 
 		}
-		if (trapInHole == null && state != GAME_OVER  && !sp1.isAppearing()) {
+		if (trapInHole == null && state != GAME_OVER && !sp1.isAppearing()) {
 			xpos = (float) (xpos + xspeed * 0.2);
 			ypos = (float) (ypos + yspeed * 0.5);
 
 			manageFloorCollision();
 			manageObjectsCollision();
 		}
-		
-		
 
 		if (sp1.score >= 300) {
 			sp1.lives += 1;
@@ -332,7 +364,6 @@ public class Wizzball extends PApplet {
 		buttonMouth = false;
 		buttonBack = false;
 		buttonSound = false;
-		
 
 		pushStyle();
 		background(50);
@@ -534,7 +565,7 @@ public class Wizzball extends PApplet {
 		text("Score: " + sp1.score, 50, 55);
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + timer.getSecondsLeft(), 50, 85);
-		//timer.display(25, 85, 15);
+		timer.display(25, 85, 15);
 		pushStyle();
 
 		if (sp1.lives == 0)
@@ -676,17 +707,16 @@ public class Wizzball extends PApplet {
 		bouncingPlayer.rewind();
 		bouncingPlayer.play();
 	}
-	
+
 	public void playGunSound() {
 		gunPlayer.rewind();
 		gunPlayer.play();
 	}
-	
+
 	public void playRaySound() {
 		rayPlayer.rewind();
 		rayPlayer.play();
 	}
-
 
 	public void playBonusSound() {
 		bonusPlayer.rewind();
@@ -804,8 +834,8 @@ public class Wizzball extends PApplet {
 			}
 		}
 	}
-	
-	private void displaySuccessScreen(){
+
+	private void displaySuccessScreen() {
 		state = SUCCESS;
 		buttonRestart = false;
 
@@ -814,8 +844,8 @@ public class Wizzball extends PApplet {
 		background(50);
 		fill(50);
 		textAlign(CENTER);
-		int w=width / 2 - gameover.width / 2;
-		int h=height / 4 - gameover.height / 2;
+		int w = width / 2 - gameover.width / 2;
+		int h = height / 4 - gameover.height / 2;
 		textFont(fontSW, 40);
 		stroke(40);
 		strokeWeight(5);
@@ -824,8 +854,7 @@ public class Wizzball extends PApplet {
 		fill(200, 226, 9, 240);
 		text("SUCCESS", w, h);
 		popStyle();
-		
-		
+
 		pushStyle();
 		if (mouseY >= height - 70) {
 			fill(100, 100, 100);
@@ -849,20 +878,19 @@ public class Wizzball extends PApplet {
 		background(50);
 		fill(50);
 		textAlign(CENTER);
-		int w=width / 2 - gameover.width / 2;
-		int h=height / 4 - gameover.height / 2;
-		fill(249,241,241);
-		text("id       " + "Name      " + "Score    ", w+218, h+200);
-		text("--------------------------------", w+215, h+215);
-
+		int w = width / 2 - gameover.width / 2;
+		int h = height / 4 - gameover.height / 2;
+		fill(249, 241, 241);
+		text("id       " + "Name      " + "Score    ", w + 218, h + 200);
+		text("--------------------------------", w + 215, h + 215);
 
 		for (TableRow row : table.rows()) {
-		    
-		    int id = row.getInt("Id");
-		    String name = row.getString("Name");
-		    int score = row.getInt("Score");
-		    
-			text(id + " --- " + name + " --- " + score, w+200, h+235+id*15);
+
+			int id = row.getInt("Id");
+			String name = row.getString("Name");
+			int score = row.getInt("Score");
+
+			text(id + " --- " + name + " --- " + score, w + 200, h + 235 + id * 15);
 		}
 		fill(50);
 		textFont(fontSW, 40);
@@ -871,8 +899,6 @@ public class Wizzball extends PApplet {
 
 		image(gameover, w, h);
 
-		
-		
 		pushStyle();
 		if (mouseY >= height - 70) {
 			fill(100, 100, 100);
@@ -886,8 +912,6 @@ public class Wizzball extends PApplet {
 
 		popStyle();
 	}
-	
-	
 
 	public void accelerate() {
 		float speedTmp = Math.abs(yspeed) + 3; // Control MAX_SPEED
@@ -928,7 +952,7 @@ public class Wizzball extends PApplet {
 			} else if (buttonCustom) {
 				sp1.changeCustom();
 			} else if (buttonBack) {
-				if(pause){
+				if (pause) {
 					state = PAUSE;
 				} else {
 					state = MENU;
@@ -955,7 +979,7 @@ public class Wizzball extends PApplet {
 				restartGame();
 			}
 			break;
-			
+
 		case SUCCESS:
 			if (buttonRestart) {
 				restartGame();
@@ -989,6 +1013,19 @@ public class Wizzball extends PApplet {
 	}
 
 	public void keyPressed() {
+
+		
+		int keyCode = this.keyCode;
+
+		if (sequence.size() == 10) {
+			sequence.removeLast();
+		}
+		if(key == CODED){
+			sequence.push(keyCode);
+		} else {
+			sequence.push((int) key);
+		}
+
 		switch (state) {
 		case TYPING:
 			if (key == '\n') {
@@ -1055,7 +1092,6 @@ public class Wizzball extends PApplet {
 			}
 			break;
 		}
-
 	}
 
 	private void restartTheLevel() {
