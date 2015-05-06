@@ -3,8 +3,6 @@ package wizzball.objects.enemies;
 import wizzball.game.Wizzball;
 
 public class Bomb extends MovingEnemy {
-
-	
 	
 	public Bomb(Wizzball p, float xpos, float ypos, float x2, float y2,
 			float height, float width, boolean down) {

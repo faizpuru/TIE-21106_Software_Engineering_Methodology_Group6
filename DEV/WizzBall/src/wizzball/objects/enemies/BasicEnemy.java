@@ -35,7 +35,7 @@ public abstract class BasicEnemy extends BasicCollectable {
 	public void shoot(int damage){
 		parent.sp1.score += Wizzball.NASTIES_POINTS;
 		lives-=damage;
-		if (lives==0)
+		if (lives<=0)
 			destroy = true;
 
 	}
