@@ -21,7 +21,7 @@ public class Hole extends BasicObject implements Collidable{
 	
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("hole.png");
+		image = parent.hole;
 		
 	}
 

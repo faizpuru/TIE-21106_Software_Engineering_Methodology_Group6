@@ -50,6 +50,7 @@ public class Wizzball extends PApplet {
 	private LinkedList<Integer> KONAMI = new LinkedList<Integer>(Arrays.asList(97, 98, 39, 37, 39, 37, 40, 40, 38, 38));
 
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
+	public PImage rainbow, bonus, heart, powerup, hole, platformIm, enemy, lasergun;
 
 	Minim minim;
 	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer, rayPlayer;
@@ -92,12 +93,12 @@ public class Wizzball extends PApplet {
 	public void setup() {
 		initDisplayParameters();
 		loadFonts();
-		loadLevel();
 		loadMusics();
 		loadImages();
 		frameRate(24);
 		initSpot();
 		initStars();
+		loadLevel();
 		initTable();
 
 	}
@@ -160,7 +161,15 @@ public class Wizzball extends PApplet {
 		sound_on = loadImage("sound_on.png");
 		sound_off = loadImage("sound_off.png");
 		current_sound = sound_on;
-
+		rainbow = loadImage("rainbow.jpg");
+		bonus = loadImage("bonus.png");
+		heart = loadImage("heart.png");
+		powerup = loadImage("powerup.png");
+		hole = loadImage("hole.png");
+		platformIm = loadImage("platform.png");
+		enemy = loadImage("static_enemy.png");
+		lasergun = loadImage("lasergun.png");
+	
 	}
 
 	@Override
@@ -307,6 +316,7 @@ public class Wizzball extends PApplet {
 		// /CONTROL THE
 
 		if (timer.getSecondsLeft() <= 0) { // After level time..
+			sp1.lives = 0;
 			state = GAME_OVER;
 		}
 

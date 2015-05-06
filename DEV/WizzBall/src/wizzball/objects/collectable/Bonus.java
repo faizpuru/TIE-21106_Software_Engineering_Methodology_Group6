@@ -16,7 +16,7 @@ public class Bonus extends BasicCollectable {
 
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("bonus.png");
+		image = parent.bonus;
 	}
 
 	@Override

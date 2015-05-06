@@ -20,7 +20,7 @@ public class Platform extends BasicObject implements Collidable {
 
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("platform.png");
+		image = parent.platformIm;
 	}
 
 	/*

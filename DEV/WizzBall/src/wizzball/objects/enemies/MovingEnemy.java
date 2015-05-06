@@ -65,7 +65,7 @@ public class MovingEnemy extends BasicEnemy {
 	 */
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("static_enemy.png");
+		image = parent.enemy;
 	}
 
 	/*

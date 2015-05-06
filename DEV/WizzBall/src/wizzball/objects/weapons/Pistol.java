@@ -52,7 +52,7 @@ public class Pistol extends BasicWeapon {
 				right = false;
 				xBullet = -parent.sp1.radius;
 			} 
-			rainbow = parent.loadImage("rainbow.jpg");
+			rainbow = parent.rainbow;
 
 		}
 

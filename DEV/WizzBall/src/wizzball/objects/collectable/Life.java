@@ -21,7 +21,7 @@ public class Life extends BasicCollectable {
 	
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("heart.png");
+		image = parent.heart;
 	}
 	
 }

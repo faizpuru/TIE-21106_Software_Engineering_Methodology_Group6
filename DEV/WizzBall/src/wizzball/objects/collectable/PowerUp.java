@@ -23,7 +23,7 @@ public class PowerUp extends BasicCollectable {
 	
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("powerup.png");
+		image = parent.powerup;
 	}
 	
 }

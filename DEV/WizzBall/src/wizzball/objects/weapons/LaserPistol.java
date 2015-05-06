@@ -107,7 +107,7 @@ public class LaserPistol extends BasicWeapon {
 	 */
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("lasergun.png");
+		image = parent.lasergun;
 	}
 	
 }
