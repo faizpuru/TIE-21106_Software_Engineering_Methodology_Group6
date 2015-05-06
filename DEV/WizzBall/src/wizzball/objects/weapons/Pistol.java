@@ -136,7 +136,7 @@ public class Pistol extends BasicWeapon {
 						if (b.yBullet <= o.getBottom() && b.yBullet >= o.getTop()) {
 							bullets.remove(b);
 							if (o instanceof BasicEnemy) {
-								((BasicEnemy) o).shoot();
+								((BasicEnemy) o).shoot(1);
 							}
 						}
 					}
