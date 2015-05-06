@@ -18,6 +18,7 @@ public class Timer {
 	private int startTime;
 	private int timeLeft;
 	private boolean pause = true;
+	private int initialTime;
 
 	public Timer(PApplet parent) {
 		this.parent = parent;
@@ -33,7 +34,7 @@ public class Timer {
 	}
 
 	public void pause() {
-		timeLeft = getSecondsLeft()*1000;
+		timeLeft = getMilliSecondsLeft();
 		pause = true;
 	}
 
@@ -43,16 +44,40 @@ public class Timer {
 
 	public void init(int secs) {
 		startTime = parent.millis();
-		timeLeft = secs*1000;
+		timeLeft = secs * 1000;
+		initialTime = secs;
 	}
 
 	public int getSecondsLeft() {
-		if(pause)
+		if (pause)
 			return timeLeft;
 		return (timeLeft - (parent.millis() - startTime)) / 1000 + 1;
+	}
+	
+	private int getMilliSecondsLeft(){
+		return (timeLeft - (parent.millis() - startTime));
 	}
 
 	public boolean isPaused() {
 		return pause;
+	}
+
+	public void display(int x, int y, int size) {
+		float percent = 1 - (float) getSecondsLeft() / (float) initialTime;
+		float angle = (float) (2*PApplet.PI * percent) - (parent.PI/2);
+
+		parent.pushStyle();
+		parent.strokeWeight(2);
+		parent.stroke(100);
+		parent.smooth(8);
+
+		if (percent >= 0.75){
+			parent.stroke(0);
+			parent.fill(255, 50, 50);
+		}
+
+		parent.ellipse(x, y, size, size);
+		parent.line(x, y, x + size * PApplet.cos((float) angle), y + size * PApplet.sin((float) angle));
+		parent.popStyle();
 	}
 }
