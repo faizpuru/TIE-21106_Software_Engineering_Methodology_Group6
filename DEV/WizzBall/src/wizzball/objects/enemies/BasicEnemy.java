@@ -17,6 +17,7 @@ public abstract class BasicEnemy extends BasicCollectable {
 
 	PImage destroySprite;
 	int numImage = 0;
+	int lives;
 
 	/**
 	 * @param p
@@ -31,9 +32,11 @@ public abstract class BasicEnemy extends BasicCollectable {
 		destroySprite = parent.loadImage("explosion.png");
 	}
 
-	public void shoot(){
+	public void shoot(int damage){
 		parent.sp1.score += Wizzball.NASTIES_POINTS;
-		destroy = true;
+		lives-=damage;
+		if (lives<=0)
+			destroy = true;
 
 	}
 	

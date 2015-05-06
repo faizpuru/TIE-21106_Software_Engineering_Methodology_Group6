@@ -87,13 +87,13 @@ public class LaserPistol extends BasicWeapon {
 				if (parent.sp1.getDirection() == 'r') {
 					if (bottomBullet >= t && topBullet <= b) {
 						if (l > parent.xpos && l < parent.xpos + parent.sp1.radius + wBullet) {
-							((BasicEnemy) o).shoot();
+							((BasicEnemy) o).shoot(3);
 						}
 					}
 				} else {
 					if (bottomBullet >= t && topBullet <= b) {
 						if (r < parent.xpos && r > parent.xpos - parent.sp1.radius - wBullet) {
-							((BasicEnemy) o).shoot();
+							((BasicEnemy) o).shoot(3);
 						}
 					}
 				}
