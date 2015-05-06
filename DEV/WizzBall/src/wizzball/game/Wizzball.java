@@ -982,6 +982,7 @@ public class Wizzball extends PApplet {
 			} else if (buttonSettings) {
 				state = SETTINGS;
 			} else if (buttonRestart) {
+				scoreSaved=false;
 				timer.unpause();
 				restartGame();
 			}
