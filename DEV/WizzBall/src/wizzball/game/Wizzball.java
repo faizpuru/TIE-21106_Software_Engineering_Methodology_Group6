@@ -50,7 +50,7 @@ public class Wizzball extends PApplet {
 	private LinkedList<Integer> KONAMI = new LinkedList<Integer>(Arrays.asList(97, 98, 39, 37, 39, 37, 40, 40, 38, 38));
 
 	PImage img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
-	public PImage rainbow, bonus, heart, powerup, hole, platformIm, enemy, lasergun;
+	public PImage nasty, rainbow, bonus, heart, powerup, hole, platformIm, enemy, lasergun;
 
 	Minim minim;
 	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer, rayPlayer;
@@ -169,6 +169,7 @@ public class Wizzball extends PApplet {
 		platformIm = loadImage("platform.png");
 		enemy = loadImage("static_enemy.png");
 		lasergun = loadImage("lasergun.png");
+		nasty=loadImage("nasty.png");
 	
 	}
 

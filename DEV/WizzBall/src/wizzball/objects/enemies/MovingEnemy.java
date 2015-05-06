@@ -65,7 +65,6 @@ public class MovingEnemy extends BasicEnemy {
 	 */
 	@Override
 	public void loadImage() {
-		image = parent.enemy;
 	}
 
 	/*
