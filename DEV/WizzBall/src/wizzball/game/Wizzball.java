@@ -534,7 +534,7 @@ public class Wizzball extends PApplet {
 		text("Score: " + sp1.score, 50, 55);
 		text("Stars left: " + lvl.nbBonus, 50, 100);
 		text("Time left: " + timer.getSecondsLeft(), 50, 85);
-		timer.display(25, 85, 15);
+		//timer.display(25, 85, 15);
 		pushStyle();
 
 		if (sp1.lives == 0)

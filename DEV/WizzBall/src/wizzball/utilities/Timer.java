@@ -50,7 +50,7 @@ public class Timer {
 
 	public int getSecondsLeft() {
 		if (pause)
-			return timeLeft;
+			return timeLeft / 1000;
 		return (timeLeft - (parent.millis() - startTime)) / 1000 + 1;
 	}
 	
@@ -64,7 +64,7 @@ public class Timer {
 
 	public void display(int x, int y, int size) {
 		float percent = 1 - (float) getSecondsLeft() / (float) initialTime;
-		float angle = (float) (2*PApplet.PI * percent) - (parent.PI/2);
+		float angle = (float) (2*PApplet.PI * percent) - (PApplet.PI/2);
 
 		parent.pushStyle();
 		parent.strokeWeight(2);
