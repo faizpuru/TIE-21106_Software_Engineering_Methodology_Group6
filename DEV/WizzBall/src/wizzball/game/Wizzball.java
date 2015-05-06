@@ -894,8 +894,8 @@ public class Wizzball extends PApplet {
 		int w = width / 2 - gameover.width / 2;
 		int h = height / 4 - gameover.height / 2;
 		fill(249, 241, 241);
-		text("id       " + "Name      " + "Score    ", w + 218, h + 200);
-		text("--------------------------------", w + 215, h + 215);
+		text("    Name      " + "Score    ", w + 218, h + 200);
+		text("------------------------------", w + 215, h + 215);
 
 		for (TableRow row : table.rows()) {
 
@@ -903,7 +903,7 @@ public class Wizzball extends PApplet {
 			String name = row.getString("Name");
 			int score = row.getInt("Score");
 
-			text(id + " --- " + name + " --- " + score, w + 200, h + 235 + id * 15);
+			text("     " + name + "      " + score, w + 200, h + 235 + id * 15);
 		}
 		fill(50);
 		textFont(fontSW, 40);
