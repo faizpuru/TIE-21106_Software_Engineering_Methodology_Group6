@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Vector;
+import processing.core.PImage;
 
 import processing.core.PApplet;
 import wizzball.objects.basics.BasicObject;
@@ -43,6 +44,11 @@ public class Level {
 
 	public boolean isLoading() {
 		return loading;
+	}
+	
+	public int getLevel()
+	{
+		return this.currentLevel;
 	}
 
 	/**
