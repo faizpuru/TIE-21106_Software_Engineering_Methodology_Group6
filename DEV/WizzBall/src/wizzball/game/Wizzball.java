@@ -613,31 +613,52 @@ public class Wizzball extends PApplet {
 		strokeWeight(2);
 		stroke(200);
 
-		int w1 = 200;
-		int h1 = 25;
+		int h0 = height;
+		int h1 = height - 20;
+		int h2 = height - 83;
+		
+		int offset = 15;
+		int w2 = 125;
+		int w3 = 70;
+		
+		int yA = 0;
+		
+		
+		
 		
 		PShape shape4 = createShape();
 		shape4.beginShape();
-		shape4.vertex(0 , height);
-		shape4.vertex(0, height -20 );
-		shape4.vertex(15, height -20);
-		shape4.vertex(30, height -83);
-		shape4.vertex(170, height -83);
-		shape4.vertex(185, height -20);
-		shape4.vertex(width-102, height -20);
-		shape4.vertex(width-90, height -83);
-		shape4.vertex(width-20, height -83);
-		shape4.vertex(width-7, height -20);
-		shape4.vertex(width , height-20);
-		shape4.vertex(width , height);
+		shape4.vertex(0 , h0);
+		shape4.vertex(0, h1 );
+		yA += 18;
+		shape4.vertex(yA, h1);
+		yA += offset;
+		shape4.vertex(yA, h2);
+		yA += w2;
+		shape4.vertex(yA, h2);
+		yA += offset;
+		shape4.vertex(yA, h1);
+		yA = width - 7 - 2 * offset- w3;
+		shape4.vertex(yA, h1);
+		yA += offset;
+		shape4.vertex(yA, h2);
+		yA += w3;
+		shape4.vertex(yA, h2);
+		yA += offset;
+		shape4.vertex(yA, h1);
+		shape4.vertex(width , h1);
+		shape4.vertex(width , h0);
 		shape4.endShape(CLOSE);
+		
+		int h4 = 23;
+		int w1 = 200;
 		
 		PShape shape = createShape();
 		shape.beginShape();
 		shape.vertex(width / 2 - w1 / 2, 0);
 		shape.vertex(width / 2 + w1 / 2, 0);
-		shape.vertex(width / 2 + w1 / 2 - 10, h1);
-		shape.vertex(width / 2 - w1 / 2 + 10, h1);
+		shape.vertex(width / 2 + w1 / 2 - 10, h4);
+		shape.vertex(width / 2 - w1 / 2 + 10, h4);
 		shape.endShape(CLOSE);
 
 		shape(shape4);
@@ -649,7 +670,7 @@ public class Wizzball extends PApplet {
 		textAlign(CENTER);
 		fill(255);
 		textFont(fontSW, sFont);
-		text(("Level " + lvl.currentLevel), width / 2, h1 / 2 + sFont / 2 - 3);
+		text(("Level " + lvl.currentLevel), width / 2, h4 / 2 + sFont / 2 - 3);
 		popStyle();
 
 		coin.resize(20, 20);
