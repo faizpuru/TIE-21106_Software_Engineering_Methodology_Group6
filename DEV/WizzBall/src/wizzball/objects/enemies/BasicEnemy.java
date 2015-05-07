@@ -33,7 +33,15 @@ public abstract class BasicEnemy extends BasicCollectable {
 	}
 
 	public void shoot(int damage){
-		parent.sp1.score += Wizzball.NASTIES_POINTS;
+		if(this instanceof Bomb){
+			parent.sp1.score += Wizzball.BOMBS_POINTS;
+			parent.sp1.acumulativeScore += Wizzball.BOMBS_POINTS;
+		}
+		else{
+			parent.sp1.score += Wizzball.NASTIES_POINTS;
+			parent.sp1.acumulativeScore += Wizzball.NASTIES_POINTS;
+		}
+		
 		lives-=damage;
 		if (lives<=0){
 			destroy = true;
@@ -45,8 +53,14 @@ public abstract class BasicEnemy extends BasicCollectable {
 	@Override
 	public void effect() {
 		if (parent.sp1.power) {
-			parent.sp1.score += Wizzball.NASTIES_POINTS;
-			parent.sp1.acumulativeScore += Wizzball.NASTIES_POINTS;
+			if(this instanceof Bomb){
+				parent.sp1.score += Wizzball.BOMBS_POINTS;
+				parent.sp1.acumulativeScore += Wizzball.BOMBS_POINTS;
+			}
+			else{
+				parent.sp1.score += Wizzball.NASTIES_POINTS;
+				parent.sp1.acumulativeScore += Wizzball.NASTIES_POINTS;
+			}
 			parent.sp1.switchPower();
 			parent.playExplosionSound();
 		} else {

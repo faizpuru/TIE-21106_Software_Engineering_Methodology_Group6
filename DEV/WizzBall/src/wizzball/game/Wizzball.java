@@ -38,8 +38,8 @@ public class Wizzball extends PApplet {
 	
 	public static final int STARS_POINTS = 100;
 	public static final int POWER_POINTS = 50;
-	public static final int NASTIES_POINTS = 500;
-	public static final int BOMBS_POINTS = 300;
+	public static final int NASTIES_POINTS =200;
+	public static final int BOMBS_POINTS = 150;
 	
 	
 	/*
@@ -402,7 +402,7 @@ public class Wizzball extends PApplet {
 			manageObjectsCollision();
 		}
 
-		if (sp1.score >= 650) {
+		if (sp1.score >= 800) {
 			sp1.incrementLives();
 			sp1.score = 0;
 		}
