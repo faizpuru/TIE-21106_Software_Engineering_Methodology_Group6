@@ -32,9 +32,22 @@ public class Wizzball extends PApplet {
 	private static final double INCR_SPEED = 0.1;
 	private static final int rotationEffect = 40;
 
+	/*
+	 * POINTS
+	 */
+	
 	public static final int STARS_POINTS = 100;
 	public static final int POWER_POINTS = 50;
 	public static final int NASTIES_POINTS = 500;
+	public static final int BOMBS_POINTS = 300;
+	
+	
+	/*
+	 * LIVES
+	 */
+	
+	public final int NASTY_LIVES = 3;
+	public final int BOMB_LIVES = 2;
 
 	public static float gravity = (float) 0.5; // positive downwards --- negative upwards
 
@@ -53,7 +66,7 @@ public class Wizzball extends PApplet {
 	public PImage nasty, rainbow, bonus, heart, powerup, hole, platformIm, enemy, lasergun,laserSprite;
 
 	Minim minim;
-	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer, rayPlayer;
+	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer, rayPlayer,explosionPlayer;
 
 	PFont f, fontSW;
 	float yFont = 250, zFont = -200;
@@ -206,6 +219,7 @@ public class Wizzball extends PApplet {
 		keyPlayer = minim.loadFile("musics/keySound.mp3");
 		gunPlayer = minim.loadFile("musics/Gun.mp3");
 		rayPlayer = minim.loadFile("musics/Ray_gun.mp3");
+		explosionPlayer=minim.loadFile("musics/Explosion.mp3");
 
 	}
 
@@ -783,6 +797,10 @@ public class Wizzball extends PApplet {
 		keyPlayer.play();
 	}
 
+	public void playExplosionSound() {
+		explosionPlayer.rewind();
+		explosionPlayer.play();
+	}
 	private void manageFloorCollision() {
 		// The ball can't go under the floor
 		ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);

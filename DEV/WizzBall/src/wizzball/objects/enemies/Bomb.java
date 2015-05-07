@@ -7,7 +7,7 @@ public class Bomb extends MovingEnemy {
 	public Bomb(Wizzball p, float xpos, float ypos, float x2, float y2,
 			float height, float width, boolean down) {
 		super(p, xpos, ypos, x2, y2, height, width, down);
-		lives=2;
+		lives=parent.BOMB_LIVES;
 	}
 
 	/*

@@ -35,8 +35,10 @@ public abstract class BasicEnemy extends BasicCollectable {
 	public void shoot(int damage){
 		parent.sp1.score += Wizzball.NASTIES_POINTS;
 		lives-=damage;
-		if (lives<=0)
+		if (lives<=0){
 			destroy = true;
+			parent.playExplosionSound();
+		}
 
 	}
 	
@@ -46,6 +48,7 @@ public abstract class BasicEnemy extends BasicCollectable {
 			parent.sp1.score += Wizzball.NASTIES_POINTS;
 			parent.sp1.acumulativeScore += Wizzball.NASTIES_POINTS;
 			parent.sp1.switchPower();
+			parent.playExplosionSound();
 		} else {
 			parent.state = Wizzball.GAME_OVER;
 		}
