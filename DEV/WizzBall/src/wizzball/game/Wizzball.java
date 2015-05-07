@@ -14,6 +14,7 @@ import java.util.Vector;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
+import processing.core.PShape;
 import processing.core.PVector;
 import processing.data.Table;
 import processing.data.TableRow;
@@ -35,24 +36,23 @@ public class Wizzball extends PApplet {
 	/*
 	 * POINTS
 	 */
-	
+
 	public static final int STARS_POINTS = 100;
 	public static final int POWER_POINTS = 50;
-	public static final int NASTIES_POINTS =200;
+	public static final int NASTIES_POINTS = 200;
 	public static final int BOMBS_POINTS = 150;
-	
-	
+
 	/*
 	 * LIVES
 	 */
-	
+
 	public final int NASTY_LIVES = 3;
 	public final int BOMB_LIVES = 2;
-	
+
 	/*
 	 * WEAPONS DAMAGE
 	 */
-	
+
 	public final int GUN_DAMAGE = 1;
 	public final int RAY_DAMAGE = 3;
 
@@ -70,12 +70,12 @@ public class Wizzball extends PApplet {
 	private LinkedList<Integer> KONAMI = new LinkedList<Integer>(Arrays.asList(97, 98, 39, 37, 39, 37, 40, 40, 38, 38));
 
 	PImage coin, level1, level2, level3, img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
-	public PImage nasty, rainbow, bonus, heart, powerup, hole, platformIm, enemy, lasergun,laserSprite;
+	public PImage nasty, rainbow, bonus, heart, powerup, hole, platformIm, enemy, lasergun, laserSprite, watch;
 
 	Minim minim;
-	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer, rayPlayer,explosionPlayer;
+	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer, rayPlayer, explosionPlayer;
 
-	PFont f, fontSW;
+	public PFont f, fontSW, fontDigital;
 	float yFont = 250, zFont = -200;
 
 	Star[] stars;// The array of stars
@@ -137,6 +137,7 @@ public class Wizzball extends PApplet {
 	private void loadFonts() {
 		f = createFont("Arial", 16, true);
 		fontSW = loadFont("fonts/StarJedi-48.vlw");
+		fontDigital = loadFont("fonts/digital.vlw");
 
 	}
 
@@ -190,9 +191,10 @@ public class Wizzball extends PApplet {
 		platformIm = loadImage("platform.png");
 		enemy = loadImage("static_enemy.png");
 		lasergun = loadImage("lasergun.png");
-		nasty=loadImage("nasty.png");
-		laserSprite=loadImage("laser.png");
-	
+		nasty = loadImage("nasty.png");
+		laserSprite = loadImage("laser.png");
+		watch = loadImage("watch.png");
+
 	}
 
 	@Override
@@ -208,7 +210,9 @@ public class Wizzball extends PApplet {
 		keyPlayer = minim.loadFile("musics/keySound.mp3");
 		gunPlayer = minim.loadFile("musics/Gun.mp3");
 		rayPlayer = minim.loadFile("musics/Ray_gun.mp3");
-		explosionPlayer=minim.loadFile("musics/Explosion.mp3");
+		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
+
+		//minim.stop();
 
 	}
 
@@ -297,11 +301,10 @@ public class Wizzball extends PApplet {
 		stroke(0);
 		strokeWeight(5);
 		if (!nyancatmode) {
-			if(lvl.getImage()!=null){
-				lvl.getImage().resize(500,500);
+			if (lvl.getImage() != null) {
+				lvl.getImage().resize(500, 500);
 				background(lvl.getImage());
-			}
-			else{
+			} else {
 				background(0);
 			}
 		} else {
@@ -603,22 +606,62 @@ public class Wizzball extends PApplet {
 	 * 
 	 */
 	private void displayTextBoxGame() {
+
+		pushStyle();
+
+		fill(50);
+		strokeWeight(2);
+		stroke(200);
+
+		int w1 = 200;
+		int h1 = 25;
 		
+		PShape shape4 = createShape();
+		shape4.beginShape();
+		shape4.vertex(0 , height);
+		shape4.vertex(0, height -20 );
+		shape4.vertex(15, height -20);
+		shape4.vertex(30, height -83);
+		shape4.vertex(170, height -83);
+		shape4.vertex(185, height -20);
+		shape4.vertex(width-102, height -20);
+		shape4.vertex(width-90, height -83);
+		shape4.vertex(width-20, height -83);
+		shape4.vertex(width-7, height -20);
+		shape4.vertex(width , height-20);
+		shape4.vertex(width , height);
+		shape4.endShape(CLOSE);
+		
+		PShape shape = createShape();
+		shape.beginShape();
+		shape.vertex(width / 2 - w1 / 2, 0);
+		shape.vertex(width / 2 + w1 / 2, 0);
+		shape.vertex(width / 2 + w1 / 2 - 10, h1);
+		shape.vertex(width / 2 - w1 / 2 + 10, h1);
+		shape.endShape(CLOSE);
+
+		shape(shape4);
+		shape(shape);
+		popStyle();
+
+		pushStyle();
+		int sFont = 20;
+		textAlign(CENTER);
+		fill(255);
+		textFont(fontSW, sFont);
+		text(("Level " + lvl.currentLevel), width / 2, h1 / 2 + sFont / 2 - 3);
+		popStyle();
+
 		coin.resize(20, 20);
 		heart.resize(20, 20);
-		image(coin, 50, 405);
-		for( int i = 0; i<sp1.lives ; i++ )
-		{
-			image(heart , 50 + i*10 , 430);
+		image(coin, 50, 425);
+		for (int i = 0; i < sp1.lives; i++) {
+			image(heart, 50 + i * 20, 450);
 		}
-		text( sp1.acumulativeScore, 80, 420);
-		text("Stars left: " + lvl.nbBonus, 50, 465);
-		text("Time left: " + timer.getSecondsLeft(), 50, 480);
-		timer.display(25, 85, 15);
-		pushStyle();
-		if (sp1.lives == 0)
-			fill(240, 7, 30);
-		popStyle();
+		
+		text(sp1.acumulativeScore, 80, 440);
+		text("Stars left: " + lvl.nbBonus, 50, 490);
+		timer.display(width - 55, (int) (height * 0.92), 25);
 	}
 
 	private void displayStoryScreen() {
@@ -779,6 +822,7 @@ public class Wizzball extends PApplet {
 		explosionPlayer.rewind();
 		explosionPlayer.play();
 	}
+
 	private void manageFloorCollision() {
 		// The ball can't go under the floor
 		ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);
@@ -1020,7 +1064,7 @@ public class Wizzball extends PApplet {
 			} else if (buttonSettings) {
 				state = SETTINGS;
 			} else if (buttonRestart) {
-				scoreSaved=false;
+				scoreSaved = false;
 				timer.unpause();
 				restartGame();
 			}
@@ -1169,15 +1213,15 @@ public class Wizzball extends PApplet {
 
 				else if (buttonGameKeyboard == true) {
 					buttonGameKeyboard = false;
-					buttonRestartKeyboard = keyCode==DOWN;
-					buttonSettingsKeyboard = !(keyCode==DOWN);
+					buttonRestartKeyboard = keyCode == DOWN;
+					buttonSettingsKeyboard = !(keyCode == DOWN);
 				} else if (buttonRestartKeyboard == true) {
-					buttonSettingsKeyboard = (keyCode==DOWN);
-					buttonGameKeyboard = !(keyCode==DOWN);
+					buttonSettingsKeyboard = (keyCode == DOWN);
+					buttonGameKeyboard = !(keyCode == DOWN);
 					buttonRestartKeyboard = false;
 				} else if (buttonSettingsKeyboard == true) {
-					buttonGameKeyboard = (keyCode==DOWN);
-					buttonRestartKeyboard =!(keyCode==DOWN);
+					buttonGameKeyboard = (keyCode == DOWN);
+					buttonRestartKeyboard = !(keyCode == DOWN);
 					buttonSettingsKeyboard = false;
 				}
 			}
@@ -1205,26 +1249,26 @@ public class Wizzball extends PApplet {
 			}
 
 			break;
-			
+
 		case SETTINGS:
 			if (keyCode == DOWN || keyCode == UP) {
-				if (!buttonBallKeyboard&& !buttonEyesKeyboard&& !buttonMouthKeyboard && !buttonCustomKeyboard) {
+				if (!buttonBallKeyboard && !buttonEyesKeyboard && !buttonMouthKeyboard && !buttonCustomKeyboard) {
 					buttonBallKeyboard = true;
 				} else if (buttonBallKeyboard == true) {
 					buttonBallKeyboard = false;
-					buttonEyesKeyboard = keyCode==DOWN;
-					buttonCustomKeyboard = !(keyCode==DOWN);
+					buttonEyesKeyboard = keyCode == DOWN;
+					buttonCustomKeyboard = !(keyCode == DOWN);
 				} else if (buttonEyesKeyboard == true) {
-					buttonMouthKeyboard = (keyCode==DOWN);
-					buttonBallKeyboard = !(keyCode==DOWN);
+					buttonMouthKeyboard = (keyCode == DOWN);
+					buttonBallKeyboard = !(keyCode == DOWN);
 					buttonEyesKeyboard = false;
 				} else if (buttonMouthKeyboard == true) {
-					buttonCustomKeyboard = (keyCode==DOWN);
-					buttonEyesKeyboard =!(keyCode==DOWN);
+					buttonCustomKeyboard = (keyCode == DOWN);
+					buttonEyesKeyboard = !(keyCode == DOWN);
 					buttonMouthKeyboard = false;
-				}  else if (buttonCustomKeyboard == true) {
-					buttonBallKeyboard = (keyCode==DOWN);
-					buttonMouthKeyboard =!(keyCode==DOWN);
+				} else if (buttonCustomKeyboard == true) {
+					buttonBallKeyboard = (keyCode == DOWN);
+					buttonMouthKeyboard = !(keyCode == DOWN);
 					buttonCustomKeyboard = false;
 				}
 			}
@@ -1236,7 +1280,7 @@ public class Wizzball extends PApplet {
 					sp1.changeEyes();
 				} else if (buttonMouthKeyboard) {
 					sp1.changeMouth();
-				} else if(buttonCustomKeyboard){
+				} else if (buttonCustomKeyboard) {
 					sp1.changeCustom();
 				}
 			} else if (key == ESC) {

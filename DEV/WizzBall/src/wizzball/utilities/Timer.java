@@ -6,6 +6,7 @@
 package wizzball.utilities;
 
 import processing.core.PApplet;
+import wizzball.game.Wizzball;
 
 /**
  * @author francois
@@ -14,13 +15,13 @@ import processing.core.PApplet;
  */
 public class Timer {
 
-	private PApplet parent;
+	private Wizzball parent;
 	private int startTime;
 	private int timeLeft;
 	private boolean pause = true;
 	private int initialTime;
 
-	public Timer(PApplet parent) {
+	public Timer(Wizzball parent) {
 		this.parent = parent;
 	}
 
@@ -53,8 +54,8 @@ public class Timer {
 			return timeLeft / 1000;
 		return (timeLeft - (parent.millis() - startTime)) / 1000 + 1;
 	}
-	
-	private int getMilliSecondsLeft(){
+
+	private int getMilliSecondsLeft() {
 		return (timeLeft - (parent.millis() - startTime));
 	}
 
@@ -64,20 +65,48 @@ public class Timer {
 
 	public void display(int x, int y, int size) {
 		float percent = 1 - (float) getSecondsLeft() / (float) initialTime;
-		float angle = (float) (2*PApplet.PI * percent) - (PApplet.PI/2);
+		float angle = (float) (2 * PApplet.PI * percent) - (PApplet.PI / 2);
 
 		parent.pushStyle();
-		parent.strokeWeight(2);
-		parent.stroke(100);
-		parent.smooth(4);
 
-		if (percent >= 0.75){
-			parent.stroke(0);
-			parent.fill(255, 50, 50);
+		parent.fill(10);
+		parent.stroke(230);
+		parent.strokeWeight(10);
+
+		parent.smooth(8);
+
+		parent.ellipse(x, y, size+1, size);
+
+		parent.stroke(255, 25, 25);
+		parent.arc((float) x, (float) y, (float) size, (float) size, -parent.PI / 2, (float) angle);
+
+		parent.pushStyle();
+		parent.stroke(0);
+		for (int i = 0; i <= 4; i++) {
+			parent.strokeWeight(2);
+			float ang = i * (PApplet.PI / 2);
+			parent.line(x + (size * 0.8f + 3) * PApplet.cos((float) ang), y + (size * 0.8f + 3) * PApplet.sin((float) ang), x + (size + 3) * PApplet.cos((float) ang), y
+					+ (size + 3) * PApplet.sin((float) ang));
+			parent.strokeWeight(1);
+			for (int j = 0; j < 3; j++) {
+				ang = ang + PApplet.PI / 8;
+				parent.line(x + (size * 0.8f + 3) * PApplet.cos((float) ang), y + (size * 0.8f + 3) * PApplet.sin((float) ang), x + (size + 3) * PApplet.cos((float) ang), y
+						+ (size + 3) * PApplet.sin((float) ang));
+			}
 		}
 
-		parent.ellipse(x, y, size, size);
-		parent.line(x, y, x + size * PApplet.cos((float) angle), y + size * PApplet.sin((float) angle));
+		float s = 2 * size + 22;
+		parent.image(parent.watch, x - s / 2, y - s / 2 - 3, s, s);
+		parent.popStyle();
+
+		parent.popStyle();
+
+		parent.pushStyle();
+		parent.textAlign(PApplet.CENTER, PApplet.CENTER);
+		parent.fill(200, 250, 38);
+		int sFont = 30;
+		parent.textFont(parent.fontDigital, sFont);
+		parent.text(getSecondsLeft(), x, y);
 		parent.popStyle();
 	}
 }
