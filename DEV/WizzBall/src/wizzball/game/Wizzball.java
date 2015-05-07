@@ -609,15 +609,15 @@ public class Wizzball extends PApplet {
 
 		pushStyle();
 
-		fill(50);
+		fill(10);
 		strokeWeight(2);
 		stroke(200);
 
 		int h0 = height;
-		int h1 = height - 20;
+		int h1 = height - 10;
 		int h2 = height - 83;
 		
-		int offset = 15;
+		int offset = 20;
 		int w2 = 125;
 		int w3 = 70;
 		
@@ -682,7 +682,7 @@ public class Wizzball extends PApplet {
 		
 		text(sp1.acumulativeScore, 80, 440);
 		text("Stars left: " + lvl.nbBonus, 50, 490);
-		timer.display(width - 55, (int) (height * 0.92), 25);
+		timer.display(width - 61, (int) (height * 0.92), 25);
 	}
 
 	private void displayStoryScreen() {
