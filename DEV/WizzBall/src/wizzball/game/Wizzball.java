@@ -49,7 +49,7 @@ public class Wizzball extends PApplet {
 	private LinkedList<Integer> sequence = new LinkedList<Integer>();
 	private LinkedList<Integer> KONAMI = new LinkedList<Integer>(Arrays.asList(97, 98, 39, 37, 39, 37, 40, 40, 38, 38));
 
-	PImage level1, level2, level3, img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
+	PImage coin, level1, level2, level3, img, floor, ceiling, saturn, stars1, starsOver, gameover, avatars, sound_on, sound_off, current_sound;
 	public PImage nasty, rainbow, bonus, heart, powerup, hole, platformIm, enemy, lasergun,laserSprite;
 
 	Minim minim;
@@ -165,6 +165,7 @@ public class Wizzball extends PApplet {
 	}
 
 	private void loadImages() {
+		coin = loadImage("coin.png");
 		level1 = loadImage("level1_background.jpg");
 		level2 = loadImage("level2_background.jpg");
 		level3 = loadImage("level3_background.jpg");
@@ -610,16 +611,21 @@ public class Wizzball extends PApplet {
 	 * 
 	 */
 	private void displayTextBoxGame() {
-
-		text("Score: " + sp1.score, 50, 55);
-		text("Stars left: " + lvl.nbBonus, 50, 100);
-		text("Time left: " + timer.getSecondsLeft(), 50, 85);
+		
+		coin.resize(20, 20);
+		heart.resize(20, 20);
+		image(coin, 50, 405);
+		for( int i = 0; i<sp1.lives ; i++ )
+		{
+			image(heart , 50 + i*10 , 430);
+		}
+		text( sp1.score, 80, 420);
+		text("Stars left: " + lvl.nbBonus, 50, 465);
+		text("Time left: " + timer.getSecondsLeft(), 50, 480);
 		timer.display(25, 85, 15);
 		pushStyle();
-
 		if (sp1.lives == 0)
 			fill(240, 7, 30);
-		text("Lives : " + sp1.lives, 50, 70);
 		popStyle();
 	}
 
