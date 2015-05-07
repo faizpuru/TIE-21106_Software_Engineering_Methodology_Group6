@@ -66,7 +66,7 @@ public class Level {
 			String strLine;
 
 			try {
-				image = null;//wizz.loadImage("level" + currentLevel + "_background.jpg");
+				image = wizz.loadImage("level" + currentLevel + "_background.jpg");
 			} catch (Exception e) {
 				image = null;
 			}
