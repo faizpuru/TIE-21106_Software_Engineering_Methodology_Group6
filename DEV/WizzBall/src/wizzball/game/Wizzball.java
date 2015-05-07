@@ -636,7 +636,7 @@ public class Wizzball extends PApplet {
 		coin.resize(20, 20);
 		heart.resize(20, 20);
 		image(coin, 50, 405);
-		for( int i = 1; i<sp1.lives ; i++ )
+		for( int i = 0; i<sp1.lives ; i++ )
 		{
 			image(heart , 50 + i*10 , 430);
 		}
