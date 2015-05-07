@@ -381,8 +381,8 @@ public class Wizzball extends PApplet {
 			manageObjectsCollision();
 		}
 
-		if (sp1.score >= 300) {
-			sp1.lives += 1;
+		if (sp1.score >= 650) {
+			sp1.incrementLives();
 			sp1.score = 0;
 		}
 
@@ -615,11 +615,11 @@ public class Wizzball extends PApplet {
 		coin.resize(20, 20);
 		heart.resize(20, 20);
 		image(coin, 50, 405);
-		for( int i = 0; i<sp1.lives ; i++ )
+		for( int i = 1; i<sp1.lives ; i++ )
 		{
 			image(heart , 50 + i*10 , 430);
 		}
-		text( sp1.score, 80, 420);
+		text( sp1.acumulativeScore, 80, 420);
 		text("Stars left: " + lvl.nbBonus, 50, 465);
 		text("Time left: " + timer.getSecondsLeft(), 50, 480);
 		timer.display(25, 85, 15);

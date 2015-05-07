@@ -197,7 +197,7 @@ public class Spot {
 	}
 
 	public void incrementLives() {
-		if (lives < MAX_LIVES) {
+		if (lives <= MAX_LIVES) {
 			lives++;
 		}
 
