@@ -48,6 +48,13 @@ public class Wizzball extends PApplet {
 	
 	public final int NASTY_LIVES = 3;
 	public final int BOMB_LIVES = 2;
+	
+	/*
+	 * WEAPONS DAMAGE
+	 */
+	
+	public final int GUN_DAMAGE = 1;
+	public final int RAY_DAMAGE = 3;
 
 	public static float gravity = (float) 0.5; // positive downwards --- negative upwards
 
