@@ -165,30 +165,12 @@ public class Wizzball extends PApplet {
 			lvl = new Level(this);
 		}
 		if (!lvl.loadLevel()) {
-			if( lvl.currentLevel == 1 )
-			{
-				level1.resize(500, 500);
-				background(level1);
-			}
-			else if( lvl.currentLevel == 2 )
-			{
-				level2.resize(500, 500);
-				background(level2);
-			}
-			else if ( lvl.currentLevel == 3 )
-			{
-				level3.resize(500, 500);
-				background(level3);
-			}
 			state = SUCCESS;
 		}
 	}
 
 	private void loadImages() {
 		coin = loadImage("coin.png");
-		level1 = loadImage("level1_background.jpg");
-		level2 = loadImage("level2_background.jpg");
-		level3 = loadImage("level3_background.jpg");
 		img = loadImage("space_background.jpg");
 		floor = loadImage("moonfloor.jpg");
 		ceiling = loadImage("ceiling.jpg");
@@ -315,20 +297,9 @@ public class Wizzball extends PApplet {
 		stroke(0);
 		strokeWeight(5);
 		if (!nyancatmode) {
-			if ( lvl.getLevel() == 1 )
-			{
-				level1.resize(500, 500);
-				background(level1);
-			}
-			else if ( lvl.getLevel() == 2 )
-			{
-				level2.resize(500, 500);
-				background(level2);
-			}
-			else if ( lvl.getLevel() == 3 )
-			{
-				level3.resize(500, 500);
-				background(level3);
+			if(lvl.getImage()!=null){
+				lvl.getImage().resize(500,500);
+				background(lvl.getImage());
 			}
 			else{
 				background(0);

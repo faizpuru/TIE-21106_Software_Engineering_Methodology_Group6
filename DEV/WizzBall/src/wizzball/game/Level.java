@@ -11,9 +11,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Vector;
-import processing.core.PImage;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.collectable.Bonus;
 import wizzball.objects.collectable.Life;
@@ -28,6 +28,7 @@ import wizzball.objects.weapons.Pistol;
 
 public class Level {
 
+	PImage image;
 	int currentLevel = 1;
 	int maximumTime = 0;
 	int xBegin = 0;
@@ -45,9 +46,8 @@ public class Level {
 	public boolean isLoading() {
 		return loading;
 	}
-	
-	public int getLevel()
-	{
+
+	public int getLevel() {
 		return this.currentLevel;
 	}
 
@@ -55,9 +55,9 @@ public class Level {
 	 * Load the level corresponding to the txt file
 	 */
 	public boolean loadLevel() {
-		
+
 		loading = true;
-		
+
 		// Open the file
 		try {
 			FileInputStream fstream = new FileInputStream("data/levels/level" + currentLevel + ".txt");
@@ -65,6 +65,11 @@ public class Level {
 
 			String strLine;
 
+			try {
+				image = wizz.loadImage("level" + currentLevel + "_background.jpg");
+			} catch (Exception e) {
+				image = null;
+			}
 			// initialize platforms and holes containers
 			if (objects == null)
 				objects = new Vector<BasicObject>();
@@ -95,16 +100,14 @@ public class Level {
 					wizz.timer.init(PApplet.parseInt(words[1]));
 					nbLine++;
 				}
-				
-				
 
 				else {// Create platforms, stairs and holes
-					for(int i = 0; i < words.length ; i++){
+					for (int i = 0; i < words.length; i++) {
 						try {
-							
+
 							words[i] = words[i].split(":")[1];
-						} catch(Exception e){
-							//No description
+						} catch (Exception e) {
+							// No description
 						}
 					}
 					if (words[0].equals("P")) {
@@ -125,40 +128,40 @@ public class Level {
 						objects.addElement(new Bonus(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
 								true));
 					}
-					
+
 					if (words[0].equals("LW")) {
-						objects.addElement(new LaserPistol(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
-								true));
+						objects.addElement(new LaserPistol(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
+								.parseFloat(words[3]), true));
 					}
-					
+
 					if (words[0].equals("PW")) {
 						objects.addElement(new Pistol(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
 								true));
 					}
-					
+
 					if (words[0].equals("SE")) {
-						objects.addElement(new StaticEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
-								true));
+						objects.addElement(new StaticEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
+								.parseFloat(words[3]), true));
 					}
-					
+
 					if (words[0].equals("BO")) {
-						objects.addElement(new Bomb(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]),PApplet.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]),
-								true));
+						objects.addElement(new Bomb(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true));
 					}
-					
+
 					if (words[0].equals("N")) {
-						objects.addElement(new Nasty(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]),PApplet.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]),
-								true));
+						objects.addElement(new Nasty(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true));
 					}
 
 					if (words[0].equals("L")) {
 						objects.addElement(new Life(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
 								true));
 					}
-					
+
 					if (words[0].equals("PU")) {
-						objects.addElement(new PowerUp(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[3]),
-								true));
+						objects.addElement(new PowerUp(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]),
+								PApplet.parseFloat(words[3]), true));
 					}
 
 					if (words[0].equals("S")) {
@@ -195,11 +198,19 @@ public class Level {
 
 			// Close the input stream
 			br.close();
-			loading  = false;
+			loading = false;
 			return true;
 
 		} catch (IOException e) {
 			return false;
 		}
+	}
+
+	/**
+	 * @return background
+	 */
+	public PImage getImage() {
+		// TODO Auto-generated method stub
+		return image;
 	}
 }
