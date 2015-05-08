@@ -78,7 +78,7 @@ public class Timer {
 		parent.ellipse(x, y, size+1, size);
 
 		parent.stroke(255, 25, 25);
-		parent.arc((float) x, (float) y, (float) size, (float) size, -parent.PI / 2, (float) angle);
+		parent.arc((float) x, (float) y, (float) size, (float) size, -PApplet.PI / 2, (float) angle);
 
 		parent.pushStyle();
 		parent.stroke(0);

@@ -1142,6 +1142,11 @@ public class Wizzball extends PApplet {
 	 */
 	private void restartGame() {
 		lvl = new Level(this);
+		xpos = 0;
+		ypos = width/2;
+		xspeed = 0;
+		yspeed =  5;
+		gravity = 0.5f;
 		sp1.initSpot();
 		loadLevel();
 		state = GAME;

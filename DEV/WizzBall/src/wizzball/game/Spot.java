@@ -71,7 +71,11 @@ public class Spot {
 	public void initSpot() {
 		lives = 3;
 		score = 0;
-		power = false;
+		if(power){
+			changeColour();
+			power = false;
+		}
+		rotationSpeed = 0;
 	}
 
 	public void display() {
