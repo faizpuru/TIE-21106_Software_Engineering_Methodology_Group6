@@ -51,10 +51,12 @@ public class Level {
 		return this.currentLevel;
 	}
 
+	
+	
 	/**
 	 * Load the level corresponding to the txt file
 	 */
-	public boolean loadLevel() {
+	public void loadLevel() {
 
 		loading = true;
 
@@ -199,10 +201,9 @@ public class Level {
 			// Close the input stream
 			br.close();
 			loading = false;
-			return true;
 
 		} catch (IOException e) {
-			return false;
+			wizz.state =  Wizzball.SUCCESS;
 		}
 	}
 

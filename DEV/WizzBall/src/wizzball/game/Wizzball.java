@@ -85,10 +85,12 @@ public class Wizzball extends PApplet {
 	PVector vfront = new PVector(0, 5);
 
 	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43, PAUSE = 44, SUCCESS = 45;
+	private float FRAMERATE = 25;
 	public int state = MENU;
 
 	String typing = "";
 	String player = "";
+	String loadingPoints = ".";
 
 	public float xpos = 0; // Starting position of shape
 	public float ypos;
@@ -109,18 +111,24 @@ public class Wizzball extends PApplet {
 	private boolean buttonEyesKeyboard = false;
 	private boolean buttonMouthKeyboard = false;
 	private boolean buttonCustomKeyboard = false;
+	public static boolean loading = false;
 
 	public void setup() {
 		initDisplayParameters();
+		thread("initialization");
+
+	}
+
+	public void initialization() {
+		loading = true;
 		loadFonts();
 		loadMusics();
 		loadImages();
-		frameRate(24);
 		initSpot();
 		initStars();
 		loadLevel();
 		initTable();
-
+		loading = false;
 	}
 
 	private void initTable() {
@@ -142,6 +150,7 @@ public class Wizzball extends PApplet {
 	}
 
 	private void initDisplayParameters() {
+		frameRate(FRAMERATE);
 		ellipseMode(RADIUS);
 		size(500, 500, OPENGL);
 		smooth();
@@ -165,9 +174,12 @@ public class Wizzball extends PApplet {
 		if (lvl == null) {
 			lvl = new Level(this);
 		}
-		if (!lvl.loadLevel()) {
-			state = SUCCESS;
-		}
+		thread("testThread");
+
+	}
+
+	public void testThread() {
+		lvl.loadLevel();
 	}
 
 	private void loadImages() {
@@ -212,7 +224,7 @@ public class Wizzball extends PApplet {
 		rayPlayer = minim.loadFile("musics/Ray_gun.mp3");
 		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
 
-		//minim.stop();
+		// minim.stop();
 
 	}
 
@@ -225,6 +237,21 @@ public class Wizzball extends PApplet {
 	}
 
 	public void draw() {
+
+		if (loading) {
+
+			pushStyle();
+			background(0);
+			textAlign(CENTER);
+			fill(255);
+			textFont(createFont("Georgia", 44));
+			text("WIZZBALL", width / 2, height / 2);
+			textFont(createFont("Georgia", 25));
+			text(loadingPoints, width / 2, height / 2 + 80);
+			loadingPoints += "..";
+			popStyle();
+			return;
+		}
 
 		if (sequence.equals(KONAMI)) {
 			nyancatMode();
@@ -247,8 +274,16 @@ public class Wizzball extends PApplet {
 			displayStoryScreen();
 			break;
 		case GAME:
-			if (!lvl.isLoading())
+			if (!lvl.isLoading()) {
 				displayGame();
+			} else {
+				pushStyle();
+				background(0);
+				textAlign(CENTER);
+				fill(255);
+				text("Loading", width / 2, height / 2);
+				popStyle();
+			}
 			break;
 		case PAUSE:
 			displayPause();
@@ -281,6 +316,7 @@ public class Wizzball extends PApplet {
 
 		if (!nyancatmode) {
 
+			frameRate(40);
 			sp1.ball = loadImage("nyancat.png");
 			sp1.mouth = null;
 			sp1.eyes = null;
@@ -297,7 +333,6 @@ public class Wizzball extends PApplet {
 	private void displayGame() {
 
 		clear();
-		frameRate(25);
 		stroke(0);
 		strokeWeight(5);
 		if (!nyancatmode) {
@@ -316,7 +351,7 @@ public class Wizzball extends PApplet {
 		paraDrawCeiling(ceiling, 500, xpos);
 		paraDrawFloor(floor, 500, xpos);
 
-		displayStars();
+		//displayStars();
 
 		if (!isInGame) {
 			ypos = height + 2 * sp1.radius;
@@ -616,20 +651,17 @@ public class Wizzball extends PApplet {
 		int h0 = height;
 		int h1 = height - 10;
 		int h2 = height - 83;
-		
+
 		int offset = 20;
 		int w2 = 125;
 		int w3 = 70;
-		
+
 		int yA = 0;
-		
-		
-		
-		
+
 		PShape shape4 = createShape();
 		shape4.beginShape();
-		shape4.vertex(0 , h0);
-		shape4.vertex(0, h1 );
+		shape4.vertex(0, h0);
+		shape4.vertex(0, h1);
 		yA += 18;
 		shape4.vertex(yA, h1);
 		yA += offset;
@@ -638,7 +670,7 @@ public class Wizzball extends PApplet {
 		shape4.vertex(yA, h2);
 		yA += offset;
 		shape4.vertex(yA, h1);
-		yA = width - 7 - 2 * offset- w3;
+		yA = width - 7 - 2 * offset - w3;
 		shape4.vertex(yA, h1);
 		yA += offset;
 		shape4.vertex(yA, h2);
@@ -646,13 +678,13 @@ public class Wizzball extends PApplet {
 		shape4.vertex(yA, h2);
 		yA += offset;
 		shape4.vertex(yA, h1);
-		shape4.vertex(width , h1);
-		shape4.vertex(width , h0);
+		shape4.vertex(width, h1);
+		shape4.vertex(width, h0);
 		shape4.endShape(CLOSE);
-		
+
 		int h4 = 23;
 		int w1 = 200;
-		
+
 		PShape shape = createShape();
 		shape.beginShape();
 		shape.vertex(width / 2 - w1 / 2, 0);
@@ -679,7 +711,7 @@ public class Wizzball extends PApplet {
 		for (int i = 0; i < sp1.lives; i++) {
 			image(heart, 50 + i * 20, 450);
 		}
-		
+
 		text(sp1.acumulativeScore, 80, 440);
 		text("Stars left: " + lvl.nbBonus, 50, 490);
 		timer.display(width - 61, (int) (height * 0.92), 25);

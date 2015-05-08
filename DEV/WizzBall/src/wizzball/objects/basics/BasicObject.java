@@ -57,11 +57,10 @@ public class BasicObject {
 		float left = ((Wizzball) parent).getLimitX('l');
 		float right = ((Wizzball) parent).getLimitX('r');
 
-		if (xAbs - width / 2 > left)
+		if ((xAbs + width  > left)  &&  (xAbs - width < right))
 			return true;
-		if (xAbs + width / 2 < right)
-			return true;
-		return false;
+		
+		return true;
 	}
 
 	public float getLeft() {
