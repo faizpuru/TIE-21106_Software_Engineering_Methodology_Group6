@@ -5,6 +5,8 @@
  */
 package wizzball.objects.enemies;
 
+import java.awt.Stroke;
+
 import wizzball.game.Wizzball;
 
 /**
@@ -76,6 +78,17 @@ public class MovingEnemy extends BasicEnemy {
 	public void display() {
 
 		super.display();
+		if(lives<maxLives && !destroy){
+			parent.pushStyle();
+			parent.strokeWeight(0.3f);
+			parent.fill(67,240,67);
+			float limit = width*lives/maxLives;
+			parent.rect(x-width/2 + parent.width/2, y - 8 , limit, 4);
+			parent.fill(240,67,67);
+			parent.rect(x-width/2 + parent.width/2 + limit, y - 8 , width-limit, 4);
+
+			parent.popStyle();
+		}
 
 		if (!vertical) {
 			if (!isGreater(x1, x2)) {

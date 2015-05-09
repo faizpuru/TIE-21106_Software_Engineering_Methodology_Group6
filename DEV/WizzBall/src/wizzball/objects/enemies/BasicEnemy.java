@@ -18,6 +18,7 @@ public abstract class BasicEnemy extends BasicCollectable {
 	PImage destroySprite;
 	int numImage = 0;
 	int lives;
+	int maxLives;
 
 	/**
 	 * @param p
@@ -30,6 +31,15 @@ public abstract class BasicEnemy extends BasicCollectable {
 	public BasicEnemy(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
 		super(p, xpos, ypos, height, width, down);
 		destroySprite = parent.loadImage("explosion.png");
+		lives = getInitialLives();
+		maxLives = lives;
+	}
+
+	/**
+	 * @return
+	 */
+	protected int getInitialLives() {
+		return 1;
 	}
 
 	public void shoot(int damage){
