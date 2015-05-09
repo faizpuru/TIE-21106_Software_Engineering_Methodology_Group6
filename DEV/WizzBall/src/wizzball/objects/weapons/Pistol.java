@@ -60,7 +60,7 @@ public class Pistol extends BasicWeapon {
 		 * 
 		 */
 		private boolean isAlive() {
-			return xBullet < 3 * parent.width / 8 || xBullet > -3*parent.width/8;
+			return xBullet < 3 * parent.width / 8 && xBullet > -3*parent.width/8;
 		}
 
 		/**
@@ -162,5 +162,12 @@ public class Pistol extends BasicWeapon {
 	public void activateWeapon() {
 		if (bullets.size() < maximumNbBullets)
 			bullets.addElement(new Bullet(parent.ypos));
+	}
+	/* (non-Javadoc)
+	 * @see wizzball.objects.weapons.BasicWeapon#getTimeBetweenTwoShoot()
+	 */
+	@Override
+	protected int getTimeBetweenTwoShoot() {
+		return 150;
 	}
 }

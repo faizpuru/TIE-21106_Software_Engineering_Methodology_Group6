@@ -32,7 +32,7 @@ public class Spot {
 
 	public int lives = 3;
 	public int score = 0;
-	public int acumulativeScore=0;
+	public int acumulativeScore = 0;
 	public boolean power = false;
 	private BasicWeapon weapon;
 	private boolean appearing = true;
@@ -71,7 +71,7 @@ public class Spot {
 	public void initSpot() {
 		lives = 3;
 		score = 0;
-		if(power){
+		if (power) {
 			changeColour();
 			power = false;
 		}
@@ -317,10 +317,9 @@ public class Spot {
 	public void activateWeapon() {
 		if (weapon != null) {
 			weapon.activateWeapon();
-			if(weapon instanceof Pistol){
+			if (weapon instanceof Pistol) {
 				parent.playGunSound();
-			}
-			else if(weapon instanceof LaserPistol){
+			} else if (weapon instanceof LaserPistol) {
 				parent.playRaySound();
 			}
 		}
@@ -328,6 +327,15 @@ public class Spot {
 
 	public void appearAnimation() {
 		appearing = true;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isAllowedToShoot() {
+		if (weapon != null)
+			return weapon.isAllowedToShoot();
+		return false;
 	}
 
 }

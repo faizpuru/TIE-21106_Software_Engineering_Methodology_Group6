@@ -5,8 +5,6 @@
  */
 package wizzball.objects.enemies;
 
-import java.awt.Stroke;
-
 import wizzball.game.Wizzball;
 
 /**

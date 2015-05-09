@@ -48,6 +48,12 @@ public class Timer {
 		timeLeft = secs * 1000;
 		initialTime = secs;
 	}
+	
+	public void initMillis(int millis) {
+		startTime = parent.millis();
+		timeLeft = millis;
+		initialTime = millis;
+	}
 
 	public int getSecondsLeft() {
 		if (pause)
@@ -55,7 +61,7 @@ public class Timer {
 		return (timeLeft - (parent.millis() - startTime)) / 1000 + 1;
 	}
 
-	private int getMilliSecondsLeft() {
+	public int getMilliSecondsLeft() {
 		return (timeLeft - (parent.millis() - startTime));
 	}
 

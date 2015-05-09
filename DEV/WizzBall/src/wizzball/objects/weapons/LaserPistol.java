@@ -110,4 +110,12 @@ public class LaserPistol extends BasicWeapon {
 		image = parent.lasergun;
 	}
 	
+	/* (non-Javadoc)
+	 * @see wizzball.objects.weapons.BasicWeapon#getTimeBetweenTwoShoot()
+	 */
+	@Override
+	protected int getTimeBetweenTwoShoot() {
+		return 1500;
+	}
+	
 }

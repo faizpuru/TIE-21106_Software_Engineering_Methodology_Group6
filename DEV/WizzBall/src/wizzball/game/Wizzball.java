@@ -158,7 +158,7 @@ public class Wizzball extends PApplet {
 		size(500, 500, OPENGL);
 		smooth();
 	}
-
+	
 	private void initSpot() {
 		loading++;
 		sp1 = new Spot(this, xpos, ypos, 20);
@@ -261,7 +261,7 @@ public class Wizzball extends PApplet {
 		loading++;
 
 
-		// minim.stop();
+		 //minim.stop();
 
 	}
 
@@ -1256,7 +1256,9 @@ public class Wizzball extends PApplet {
 				sp1.accelerateRotation(-INCR_SPEED);
 			}
 			if (key == ' ') {
-				sp1.activateWeapon();
+				if(sp1.isAllowedToShoot()){
+					sp1.activateWeapon();
+				}
 			}
 
 			if (keyCode == 71) {
