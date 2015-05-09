@@ -111,7 +111,7 @@ public class Wizzball extends PApplet {
 	private boolean buttonEyesKeyboard = false;
 	private boolean buttonMouthKeyboard = false;
 	private boolean buttonCustomKeyboard = false;
-	public static boolean loading = false;
+	public static int loading = 0;
 
 	public void setup() {
 		initDisplayParameters();
@@ -120,7 +120,6 @@ public class Wizzball extends PApplet {
 	}
 
 	public void initialization() {
-		loading = true;
 		loadFonts();
 		loadMusics();
 		loadImages();
@@ -128,7 +127,8 @@ public class Wizzball extends PApplet {
 		initStars();
 		loadLevel();
 		initTable();
-		loading = false;
+		loading++;
+		System.out.println(loading);
 	}
 
 	private void initTable() {
@@ -144,8 +144,11 @@ public class Wizzball extends PApplet {
 
 	private void loadFonts() {
 		f = createFont("Arial", 16, true);
+		loading++;
 		fontSW = loadFont("fonts/StarJedi-48.vlw");
+		loading++;
 		fontDigital = loadFont("fonts/digital.vlw");
+		loading++;
 
 	}
 
@@ -157,8 +160,10 @@ public class Wizzball extends PApplet {
 	}
 
 	private void initSpot() {
-		restartTheLevel();
+		loading++;
 		sp1 = new Spot(this, xpos, ypos, 20);
+		restartTheLevel();
+		loading++;
 	}
 
 	private void initStars() {
@@ -168,6 +173,7 @@ public class Wizzball extends PApplet {
 
 		// Initialize the offset
 		offset = new PVector(width / 2, height / 2);
+		loading++;
 	}
 
 	private void loadLevel() {
@@ -184,28 +190,51 @@ public class Wizzball extends PApplet {
 
 	private void loadImages() {
 		coin = loadImage("coin.png");
+		loading++;
 		img = loadImage("space_background.jpg");
+		loading++;
 		floor = loadImage("moonfloor.jpg");
+		loading++;
 		ceiling = loadImage("ceiling.jpg");
+		loading++;
 		stars1 = loadImage("starsBack.jpg");
+		loading++;
 		saturn = loadImage("saturn.png");
+		loading++;
 		starsOver = loadImage("goscreen.png");
+		loading++;
 		gameover = loadImage("gover.png");
+		loading++;
 		avatars = loadImage("avatars.png");
+		loading++;
 		sound_on = loadImage("sound_on.png");
+		loading++;
 		sound_off = loadImage("sound_off.png");
+		loading++;
 		current_sound = sound_on;
+		loading++;
 		rainbow = loadImage("rainbow.jpg");
+		loading++;
 		bonus = loadImage("bonus.png");
+		loading++;
 		heart = loadImage("heart.png");
+		loading++;
 		powerup = loadImage("powerup.png");
+		loading++;
 		hole = loadImage("hole.png");
+		loading++;
 		platformIm = loadImage("platform.png");
+		loading++;
 		enemy = loadImage("static_enemy.png");
+		loading++;
 		lasergun = loadImage("lasergun.png");
+		loading++;
 		nasty = loadImage("nasty.png");
+		loading++;
 		laserSprite = loadImage("laser.png");
+		loading++;
 		watch = loadImage("watch.png");
+		loading++;
 
 	}
 
@@ -217,12 +246,20 @@ public class Wizzball extends PApplet {
 	private void loadMusics() {
 		minim = new Minim(this);
 		musicPlayer = minim.loadFile("musics/music.mp3");
+		loading++;
 		bouncingPlayer = minim.loadFile("musics/bounce.mp3");
+		loading++;
 		bonusPlayer = minim.loadFile("musics/bonus.wav");
+		loading++;
 		keyPlayer = minim.loadFile("musics/keySound.mp3");
+		loading++;
 		gunPlayer = minim.loadFile("musics/Gun.mp3");
+		loading++;
 		rayPlayer = minim.loadFile("musics/Ray_gun.mp3");
+		loading++;
 		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
+		loading++;
+
 
 		// minim.stop();
 
@@ -238,17 +275,19 @@ public class Wizzball extends PApplet {
 
 	public void draw() {
 
-		if (loading) {
+		if (loading<37) {
 
 			pushStyle();
-			background(0);
+			background(50);
 			textAlign(CENTER);
 			fill(255);
 			textFont(createFont("Georgia", 44));
 			text("WIZZBALL", width / 2, height / 2);
 			textFont(createFont("Georgia", 25));
-			text(loadingPoints, width / 2, height / 2 + 80);
-			loadingPoints += "..";
+			rect(20, height/2+40, width-40, 30);
+			fill(25);
+			rect(20, height/2+40,(width-40)*loading/37,30);
+			
 			popStyle();
 			return;
 		}
@@ -333,6 +372,7 @@ public class Wizzball extends PApplet {
 	private void displayGame() {
 
 		clear();
+
 		stroke(0);
 		strokeWeight(5);
 		if (!nyancatmode) {
@@ -345,13 +385,14 @@ public class Wizzball extends PApplet {
 		} else {
 			background(239, 89, 123);
 		}
+		displayStars();
+
 		textAlign(LEFT);
 		textFont(fontSW, 14);
 
 		paraDrawCeiling(ceiling, 500, xpos);
 		paraDrawFloor(floor, 500, xpos);
 
-		//displayStars();
 
 		if (!isInGame) {
 			ypos = height + 2 * sp1.radius;
@@ -421,6 +462,7 @@ public class Wizzball extends PApplet {
 		}
 
 		displayTextBoxGame();
+
 
 	}
 
