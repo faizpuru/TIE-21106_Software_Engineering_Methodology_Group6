@@ -158,11 +158,11 @@ public class Wizzball extends PApplet {
 		size(500, 500, OPENGL);
 		smooth();
 	}
-	
+
 	private void initSpot() {
 		loading++;
 		sp1 = new Spot(this, xpos, ypos, 20);
-		restartTheLevel();
+		reinitPositionAndSpeed();
 		loading++;
 	}
 
@@ -260,8 +260,7 @@ public class Wizzball extends PApplet {
 		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
 		loading++;
 
-
-		 //minim.stop();
+		minim.stop();
 
 	}
 
@@ -275,7 +274,7 @@ public class Wizzball extends PApplet {
 
 	public void draw() {
 
-		if (loading<37) {
+		if (loading < 37) {
 
 			pushStyle();
 			background(50);
@@ -284,10 +283,10 @@ public class Wizzball extends PApplet {
 			textFont(createFont("Georgia", 44));
 			text("WIZZBALL", width / 2, height / 2);
 			textFont(createFont("Georgia", 25));
-			rect(20, height/2+40, width-40, 30);
+			rect(20, height / 2 + 40, width - 40, 30);
 			fill(25);
-			rect(20, height/2+40,(width-40)*loading/37,30);
-			
+			rect(20, height / 2 + 40, (width - 40) * loading / 37, 30);
+
 			popStyle();
 			return;
 		}
@@ -313,6 +312,7 @@ public class Wizzball extends PApplet {
 			displayStoryScreen();
 			break;
 		case GAME:
+
 			if (!lvl.isLoading()) {
 				displayGame();
 			} else {
@@ -371,13 +371,11 @@ public class Wizzball extends PApplet {
 	@SuppressWarnings("unchecked")
 	private void displayGame() {
 
-		clear();
-
+		clear();		
 		stroke(0);
 		strokeWeight(5);
 		if (!nyancatmode) {
 			if (lvl.getImage() != null) {
-				lvl.getImage().resize(500, 500);
 				background(lvl.getImage());
 			} else {
 				background(0);
@@ -392,7 +390,6 @@ public class Wizzball extends PApplet {
 
 		paraDrawCeiling(ceiling, 500, xpos);
 		paraDrawFloor(floor, 500, xpos);
-
 
 		if (!isInGame) {
 			ypos = height + 2 * sp1.radius;
@@ -463,13 +460,13 @@ public class Wizzball extends PApplet {
 
 		displayTextBoxGame();
 
-
 	}
 
 	/**
 	 * 
 	 */
 	private void reinitPositionAndSpeed() {
+		sp1.deleteBullet();
 		xpos = 0;
 		ypos = height / 2;
 		xspeed = 0;
@@ -818,6 +815,9 @@ public class Wizzball extends PApplet {
 		ceiling.resize(width * 9, (int) (height * 0.1));
 		floor.resize(width * 9, (int) (height * 0.2));
 		saturn.resize(width / 6, height / 6);
+		if (lvl.getImage() != null)
+			lvl.getImage().resize(width, height);
+
 	}
 
 	private void loopThemeMusic() {
@@ -1185,9 +1185,9 @@ public class Wizzball extends PApplet {
 	private void restartGame() {
 		lvl = new Level(this);
 		xpos = 0;
-		ypos = width/2;
+		ypos = width / 2;
 		xspeed = 0;
-		yspeed =  5;
+		yspeed = 5;
 		gravity = 0.5f;
 		sp1.initSpot();
 		loadLevel();
@@ -1256,7 +1256,7 @@ public class Wizzball extends PApplet {
 				sp1.accelerateRotation(-INCR_SPEED);
 			}
 			if (key == ' ') {
-				if(sp1.isAllowedToShoot()){
+				if (sp1.isAllowedToShoot()) {
 					sp1.activateWeapon();
 				}
 			}

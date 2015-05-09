@@ -170,4 +170,11 @@ public class Pistol extends BasicWeapon {
 	protected int getTimeBetweenTwoShoot() {
 		return 150;
 	}
+
+	/**
+	 * delete all the bullets
+	 */
+	public void deleteBullets() {
+		bullets.clear();
+	}
 }

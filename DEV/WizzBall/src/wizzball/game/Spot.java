@@ -20,7 +20,7 @@ public class Spot {
 	public float x;
 	public float y;
 	public float radius;
-	private float tmpRadius = 0;
+	private float tmpRadius = 1;
 	Wizzball parent;
 	PImage ball, eyes, mouth, custom;
 	int ballCoord, eyesCoord, mouthCoord, customCoord;
@@ -336,6 +336,15 @@ public class Spot {
 		if (weapon != null)
 			return weapon.isAllowedToShoot();
 		return false;
+	}
+
+	/**
+	 * 
+	 */
+	public void deleteBullet() {
+		if (weapon instanceof Pistol) {
+			((Pistol)weapon).deleteBullets();
+		}
 	}
 
 }

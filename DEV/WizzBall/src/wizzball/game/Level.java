@@ -51,8 +51,6 @@ public class Level {
 		return this.currentLevel;
 	}
 
-	
-	
 	/**
 	 * Load the level corresponding to the txt file
 	 */
@@ -69,6 +67,7 @@ public class Level {
 
 			try {
 				image = wizz.loadImage("level" + currentLevel + "_background.jpg");
+				image.resize(500, 500);
 			} catch (Exception e) {
 				image = null;
 			}
@@ -200,10 +199,18 @@ public class Level {
 
 			// Close the input stream
 			br.close();
+
+			for (BasicObject p : (Vector<BasicObject>) objects.clone()) {
+				if (p.isDisplay()) {
+					p.recalculatePositionX(wizz.xpos);
+				}
+
+			}
+
 			loading = false;
 
 		} catch (IOException e) {
-			wizz.state =  Wizzball.SUCCESS;
+			wizz.state = Wizzball.SUCCESS;
 		}
 	}
 
