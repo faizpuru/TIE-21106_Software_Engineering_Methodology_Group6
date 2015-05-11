@@ -20,11 +20,12 @@ import wizzball.objects.collectable.Life;
 import wizzball.objects.collectable.PowerUp;
 import wizzball.objects.collidable.Hole;
 import wizzball.objects.collidable.Platform;
-import wizzball.objects.enemies.Bomb;
-import wizzball.objects.enemies.Nasty;
+import wizzball.objects.enemies.MovingEnemy;
 import wizzball.objects.enemies.StaticEnemy;
 import wizzball.objects.weapons.LaserPistol;
 import wizzball.objects.weapons.Pistol;
+import wizzball.game.Wizzball;
+
 
 public class Level {
 
@@ -143,17 +144,22 @@ public class Level {
 
 					if (words[0].equals("SE")) {
 						objects.addElement(new StaticEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
-								.parseFloat(words[3]), true));
+								.parseFloat(words[3]),true,null,0,0));
 					}
 
 					if (words[0].equals("BO")) {
-						objects.addElement(new Bomb(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true));
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.enemy,Wizzball.BOMB_LIVES,Wizzball.BOMBS_POINTS));
 					}
 
 					if (words[0].equals("N")) {
-						objects.addElement(new Nasty(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true));
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.nasty,Wizzball.NASTY_LIVES,Wizzball.NASTIES_POINTS));
+					}
+					
+					if (words[0].equals("MA")) {
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.movingAlien,Wizzball.NASTY_LIVES,Wizzball.NASTIES_POINTS));
 					}
 
 					if (words[0].equals("L")) {

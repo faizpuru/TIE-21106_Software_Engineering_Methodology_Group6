@@ -46,8 +46,12 @@ public class Wizzball extends PApplet {
 	 * LIVES
 	 */
 
-	public final int NASTY_LIVES = 3;
-	public final int BOMB_LIVES = 2;
+	public final static int NASTY_LIVES = 3;
+	public final static int BOMB_LIVES = 2;
+	public final static int STALIEN_LIVES = 5;
+	public final static int MVALIEN_LIVES = 4;
+
+
 
 	/*
 	 * WEAPONS DAMAGE
@@ -75,8 +79,19 @@ public class Wizzball extends PApplet {
 
 	PImage coin, level1, level2, level3, img, floor, ceiling, saturn, stars1,
 			starsOver, gameover, avatars, sound_on, sound_off, current_sound;
-	public PImage nasty, rainbow, bonus, heart, heart1, powerup, hole, platformIm,
-			enemy, lasergun, laserSprite, watch;
+	public static PImage nasty;
+	public PImage rainbow;
+	public PImage bonus;
+	public PImage heart;
+	public PImage powerup;
+	public PImage hole;
+	public PImage platformIm;
+	public static PImage enemy;
+	public PImage lasergun;
+	public PImage laserSprite;
+	public PImage watch;
+	public static PImage staticAlien;
+	public static PImage movingAlien;
 
 	Minim minim;
 	AudioPlayer musicPlayer, bouncingPlayer, bonusPlayer, keyPlayer, gunPlayer,
@@ -246,7 +261,6 @@ public class Wizzball extends PApplet {
 		bonus = loadImage("bonus.png");
 		loading++;
 		heart = loadImage("heart.png");
-		heart1 = loadImage("heart.png");
 		loading++;
 		powerup = loadImage("powerup.png");
 		loading++;
@@ -255,6 +269,10 @@ public class Wizzball extends PApplet {
 		platformIm = loadImage("platform.png");
 		loading++;
 		enemy = loadImage("static_enemy.png");
+		loading++;
+		staticAlien = loadImage("alien.png");
+		loading++;
+		movingAlien = loadImage("static_enemy.png");
 		loading++;
 		lasergun = loadImage("lasergun.png");
 		loading++;
@@ -289,7 +307,7 @@ public class Wizzball extends PApplet {
 		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
 		loading++;
 
-		//minim.stop();
+		minim.stop();
 
 	}
 
@@ -774,10 +792,10 @@ public class Wizzball extends PApplet {
 		popStyle();
 
 		coin.resize(20, 20);
-		heart1.resize(20, 20);
+		heart.resize(20, 20);
 		image(coin, 50, 425);
 		for (int i = 0; i < sp1.lives; i++) {
-			image(heart1, 50 + i * 20, 450);
+			image(heart, 50 + i * 20, 450);
 		}
 
 		text(sp1.acumulativeScore, 80, 440);
@@ -789,6 +807,7 @@ public class Wizzball extends PApplet {
 		pushStyle();
 		pushMatrix();
 
+		frameRate(40);
 		background(0);
 		displayStars();
 		rotateX(PI / 4);

@@ -5,6 +5,7 @@
  */
 package wizzball.objects.enemies;
 
+import processing.core.PImage;
 import wizzball.game.Wizzball;
 
 /**
@@ -23,8 +24,9 @@ public class StaticEnemy extends BasicEnemy{
 	 * @param width
 	 * @param down
 	 */
-	public StaticEnemy(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
-		super(p, xpos, ypos, height, width, down);
+	public StaticEnemy(Wizzball p, float xpos, float ypos, float height, float width, boolean down,PImage img,
+			int liv, int pt) {
+		super(p, xpos, ypos, height, width, down,img,liv,pt);
 	}
 
 	/* (non-Javadoc)

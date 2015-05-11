@@ -5,6 +5,7 @@
  */
 package wizzball.objects.enemies;
 
+import processing.core.PImage;
 import wizzball.game.Wizzball;
 
 /**
@@ -26,19 +27,21 @@ public class MovingEnemy extends BasicEnemy {
 	 * @param width
 	 * @param down
 	 */
-	public MovingEnemy(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
-		super(p, xpos, ypos, height, width, down);
+	public MovingEnemy(Wizzball p, float xpos, float ypos, float height, float width, boolean down,PImage img,
+			int liv, int pt) {
+		super(p, xpos, ypos, height, width, down,img, liv, pt);
 
 	}
 
-	public MovingEnemy(Wizzball p, float xpos, float ypos, float x2, float y2, float height, float width, boolean down) {
+	public MovingEnemy(Wizzball p, float xpos, float ypos, float x2, float y2, float height, float width, boolean down,
+			PImage img, int liv, int pt) {
 
-		super(p, xpos, ypos, height, width, down);
+		super(p, xpos, ypos, height, width, down,img, liv, pt);
 		this.x1 = xpos;
 		this.y1 = ypos;
 		this.x2 = x2;
 		this.y2 = y2;
-
+		image=img;
 		directorCoeff = (y2 - y1) / (x2 - x1);
 
 		if (x1 == x2) {

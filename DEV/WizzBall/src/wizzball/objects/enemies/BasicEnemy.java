@@ -17,8 +17,7 @@ public abstract class BasicEnemy extends BasicCollectable {
 
 	PImage destroySprite;
 	int numImage = 0;
-	int lives;
-	int maxLives;
+	int lives,maxLives, damage, points;	
 
 	/**
 	 * @param p
@@ -28,11 +27,14 @@ public abstract class BasicEnemy extends BasicCollectable {
 	 * @param width
 	 * @param down
 	 */
-	public BasicEnemy(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
+	public BasicEnemy(Wizzball p, float xpos, float ypos, float height, float width, boolean down, PImage img,
+			int lives, int points) {
 		super(p, xpos, ypos, height, width, down);
 		destroySprite = parent.loadImage("explosion.png");
-		lives = getInitialLives();
+		this.lives = lives;
 		maxLives = lives;
+		this.points=points;
+		image=img;
 	}
 
 	/**
@@ -43,19 +45,14 @@ public abstract class BasicEnemy extends BasicCollectable {
 	}
 
 	public void shoot(int damage){
-		if(this instanceof Bomb){
-			parent.sp1.score += Wizzball.BOMBS_POINTS;
-			parent.sp1.acumulativeScore += Wizzball.BOMBS_POINTS;
-		}
-		else{
-			parent.sp1.score += Wizzball.NASTIES_POINTS;
-			parent.sp1.acumulativeScore += Wizzball.NASTIES_POINTS;
-		}
+		
 		
 		lives-=damage;
 		if (lives<=0){
 			destroy = true;
 			parent.playExplosionSound();
+			parent.sp1.score += points;
+			parent.sp1.acumulativeScore+= points;
 		}
 
 	}
@@ -63,14 +60,9 @@ public abstract class BasicEnemy extends BasicCollectable {
 	@Override
 	public void effect() {
 		if (parent.sp1.power) {
-			if(this instanceof Bomb){
-				parent.sp1.score += Wizzball.BOMBS_POINTS;
-				parent.sp1.acumulativeScore += Wizzball.BOMBS_POINTS;
-			}
-			else{
-				parent.sp1.score += Wizzball.NASTIES_POINTS;
-				parent.sp1.acumulativeScore += Wizzball.NASTIES_POINTS;
-			}
+			parent.sp1.score += points;
+			parent.sp1.acumulativeScore+= points;
+					
 			parent.sp1.switchPower();
 			parent.playExplosionSound();
 		} else {
