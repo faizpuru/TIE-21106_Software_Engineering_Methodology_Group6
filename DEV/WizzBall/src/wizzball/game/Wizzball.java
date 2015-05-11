@@ -121,6 +121,7 @@ public class Wizzball extends PApplet {
 	private boolean buttonMouthKeyboard = false;
 	private boolean buttonCustomKeyboard = false;
 	private boolean multithreading = false;
+	private boolean keyLeft = false, keyRight = false;
 	public static int loading = 0;
 
 	@Override
@@ -130,7 +131,6 @@ public class Wizzball extends PApplet {
 		if (a != null && a.equals("1")) {
 			multithreading = true;
 		}
-
 	}
 
 	public void setup() {
@@ -182,6 +182,7 @@ public class Wizzball extends PApplet {
 		size(500, 500, OPENGL);
 		smooth();
 	}
+	
 
 	private void initSpot() {
 		loading++;
@@ -289,10 +290,15 @@ public class Wizzball extends PApplet {
 		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
 		loading++;
 
-		//minim.stop();
+		minim.stop();
 
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see java.applet.Applet#resize(java.awt.Dimension)
+	 */
+	
+	
 	private void saveScore() {
 		TableRow newRow = table.addRow();
 		newRow.setInt("Id", table.lastRowIndex());
@@ -403,6 +409,14 @@ public class Wizzball extends PApplet {
 		clear();
 		stroke(0);
 		strokeWeight(5);
+		
+		if (keyRight) {
+			sp1.accelerateRotation(INCR_SPEED);
+		}
+		if (keyLeft) {
+			sp1.accelerateRotation(-INCR_SPEED);
+		}
+		
 		if (!nyancatmode) {
 			if (lvl.getImage() != null) {
 				background(lvl.getImage());
@@ -773,15 +787,19 @@ public class Wizzball extends PApplet {
 		text(("Level " + lvl.currentLevel), width / 2, h4 / 2 + sFont / 2 - 3);
 		popStyle();
 
+		float xb = 18+offset+5;
+		
 		coin.resize(20, 20);
 		heart1.resize(20, 20);
-		image(coin, 50, 425);
+		image(coin, xb, h2 + 10);
 		for (int i = 0; i < sp1.lives; i++) {
-			image(heart1, 50 + i * 20, 450);
+			image(heart1, xb + i * 20, h2 +30);
 		}
+		
+		textAlign(LEFT,CENTER);
 
-		text(sp1.acumulativeScore, 80, 440);
-		text("Stars left: " + lvl.nbBonus, 50, 490);
+		text(sp1.acumulativeScore, xb+ coin.width + 5, h2 +20);
+		text("Stars left: " + lvl.nbBonus, xb, h2 + 60);
 		timer.display(width - 61, (int) (height * 0.92), 25);
 	}
 
@@ -1267,6 +1285,8 @@ public class Wizzball extends PApplet {
 		}
 
 	}
+	
+
 
 	public void keyPressed() {
 
@@ -1309,11 +1329,13 @@ public class Wizzball extends PApplet {
 				state = PAUSE;
 				timer.pause();
 			}
-			if (keyCode == RIGHT) {
+			if (keyCode == RIGHT && !keyRight) {
 				sp1.accelerateRotation(INCR_SPEED);
+				keyRight = true;
 			}
-			if (keyCode == LEFT) {
+			if (keyCode == LEFT && !keyLeft) {
 				sp1.accelerateRotation(-INCR_SPEED);
+				keyLeft = true;
 			}
 			if (key == ' ') {
 				if (sp1.isAllowedToShoot()) {
@@ -1473,6 +1495,16 @@ public class Wizzball extends PApplet {
 				restartTheLevel();
 			}
 			break;
+		}
+	}
+	
+	
+	@Override
+	public void keyReleased() {
+		if(keyCode == LEFT){
+			keyLeft = false;
+		} if(keyCode == RIGHT){
+			keyRight = false;
 		}
 	}
 
