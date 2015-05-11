@@ -33,14 +33,6 @@ public class Wizzball extends PApplet {
 	private static final double INCR_SPEED = 0.1;
 	private static final int rotationEffect = 40;
 
-	/*
-	 * POINTS
-	 */
-
-	public static final int STARS_POINTS = 100;
-	public static final int POWER_POINTS = 50;
-	public static final int NASTIES_POINTS = 200;
-	public static final int BOMBS_POINTS = 150;
 
 	/*
 	 * LIVES
@@ -50,7 +42,19 @@ public class Wizzball extends PApplet {
 	public final static int BOMB_LIVES = 2;
 	public final static int STALIEN_LIVES = 5;
 	public final static int MVALIEN_LIVES = 4;
+	
+	/*
+	 * POINTS
+	 */
+	
+	public final static int FACTOR=50;
 
+	public static final int STAR_POINTS = 100;
+	public static final int POWER_POINTS = 50;
+	public static final int NASTY_POINTS = NASTY_LIVES*FACTOR;
+	public static final int BOMB_POINTS = BOMB_LIVES*FACTOR;
+	public static final int STALIEN_POINTS = STALIEN_LIVES*FACTOR;
+	public static final int MVALIEN_POINTS = MVALIEN_LIVES*FACTOR;
 
 
 	/*

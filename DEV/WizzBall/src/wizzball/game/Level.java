@@ -144,22 +144,22 @@ public class Level {
 
 					if (words[0].equals("SE")) {
 						objects.addElement(new StaticEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
-								.parseFloat(words[3]),true,null,0,0));
+								.parseFloat(words[3]),true,Wizzball.staticAlien,Wizzball.STALIEN_LIVES,Wizzball.STALIEN_POINTS));
 					}
 
 					if (words[0].equals("BO")) {
 						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.enemy,Wizzball.BOMB_LIVES,Wizzball.BOMBS_POINTS));
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.enemy,Wizzball.BOMB_LIVES,Wizzball.BOMB_POINTS));
 					}
 
 					if (words[0].equals("N")) {
 						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.nasty,Wizzball.NASTY_LIVES,Wizzball.NASTIES_POINTS));
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.nasty,Wizzball.NASTY_LIVES,Wizzball.NASTY_POINTS));
 					}
 					
 					if (words[0].equals("MA")) {
 						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.movingAlien,Wizzball.NASTY_LIVES,Wizzball.NASTIES_POINTS));
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.movingAlien,Wizzball.NASTY_LIVES,Wizzball.MVALIEN_POINTS));
 					}
 
 					if (words[0].equals("L")) {
