@@ -75,7 +75,7 @@ public class Wizzball extends PApplet {
 
 	PImage coin, level1, level2, level3, img, floor, ceiling, saturn, stars1,
 			starsOver, gameover, avatars, sound_on, sound_off, current_sound;
-	public PImage nasty, rainbow, bonus, heart, powerup, hole, platformIm,
+	public PImage nasty, rainbow, bonus, heart, heart1, powerup, hole, platformIm,
 			enemy, lasergun, laserSprite, watch;
 
 	Minim minim;
@@ -246,6 +246,7 @@ public class Wizzball extends PApplet {
 		bonus = loadImage("bonus.png");
 		loading++;
 		heart = loadImage("heart.png");
+		heart1 = loadImage("heart.png");
 		loading++;
 		powerup = loadImage("powerup.png");
 		loading++;
@@ -288,7 +289,7 @@ public class Wizzball extends PApplet {
 		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
 		loading++;
 
-		minim.stop();
+		//minim.stop();
 
 	}
 
@@ -773,10 +774,10 @@ public class Wizzball extends PApplet {
 		popStyle();
 
 		coin.resize(20, 20);
-		heart.resize(20, 20);
+		heart1.resize(20, 20);
 		image(coin, 50, 425);
 		for (int i = 0; i < sp1.lives; i++) {
-			image(heart, 50 + i * 20, 450);
+			image(heart1, 50 + i * 20, 450);
 		}
 
 		text(sp1.acumulativeScore, 80, 440);
@@ -788,7 +789,6 @@ public class Wizzball extends PApplet {
 		pushStyle();
 		pushMatrix();
 
-		frameRate(40);
 		background(0);
 		displayStars();
 		rotateX(PI / 4);

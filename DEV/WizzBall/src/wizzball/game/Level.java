@@ -54,6 +54,7 @@ public class Level {
 	/**
 	 * Load the level corresponding to the txt file
 	 */
+	@SuppressWarnings("unchecked")
 	public void loadLevel() {
 
 		loading = true;
