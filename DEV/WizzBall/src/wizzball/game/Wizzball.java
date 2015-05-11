@@ -40,8 +40,8 @@ public class Wizzball extends PApplet {
 
 	public final static int NASTY_LIVES = 3;
 	public final static int BOMB_LIVES = 2;
-	public final static int STALIEN_LIVES = 5;
-	public final static int MVALIEN_LIVES = 4;
+	public final static int STALIEN_LIVES = 5; //STATIC ALIEN
+	public final static int MVALIEN_LIVES = 4;	//MOVING ALIEN
 	
 	/*
 	 * POINTS
