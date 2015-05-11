@@ -142,7 +142,7 @@ public class Level {
 								true));
 					}
 
-					if (words[0].equals("SE")) {
+					if (words[0].equals("SA")) {
 						objects.addElement(new StaticEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
 								.parseFloat(words[3]),true,Wizzball.staticAlien,Wizzball.STALIEN_LIVES,Wizzball.STALIEN_POINTS));
 					}
