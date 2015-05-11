@@ -150,7 +150,7 @@ public class Pistol extends BasicWeapon {
 	 */
 	@Override
 	public void loadImage() {
-		image = parent.loadImage("pistol.png");
+		image = parent.loadImage("Spitfire.png");
 	}
 
 	/*
