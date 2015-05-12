@@ -1312,6 +1312,8 @@ public class Wizzball extends PApplet {
 		gravity = 0.5f;
 		sp1.initSpot();
 		loadLevel();
+		sp1.score=0;
+		sp1.acumulativeScore=0;
 		state = GAME;
 	}
 
