@@ -72,7 +72,7 @@ public class Spot {
 		lives = 3;
 		score = 0;
 		if (power) {
-			changeColour();
+			//changeColour();
 			power = false;
 		}
 		rotationSpeed = 0;
@@ -103,8 +103,22 @@ public class Spot {
 			} else {
 				currentAngle = currentAngle - rotationSpeed;
 			}
+			
+			
+			
 			parent.pushMatrix();
 			parent.translate(parent.width / 2, y);
+			
+			if(power){
+				parent.pushStyle();
+				  parent.fill(0, 0, 0, 0);
+				  parent.stroke(100,180,255);
+				  parent.strokeWeight(4);
+				  parent.ellipse(0, 0, radius+5,radius+5);
+				  parent.popStyle();
+
+			}
+			
 			parent.rotate(currentAngle);
 			parent.image(ball, -radius, -radius, radius * 2, radius * 2);
 			if (eyes != null)
@@ -208,17 +222,12 @@ public class Spot {
 	}
 
 	public void switchPower() {
-		changeColour();
+		//changeColour();
 		power = !power;
 	}
 
-	/**
-	 * 
-	 */
-	private void changeColour() {
-		ball.filter(PApplet.INVERT);
-	}
 
+	
 	/**
 	 * 
 	 */

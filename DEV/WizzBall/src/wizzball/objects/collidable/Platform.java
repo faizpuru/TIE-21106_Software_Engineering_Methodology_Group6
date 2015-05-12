@@ -6,6 +6,8 @@
 
 package wizzball.objects.collidable;
 
+import processing.core.PImage;
+import processing.core.PShape;
 import wizzball.game.Wizzball;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collidable;
@@ -16,6 +18,8 @@ public class Platform extends BasicObject implements Collidable {
 
 	public Platform(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
+		image = image.get((int)(image.width/2 - width), (int) (image.height/2-height), (int)width*2, (int)height*2);
+
 	}
 
 	@Override
@@ -30,7 +34,29 @@ public class Platform extends BasicObject implements Collidable {
 	 */
 	@Override
 	public void display() {
-		super.display();
+		//parent.image(image, (x - width / 2 + parent.width / 2), y, width, height);
+		
+		parent.pushStyle();
+		parent.strokeWeight(2);
+		
+		PShape shape = parent.createShape();
+		shape.beginShape();
+		shape.vertex(0,0);
+		shape.vertex(width,0);
+		shape.vertex(width,height);
+		shape.vertex(0,height);		
+		shape.endShape(Wizzball.CLOSE);
+		
+
+		parent.shape(shape,(x - width / 2 + parent.width / 2), y, width, height);
+		parent.popStyle();
+		parent.image(image, (x - width / 2 + parent.width / 2), y, width, height);
+		
+		
+		
+		
+
+
 		if (down)
 			y = (float) (parent.height * 0.8) - height;
 		else

@@ -77,8 +77,11 @@ public class Wizzball extends PApplet {
 	private LinkedList<Integer> KONAMI = new LinkedList<Integer>(Arrays.asList(
 			97, 98, 39, 37, 39, 37, 40, 40, 38, 38));
 
-	PImage coin, level1, level2, level3, img, floor, ceiling, saturn, stars1,
+	PImage coin, level1, level2, level3, img, floor, backg, ceiling, saturn, stars1,
 			starsOver, gameover, avatars, sound_on, sound_off, current_sound,heart1;
+	
+	PImage loading1, loading2, loading3, loading4, loading5, loading6;
+	
 	public static PImage nasty;
 	public PImage rainbow;
 	public PImage bonus;
@@ -150,6 +153,8 @@ public class Wizzball extends PApplet {
 
 	public void setup() {
 		initDisplayParameters();
+		initLoadingImages();
+		loadFonts();
 		if (multithreading) {
 			thread("initialization");
 		} else {
@@ -158,8 +163,20 @@ public class Wizzball extends PApplet {
 
 	}
 
+	/**
+	 * 
+	 */
+	private void initLoadingImages() {
+		loading1 = loadImage("loading/Load1.png");
+		loading2 = loadImage("loading/BarEmpty.png");
+		loading3 = loadImage("loading/Load3.png");
+		loading4 = loadImage("loading/Full1.png");
+		loading5 = loadImage("loading/BarFull.png");
+		loading6 = loadImage("loading/Full3.png");
+
+	}
+
 	public void initialization() {
-		loadFonts();
 		loadMusics();
 		loadImages();
 		initSpot();
@@ -184,7 +201,7 @@ public class Wizzball extends PApplet {
 	private void loadFonts() {
 		f = createFont("Arial", 16, true);
 		loading++;
-		fontSW = loadFont("fonts/StarJedi-48.vlw");
+		fontSW = loadFont("fonts/font.vlw");
 		loading++;
 		fontDigital = loadFont("fonts/digital.vlw");
 		loading++;
@@ -232,14 +249,17 @@ public class Wizzball extends PApplet {
 		lvl.loadLevel();
 	}
 
-	private void loadImages() {
+	private void loadImages() {		
 		coin = loadImage("coin.png");
 		loading++;
 		img = loadImage("space_background.jpg");
 		loading++;
-		floor = loadImage("moonfloor.jpg");
+		floor = loadImage("Background1.png");
+		floor = floor.get(0, 356, floor.width, 144);
 		loading++;
-		ceiling = loadImage("ceiling.jpg");
+		backg = loadImage("Background1.png");
+		backg = backg.get(0,0,backg.width,356);
+		ceiling = loadImage("up.png");
 		loading++;
 		stars1 = loadImage("starsBack.jpg");
 		loading++;
@@ -268,7 +288,7 @@ public class Wizzball extends PApplet {
 		loading++;
 		hole = loadImage("hole.png");
 		loading++;
-		platformIm = loadImage("platform.png");
+		platformIm = loadImage("Ground_Bubbles.png");
 		loading++;
 		enemy = loadImage("static_enemy.png");
 		loading++;
@@ -330,18 +350,7 @@ public class Wizzball extends PApplet {
 
 		if (loading < 37) {
 
-			pushStyle();
-			background(50);
-			textAlign(CENTER);
-			fill(255);
-			textFont(createFont("Georgia", 44));
-			text("WIZZBALL", width / 2, height / 2);
-			textFont(createFont("Georgia", 25));
-			rect(20, height / 2 + 40, width - 40, 30);
-			fill(25);
-			rect(20, height / 2 + 40, (width - 40) * loading / 37, 30);
-
-			popStyle();
+			displayLoading();
 			return;
 		}
 
@@ -405,6 +414,44 @@ public class Wizzball extends PApplet {
 	/**
 	 * 
 	 */
+	private void displayLoading() {
+		pushStyle();
+		background(50);
+		textAlign(CENTER);
+		fill(255);
+		textFont(fontSW);
+		text("WIZZBALL", width / 2, height / 2 - 10);		
+		int progress = loading/(38/11);
+		float x = 20+width/15;
+		if(progress <=0){
+			image(loading1,20, height/2,width/15,height/10);
+		} else {
+			image(loading4,20, height/2,width/15,height/10);
+		}
+		
+		if(progress<38){
+			image(loading3,width-20-width/15, height/2,width/15,height/10);
+		} else {
+			image(loading6,width-20-width/15, height/2,width/15,height/10);
+		}
+
+		while(x<progress*width/15){
+			image(loading5,x,height/2,width/15, height/10);
+			x += width/15;
+		}
+		
+		while(x < width-20-width/15){
+			image(loading2,x,height/2,width/15, height/10);
+			x += width/15;
+		}
+
+
+		popStyle();		
+	}
+
+	/**
+	 * 
+	 */
 	private void nyancatMode() {
 
 		if (!nyancatmode) {
@@ -429,6 +476,21 @@ public class Wizzball extends PApplet {
 		stroke(0);
 		strokeWeight(5);
 		
+		pushMatrix();
+		translate(-xpos/5, 0);
+		image(backg, 0, (float) (height*0.1));
+		popMatrix();
+		
+		pushMatrix();
+		int pos = (int) (xpos/ceiling.width);
+		translate(-xpos, 0);
+		image(ceiling, pos*ceiling.width, 0);
+		image(ceiling, (pos-1)*ceiling.width, 0);
+		image(ceiling, (pos+1)*ceiling.width, 0);
+
+		popMatrix();
+		
+		
 		if (keyRight) {
 			sp1.accelerateRotation(INCR_SPEED);
 		}
@@ -436,7 +498,7 @@ public class Wizzball extends PApplet {
 			sp1.accelerateRotation(-INCR_SPEED);
 		}
 		
-		if (!nyancatmode) {
+		/*if (!nyancatmode) {
 			if (lvl.getImage() != null) {
 				background(lvl.getImage());
 			} else {
@@ -444,13 +506,13 @@ public class Wizzball extends PApplet {
 			}
 		} else {
 			background(239, 89, 123);
-		}
-		displayStars();
+		}*/
+//		displayStars();
 
 		textAlign(LEFT);
 		textFont(fontSW, 14);
 
-		paraDrawCeiling(ceiling, 500, xpos);
+		//paraDrawCeiling(ceiling, 500, xpos);
 		paraDrawFloor(floor, 500, xpos);
 
 		if (!isInGame) {
@@ -520,7 +582,7 @@ public class Wizzball extends PApplet {
 			nextLevel();
 		}
 
-		displayTextBoxGame();
+		//displayTextBoxGame();
 
 	}
 
@@ -879,12 +941,10 @@ public class Wizzball extends PApplet {
 	private void imagesResizing() {
 		// img.resize(width, height);
 		stars1.resize(width, height);
-		ceiling.resize(width * 9, (int) (height * 0.1));
+		ceiling.resize(ceiling.width, (int) (height * 0.1));
 		floor.resize(width * 9, (int) (height * 0.2));
-		saturn.resize(width / 6, height / 6);
 		if (lvl.getImage() != null)
 			lvl.getImage().resize(width, height);
-
 	}
 
 	private void loopThemeMusic() {

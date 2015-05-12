@@ -34,7 +34,7 @@ public class StaticEnemy extends BasicEnemy{
 	 */
 	@Override
 	public void loadImage() {
-		image = parent.enemy;
+		image = Wizzball.enemy;
 	}
 
 
