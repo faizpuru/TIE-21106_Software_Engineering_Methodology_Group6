@@ -1,5 +1,4 @@
 /**
- * TUT _ Tampere
  * TIE-21106_Software_Engineering_Methodology
  * Group 6
  */
@@ -8,7 +7,11 @@ package wizzball.game;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import processing.core.PApplet;
@@ -63,6 +66,8 @@ public class Wizzball extends PApplet {
 
 	public final int GUN_DAMAGE = 1;
 	public final int RAY_DAMAGE = 3;
+	
+	public final int MAX_SCORES=10; //Max number of highscores
 
 	public static float gravity = (float) 0.5; // positive downwards ---
 												// negative upwards
@@ -278,7 +283,7 @@ public class Wizzball extends PApplet {
 		loading++;
 		staticAlien = loadImage("alien.png");
 		loading++;
-		movingAlien = loadImage("static_enemy.png");
+		movingAlien = loadImage("alien2.png");
 		loading++;
 		lasergun = loadImage("lasergun.png");
 		loading++;
@@ -1175,14 +1180,27 @@ public class Wizzball extends PApplet {
 		text("    Name      " + "Score    ", w + 218, h + 200);
 		text("------------------------------", w + 215, h + 215);
 
-		for (TableRow row : table.rows()) {
+		Map<String, Integer> scMap = new HashMap<String, Integer>();
 
-			int id = row.getInt("Id");
+		for (TableRow row : table.rows()) {
 			String name = row.getString("Name");
 			int score = row.getInt("Score");
-
-			text("     " + name + "      " + score, w + 200, h + 235 + id * 15);
+			scMap.put(name, score);
 		}
+		
+        ValueComparator bvc =  new ValueComparator(scMap);
+        TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(bvc);
+        sorted_map.putAll(scMap);
+        
+        int i =0;
+        Iterator<String> it = scMap.keySet().iterator();
+        while(it.hasNext() && i<10){
+        	String key = (String) it.next();
+        	text("     " + key + "      " + scMap.get(key), w + 200, h + 235 + i * 15);
+          i++;
+        }
+		
+
 		fill(50);
 		textFont(fontSW, 40);
 		stroke(40);

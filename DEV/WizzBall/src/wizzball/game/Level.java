@@ -30,7 +30,8 @@ import wizzball.game.Wizzball;
 public class Level {
 
 	PImage image;
-	int currentLevel = 1;
+	int currentLevel = 1 ;
+	//starting level;
 	int maximumTime = 0;
 	int xBegin = 0;
 	int xEnd = 0;
@@ -159,7 +160,7 @@ public class Level {
 					
 					if (words[0].equals("MA")) {
 						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.movingAlien,Wizzball.NASTY_LIVES,Wizzball.MVALIEN_POINTS));
+								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.movingAlien,Wizzball.MVALIEN_LIVES,Wizzball.MVALIEN_POINTS));
 					}
 
 					if (words[0].equals("L")) {
