@@ -24,6 +24,23 @@ public class Hole extends BasicObject implements Collidable{
 		image = parent.hole;
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see wizzball.objects.basics.BasicObject#display()
+	 */
+	@Override
+	public void display() {
+		parent.pushMatrix();
+		parent.translate(x + parent.width/2, y + height);
+		int sign = -1;
+
+		if(down){
+			parent.rotate(Wizzball.PI);
+			sign = 1;
+		}
+		parent.image(image, (- width / 2), 0, width, sign*height);
+		parent.popMatrix();
+	}
 
 	@Override
 	public boolean[] getCollidablesEdges() {
