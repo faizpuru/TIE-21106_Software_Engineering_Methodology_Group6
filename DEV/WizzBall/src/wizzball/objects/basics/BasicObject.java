@@ -35,6 +35,7 @@ public class BasicObject {
 		y = down ? (float) (parent.height * 0.8 - height) : (float) (parent.height * 0.1);
 
 	}
+	
 
 	public void loadImage() {
 		image = parent.createImage(100, 100, PConstants.RGB);

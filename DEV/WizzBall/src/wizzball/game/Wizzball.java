@@ -101,7 +101,6 @@ public class Wizzball extends PApplet {
 			rayPlayer, explosionPlayer;
 
 	public PFont f, fontSW, fontDigital;
-	float yFont = 250, zFont = -200;
 
 	Star[] stars;// The array of stars
 	PVector offset; // Global offset
@@ -199,7 +198,7 @@ public class Wizzball extends PApplet {
 	}
 
 	private void loadFonts() {
-		f = createFont("Arial", 16, true);
+		f = loadFont("fonts/draw.vlw");
 		loading++;
 		fontSW = loadFont("fonts/font.vlw");
 		loading++;
@@ -211,7 +210,7 @@ public class Wizzball extends PApplet {
 	private void initDisplayParameters() {
 		frameRate(FRAMERATE);
 		ellipseMode(RADIUS);
-		size(500, 500, OPENGL);
+		size(500, 500, P2D);
 		smooth();
 	}
 	
@@ -380,7 +379,7 @@ public class Wizzball extends PApplet {
 				displayGame();
 			} else {
 				pushStyle();
-				background(0);
+				background(50);
 				textAlign(CENTER);
 				fill(255);
 				text("Loading", width / 2, height / 2);
@@ -502,7 +501,7 @@ public class Wizzball extends PApplet {
 			if (lvl.getImage() != null) {
 				background(lvl.getImage());
 			} else {
-				background(0);
+				background(50);
 			}
 		} else {
 			background(239, 89, 123);
@@ -510,7 +509,7 @@ public class Wizzball extends PApplet {
 //		displayStars();
 
 		textAlign(LEFT);
-		textFont(fontSW, 14);
+		textFont(f, 14);
 
 		//paraDrawCeiling(ceiling, 500, xpos);
 		paraDrawFloor(floor, 500, xpos);
@@ -611,7 +610,7 @@ public class Wizzball extends PApplet {
 		pushStyle();
 		background(50);
 		fill(50);
-		textFont(fontSW, 40);
+		textFont(f, 40);
 		textAlign(CENTER);
 		stroke(40);
 		strokeWeight(5);
@@ -687,7 +686,7 @@ public class Wizzball extends PApplet {
 		popStyle();
 
 		fill(200, 226, 9, 240);
-		textFont(fontSW, 30);
+		textFont(f, 30);
 
 		text("Body", width / 2, y4 + h - 10);
 		text("Eyes", width / 2, y3 + h - 10);
@@ -714,8 +713,8 @@ public class Wizzball extends PApplet {
 		buttonRestart = false;
 
 		fill(0);
-		background(0);
-		textFont(fontSW, 40);
+		background(50);
+		textFont(f, 40);
 		textAlign(CENTER);
 		stroke(40);
 		strokeWeight(5);
@@ -767,8 +766,8 @@ public class Wizzball extends PApplet {
 		buttonSettings = false;
 
 		fill(0);
-		background(0);
-		textFont(fontSW, 40);
+		background(50);
+		textFont(f, 40);
 		textAlign(CENTER);
 		stroke(40);
 		strokeWeight(5);
@@ -864,7 +863,7 @@ public class Wizzball extends PApplet {
 		int sFont = 20;
 		textAlign(CENTER);
 		fill(255);
-		textFont(fontSW, sFont);
+		textFont(f, sFont);
 		text(("Level " + lvl.currentLevel), width / 2, h4 / 2 + sFont / 2 - 3);
 		popStyle();
 
@@ -888,31 +887,18 @@ public class Wizzball extends PApplet {
 		pushStyle();
 		pushMatrix();
 
-		background(0);
-		displayStars();
-		rotateX(PI / 4);
+		background(50);
 
 		stroke(0);
 		strokeWeight(5);
-		directionalLight(250, 207, 63, 0, -200, -200);
-
-		textFont(fontSW, 20);
+		textFont(f, 20);
 		textAlign(CENTER);
 		int xFont = width / 2;
-		text("Hello " + player + ", you will enter the game.", xFont, yFont,
-				zFont);
-		text("enter the GAME.", xFont, yFont + 40, zFont);
-		text("You can rotate the character ", xFont, yFont + 80, zFont);
-		text("using arrows keys.", xFont, yFont + 120, zFont);
-		text("Use G to change the ", xFont, yFont + 160, zFont);
-		text("GRAVITY ", xFont, yFont + 200, zFont);
-		text("Press TAB to continue...", xFont, yFont + 240, zFont);
+		text("Hello " + player + ", you will enter the game"
+				+ "\n You can rotate the character using arrows keys."
+				+ "\n Use G to change the GRAVITY", xFont, height/4);
+		text("Press TAB to continue...", xFont, height-20);
 
-		yFont--;
-		if (yFont < -300) {
-			state = GAME;
-			timer.start();
-		}
 
 		popStyle();
 		popMatrix();
@@ -924,15 +910,14 @@ public class Wizzball extends PApplet {
 		pushMatrix();
 		stroke(0);
 		strokeWeight(5);
-		directionalLight(250, 207, 63, 0, -200, -200);
-		background(0);
+		background(50);
 		textAlign(CENTER);
-		textFont(fontSW, 18);
+		textFont(f, 18);
 		fill(200);
 		stroke(153);
 		text(" Hello, welcome to Wizzball game.\n Please, enter your name and press ENTER...\n",
 				width / 2, 50);
-		textFont(fontSW, 30);
+		textFont(f, 30);
 		text(typing, width / 2, height / 2);
 		popStyle();
 		popMatrix();
@@ -958,23 +943,7 @@ public class Wizzball extends PApplet {
 
 	}
 
-	private void displayStars() {
-		// Display the stars
-
-		for (int i = 0; i < stars.length; i++)
-			stars[i].display();
-
-		// Modify the offset, using the center of the screen as a form of
-		// joystick
-		// Something should be changed HERE to use the position of the ball as
-		// the joystick
-
-		PVector angle = new PVector(sp1.x - width / 2, sp1.y - height / 2);
-		angle.normalize();
-		angle.mult(dist(width / 2, height / 2, sp1.x, sp1.y) / 50);
-
-		offset.add(angle);
-	}
+	
 
 	private boolean achieveLevel() {
 		return xpos >= lvl.xEnd && lvl.nbBonus == 0;
@@ -1193,7 +1162,7 @@ public class Wizzball extends PApplet {
 		textAlign(CENTER);
 		int w = width / 2 - gameover.width / 2;
 		int h = height / 4 - gameover.height / 2;
-		textFont(fontSW, 40);
+		textFont(f, 40);
 		stroke(40);
 		strokeWeight(5);
 
@@ -1240,7 +1209,7 @@ public class Wizzball extends PApplet {
 			text("     " + name + "      " + score, w + 200, h + 235 + id * 15);
 		}
 		fill(50);
-		textFont(fontSW, 40);
+		textFont(f, 40);
 		stroke(40);
 		strokeWeight(5);
 

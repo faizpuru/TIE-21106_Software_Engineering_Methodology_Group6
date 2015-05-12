@@ -8,7 +8,6 @@ package wizzball.game;
 
 import java.util.Vector;
 
-import processing.core.PApplet;
 import processing.core.PImage;
 import wizzball.objects.weapons.BasicWeapon;
 import wizzball.objects.weapons.LaserPistol;
