@@ -110,7 +110,7 @@ public class Wizzball extends PApplet {
 
 	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3,
 			MENU = 42, SETTINGS = 43, PAUSE = 44, SUCCESS = 45;
-	private float FRAMERATE = 25;
+	private float FRAMERATE = 28;
 	public int state = MENU;
 
 	String typing = "";
@@ -1208,12 +1208,17 @@ public class Wizzball extends PApplet {
 
 			text("     " + name + "      " + score, w + 200, h + 235 + id * 15);
 		}
-		fill(50);
 		textFont(f, 40);
+		fill(50);
 		stroke(40);
 		strokeWeight(5);
 
-		image(gameover, w, h);
+		pushStyle();
+		textFont(fontSW, 50);
+		fill(200, 226, 9, 240);
+		text("GAME\nOVER",width/2,height/4);
+		popStyle();
+		
 
 		pushStyle();
 		if (mouseY >= height - 70) {

@@ -18,8 +18,13 @@ public class Platform extends BasicObject implements Collidable {
 
 	public Platform(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
-		image = image.get((int)(image.width/2 - width), (int) (image.height/2-height), (int)width*2, (int)height*2);
-
+		
+		double factor = 2;
+		if(height>300){
+		}
+		int xCrop = (int) parent.random(((float)factor*width),(float) (image.width-factor*width));
+		int yCrop = (int) parent.random(((float)factor*height),(float) (image.height-factor*height));
+		image = image.get(((int)(xCrop - width*factor)), ((int) (yCrop-height*2)), (int)(width*factor), (int)(height*factor));		
 	}
 
 	@Override

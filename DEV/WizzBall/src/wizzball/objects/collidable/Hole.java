@@ -17,6 +17,10 @@ public class Hole extends BasicObject implements Collidable{
 
 	public Hole(Wizzball p, float xpos, float height, float width, boolean down) {
 		super(p, xpos, height, width, down);
+		int factor = 1;
+		int xCrop = (int) parent.random(factor*width,image.width-factor*width);
+		int yCrop = (int) parent.random(factor*height,image.height-factor*height);
+		image = image.get((int)(xCrop - width*factor), (int) (yCrop-height*2), (int)width*2*factor, (int)height*2*factor);
 	}
 	
 	/* (non-Javadoc)
@@ -25,13 +29,25 @@ public class Hole extends BasicObject implements Collidable{
 	@Override
 	public void display() {
 		parent.pushMatrix();
+		parent.pushStyle();
+		parent.fill(255);
 		parent.translate(x + parent.width/2, y + height);
+		int sign = -1;
 
 		if(down){
 			parent.rotate(Wizzball.PI);
+			sign = 1;
 		}
-		parent.image(image, (- width / 2), 0, width, height);
+		
+		parent.strokeWeight(1);
+		parent.rect((- width / 2 + width/20), (float) (-height*0.1), width-width/10, (float) (sign*height*0.9));
+		parent.pushStyle();
+		parent.fill(240,60,60);
+		parent.rect((- width / 2), 0, width, (float) (sign*height*0.1));
+		parent.popStyle();
+		parent.image(image, (- width / 2 + width/20), (float) (-height*0.1), width-width/10, (float) (sign*height*0.9));
 		parent.popMatrix();
+		parent.popStyle();
 	}
 	
 	@Override

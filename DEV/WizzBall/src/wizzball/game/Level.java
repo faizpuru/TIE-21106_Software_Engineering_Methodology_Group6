@@ -92,12 +92,12 @@ public class Level {
 
 				// Initialize begin, end and time for the level
 				if (nbLine == 0) {
-					xBegin = PApplet.parseInt(words[1]);
+					xBegin = PApplet.parseInt(words[1]); 
 					nbLine++;
 				} else if (nbLine == 1) {
 					xEnd = PApplet.parseInt(words[1]);
-					objects.addElement(new Platform(wizz, xEnd + 50, (float) (wizz.height * 0.7), 40, true));
-					objects.addElement(new Platform(wizz, xBegin, (float) (wizz.height * 0.7), 40, true));
+					objects.addElement(new Platform(wizz, xEnd + wizz.width/2 + wizz.sp1.radius, (float) (wizz.height * 0.7), wizz.width/2, true));
+					objects.addElement(new Platform(wizz, xBegin - wizz.width/4, (float) (wizz.height * 0.7), wizz.width/2, true));
 					nbLine++;
 				} else if (nbLine == 2) {
 					wizz.timer.init(PApplet.parseInt(words[1]));
