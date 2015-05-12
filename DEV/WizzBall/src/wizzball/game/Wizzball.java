@@ -8,7 +8,6 @@ package wizzball.game;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -1192,13 +1191,16 @@ public class Wizzball extends PApplet {
         TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(bvc);
         sorted_map.putAll(scMap);
         
+        System.out.println("results: "+sorted_map);
+
         int i =0;
-        Iterator<String> it = scMap.keySet().iterator();
-        while(it.hasNext() && i<10){
-        	String key = (String) it.next();
-        	text("     " + key + "      " + scMap.get(key), w + 200, h + 235 + i * 15);
-          i++;
+        for (Map.Entry<String, Integer> entry : sorted_map.entrySet()) {
+        	text("     " + entry.getKey() + "      " + entry.getValue(), w + 200, h + 235 + i * 15);
+            i++;
+        	if(i>=10)
+        		break;
         }
+   
 		
 
 		fill(50);
