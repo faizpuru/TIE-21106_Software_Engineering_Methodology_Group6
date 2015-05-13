@@ -105,7 +105,7 @@ public class Wizzball extends PApplet {
 	PVector vfront = new PVector(0, 5);
 
 	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43, PAUSE = 44, SUCCESS = 45;
-	private float FRAMERATE = 28;
+	private float FRAMERATE = 32;
 	public int state = MENU;
 
 	String typing = "";
@@ -405,7 +405,7 @@ public class Wizzball extends PApplet {
 		textAlign(CENTER);
 		fill(255);
 		textFont(fontSW);
-		text("WIZZBALL", width / 2, height / 2 - 10);
+		text("STRONZBALL", width / 2, height / 2 - 10);
 		int progress = loading / (35 / 11);
 		float x = 20 + width / 15;
 		if (progress <= 0) {
@@ -532,23 +532,22 @@ public class Wizzball extends PApplet {
 			sp1.display();
 		}
 
-			// Display platforms to the good position
-			for (BasicObject p : (Vector<BasicObject>) lvl.objects.clone()) {
-				if (p.isDisplay()) {
-					p.display();
-					p.recalculatePositionX(xpos);
-				}
-
+		// Display platforms to the good position
+		for (BasicObject p : (Vector<BasicObject>) lvl.objects.clone()) {
+			if (p.isDisplay()) {
+				p.display();
 			}
+			p.recalculatePositionX(xpos);
 
-		
+		}
+
 		if (trapInHole == null && state != GAME_OVER && !sp1.isAppearing()) {
 			xpos = (float) (xpos + xspeed * 0.2);
 			ypos = (float) (ypos + yspeed * 0.5);
 
-			if(isInGame){
-			manageFloorCollision();
-			manageObjectsCollision();
+			if (isInGame) {
+				manageFloorCollision();
+				manageObjectsCollision();
 			}
 		}
 
@@ -809,6 +808,9 @@ public class Wizzball extends PApplet {
 		text(sp1.acumulativeScore, xb + 20 + 5, h2 + 20);
 		image(bonus, xb, h2 + 50, 20, 20);
 		text("left: " + lvl.nbBonus, xb + 20 + 5, h2 + 60);
+
+		if (sp1.getActiveWeapon() != null)
+			image(sp1.getActiveWeapon().getImage(), width / 2, height - 60, 50, 50);
 		timer.display(width - 30, (int) (height - 30), 20);
 	}
 
@@ -935,23 +937,10 @@ public class Wizzball extends PApplet {
 		ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);
 		ypos = (float) (ypos > height * 0.8 - sp1.radius ? height * 0.8 - sp1.radius : ypos);
 
-		if (ypos >= (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this
-																	// number
-																	// for
-																	// proper
-																	// collision
-																	// with
+		if (ypos >= (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this								// with
 																	// floor
 			ybounce();
-		} else if (ypos <= (height * 0.1 + sp1.radius) && yspeed < 0) { // Adjust
-																		// this
-																		// number
-																		// for
-																		// proper
-																		// collision
-																		// with
-																		// ceiling
-
+		} else if (ypos <= (height * 0.1 + sp1.radius) && yspeed < 0) { // Adjust number for proper collision with ceiling
 			ybounce();
 		}
 	}
@@ -1115,7 +1104,7 @@ public class Wizzball extends PApplet {
 
 		int i = 0;
 		for (Map.Entry<String, Integer> entry : sorted_map.entrySet()) {
-			text("     " + entry.getKey() + "      " + entry.getValue(), w , width/2 + (i+1) * 15);
+			text("     " + entry.getKey() + "      " + entry.getValue(), w, width / 2 + (i + 1) * 15);
 			i++;
 			if (i >= 10)
 				break;
@@ -1307,7 +1296,7 @@ public class Wizzball extends PApplet {
 					sp1.activateWeapon();
 				}
 			}
-			
+
 			if (key == 'f') {
 				sp1.changeWeapon();
 			}

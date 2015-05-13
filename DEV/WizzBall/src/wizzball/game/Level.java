@@ -69,6 +69,7 @@ public class Level {
 			try {
 				image = wizz.loadImage("bk" + currentLevel + ".png");
 				image = image.get(0, 0, image.width, 356);
+				image.resize(image.width, (int) (wizz.height*0.8));
 			} catch (Exception e) {
 				image = null;
 			}

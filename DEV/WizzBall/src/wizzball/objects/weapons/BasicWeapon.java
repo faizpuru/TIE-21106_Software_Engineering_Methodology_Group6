@@ -5,6 +5,7 @@
  */
 package wizzball.objects.weapons;
 
+import processing.core.PImage;
 import wizzball.game.Wizzball;
 import wizzball.objects.collectable.BasicCollectable;
 import wizzball.utilities.Timer;
@@ -30,6 +31,10 @@ public abstract class BasicWeapon extends BasicCollectable {
 		super(p, xpos, ypos, height, width, down);
 		t = new Timer(p);
 		t.start();
+	}
+	
+	public PImage getImage(){
+		return image;
 	}
 
 	/*

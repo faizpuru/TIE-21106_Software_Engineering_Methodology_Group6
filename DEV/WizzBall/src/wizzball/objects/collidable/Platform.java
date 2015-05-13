@@ -41,18 +41,9 @@ public class Platform extends BasicObject implements Collidable {
 		//parent.image(image, (x - width / 2 + parent.width / 2), y, width, height);
 		
 		parent.pushStyle();
-		parent.strokeWeight(2);
-		
-		PShape shape = parent.createShape();
-		shape.beginShape();
-		shape.vertex(0,0);
-		shape.vertex(width,0);
-		shape.vertex(width,height);
-		shape.vertex(0,height);		
-		shape.endShape(Wizzball.CLOSE);
-		
+		parent.strokeWeight(2);	
 
-		parent.shape(shape,(x - width / 2 + parent.width / 2), y, width, height);
+		parent.rect((x - width / 2 + parent.width / 2), y, width, height);
 		parent.popStyle();
 		parent.image(image, (x - width / 2 + parent.width / 2), y, width, height);
 		
