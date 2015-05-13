@@ -490,7 +490,7 @@ public class Wizzball extends PApplet {
 		textFont(f, 14);
 
 		if (!isInGame) {
-			ypos = height + 2 * sp1.radius;
+			ypos = height + 4 * sp1.radius;
 			xpos -= lvl.xEnd / 40;
 			if (xpos < 0) {
 				reinitPositionAndSpeed();
@@ -501,9 +501,9 @@ public class Wizzball extends PApplet {
 
 		if (trapInHole != null) {
 			xpos = trapInHole.getX();
-			ypos = ypos - 2;
+			ypos = ypos - (trapInHole.down ? -2 : 2);
 
-			if (ypos <= (trapInHole.getTop() + sp1.radius)) {
+			if (!trapInHole.down && ypos <= (trapInHole.getTop() + sp1.radius) || trapInHole.down && ypos >= (trapInHole.getBottom() - sp1.radius)) {
 				state = GAME_OVER;
 				trapInHole = null;
 			}
@@ -531,20 +531,24 @@ public class Wizzball extends PApplet {
 			sp1.display();
 		}
 
-		// Display platforms to the good position
-		for (BasicObject p : (Vector<BasicObject>) lvl.objects.clone()) {
-			if (p.isDisplay()) {
-				p.display();
-				p.recalculatePositionX(xpos);
+			// Display platforms to the good position
+			for (BasicObject p : (Vector<BasicObject>) lvl.objects.clone()) {
+				if (p.isDisplay()) {
+					p.display();
+					p.recalculatePositionX(xpos);
+				}
+
 			}
 
-		}
+		
 		if (trapInHole == null && state != GAME_OVER && !sp1.isAppearing()) {
 			xpos = (float) (xpos + xspeed * 0.2);
 			ypos = (float) (ypos + yspeed * 0.5);
 
+			if(isInGame){
 			manageFloorCollision();
 			manageObjectsCollision();
+			}
 		}
 
 		if (sp1.score >= 800) {
@@ -1111,7 +1115,7 @@ public class Wizzball extends PApplet {
 
 		int i = 0;
 		for (Map.Entry<String, Integer> entry : sorted_map.entrySet()) {
-			text("     " + entry.getKey() + "      " + entry.getValue(), w + 200, h + 235 + i * 15);
+			text("     " + entry.getKey() + "      " + entry.getValue(), w , width/2 + (i+1) * 15);
 			i++;
 			if (i >= 10)
 				break;
@@ -1230,8 +1234,8 @@ public class Wizzball extends PApplet {
 		gravity = 0.5f;
 		sp1.initSpot();
 		loadLevel();
-		sp1.score=0;
-		sp1.acumulativeScore=0;
+		sp1.score = 0;
+		sp1.acumulativeScore = 0;
 		state = GAME;
 	}
 

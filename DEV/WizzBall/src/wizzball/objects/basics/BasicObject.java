@@ -17,7 +17,7 @@ public class BasicObject {
 	protected float width;
 	protected float height;
 	protected float xAbs;
-	protected boolean down; // if down, platform on floor, !down, platform on ceiling
+	public boolean down; // if down, platform on floor, !down, platform on ceiling
 	protected Wizzball parent;
 	protected PImage image;
 

@@ -31,12 +31,13 @@ public class Hole extends BasicObject implements Collidable{
 		parent.pushMatrix();
 		parent.pushStyle();
 		parent.fill(255);
-		parent.translate(x + parent.width/2, y + height);
+		parent.translate(x + parent.width/2, y +(down ? 0 : height));
 		int sign = -1;
 
 		if(down){
 			parent.rotate(Wizzball.PI);
-			sign = 1;
+			
+			//sign = 1;
 		}
 		
 		parent.strokeWeight(1);
