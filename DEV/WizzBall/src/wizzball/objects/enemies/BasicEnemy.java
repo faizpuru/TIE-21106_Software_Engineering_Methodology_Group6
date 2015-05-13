@@ -77,7 +77,7 @@ public abstract class BasicEnemy extends BasicCollectable {
 	 */
 	@Override
 	protected void destroyAnimation() {
-		if (numImage == 25) {
+		if (numImage == 12) {
 			delete();
 		}
 
@@ -92,11 +92,16 @@ public abstract class BasicEnemy extends BasicCollectable {
 	 * @return Correct image from the sprite
 	 */
 	private PImage getImage() {
-		int xAvatar = numImage % 5;
-		int yAvatar = (numImage - xAvatar) / 5;
+		if(numImage == 10){
+			numImage++;
+		}
+		int xAvatar = numImage % 4;
+		int yAvatar = (numImage - xAvatar) / 4;
 
-		int w = 64;
-		int h = 64;
+		int w = 283;
+		int h = 237;
+		
+		
 
 		return destroySprite.get(xAvatar * w + xAvatar, yAvatar * h + yAvatar, w, h);
 	}

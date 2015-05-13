@@ -253,20 +253,12 @@ public class Wizzball extends PApplet {
 		loading++;
 		img = loadImage("space_background.jpg");
 		loading++;
-		floor = loadImage("Background1.png");
+		floor = loadImage("bk1.png");
 		floor = floor.get(0, 356, floor.width, 144);
 		loading++;
-		backg = loadImage("Background1.png");
-		backg = backg.get(0,0,backg.width,356);
+		/*backg = loadImage("Background1.png");
+		backg = backg.get(0,0,backg.width,356);*/
 		ceiling = loadImage("up.png");
-		loading++;
-		stars1 = loadImage("starsBack.jpg");
-		loading++;
-		saturn = loadImage("saturn.png");
-		loading++;
-		starsOver = loadImage("goscreen.png");
-		loading++;
-		gameover = loadImage("gover.png");
 		loading++;
 		avatars = loadImage("avatars.png");
 		loading++;
@@ -328,7 +320,7 @@ public class Wizzball extends PApplet {
 		explosionPlayer = minim.loadFile("musics/Explosion.mp3");
 		loading++;
 
-		minim.stop();
+//		minim.stop();
 
 	}
 	
@@ -347,7 +339,7 @@ public class Wizzball extends PApplet {
 
 	public void draw() {
 
-		if (loading < 37) {
+		if (loading < 35) {
 
 			displayLoading();
 			return;
@@ -358,7 +350,6 @@ public class Wizzball extends PApplet {
 		}
 
 		loopThemeMusic();
-		imagesResizing();
 
 		switch (state) {
 		case MENU:
@@ -420,7 +411,7 @@ public class Wizzball extends PApplet {
 		fill(255);
 		textFont(fontSW);
 		text("WIZZBALL", width / 2, height / 2 - 10);		
-		int progress = loading/(38/11);
+		int progress = loading/(35/11);
 		float x = 20+width/15;
 		if(progress <=0){
 			image(loading1,20, height/2,width/15,height/10);
@@ -428,7 +419,7 @@ public class Wizzball extends PApplet {
 			image(loading4,20, height/2,width/15,height/10);
 		}
 		
-		if(progress<38){
+		if(progress<35){
 			image(loading3,width-20-width/15, height/2,width/15,height/10);
 		} else {
 			image(loading6,width-20-width/15, height/2,width/15,height/10);
@@ -477,16 +468,19 @@ public class Wizzball extends PApplet {
 		
 		pushMatrix();
 		translate(-xpos/5, 0);
-		image(backg, 0, (float) (height*0.1));
+		image(lvl.getImage(), 0, (float) (height*0.1),lvl.getImage().width,(float) (height*0.7));
+		image(floor, 0, (float) (height*0.8),floor.width,(float) (height*0.2));
 		popMatrix();
 		
 		pushMatrix();
 		int pos = (int) (xpos/ceiling.width);
 		translate(-xpos, 0);
-		image(ceiling, pos*ceiling.width, 0);
-		image(ceiling, (pos-1)*ceiling.width, 0);
-		image(ceiling, (pos+1)*ceiling.width, 0);
-
+		image(ceiling, pos*ceiling.width, 0,ceiling.width,(float) (height*0.1));
+		image(ceiling, (pos-1)*ceiling.width, 0,ceiling.width,(float) (height*0.1));
+		image(ceiling, (pos+1)*ceiling.width, 0,ceiling.width,(float) (height*0.1));
+		
+		
+		
 		popMatrix();
 		
 		
@@ -511,8 +505,6 @@ public class Wizzball extends PApplet {
 		textAlign(LEFT);
 		textFont(f, 14);
 
-		//paraDrawCeiling(ceiling, 500, xpos);
-		paraDrawFloor(floor, 500, xpos);
 
 		if (!isInGame) {
 			ypos = height + 2 * sp1.radius;
@@ -581,7 +573,7 @@ public class Wizzball extends PApplet {
 			nextLevel();
 		}
 
-		//displayTextBoxGame();
+		displayTextBoxGame();
 
 	}
 
@@ -804,83 +796,34 @@ public class Wizzball extends PApplet {
 	 */
 	private void displayTextBoxGame() {
 
-		pushStyle();
-
-		fill(10);
-		strokeWeight(2);
-		stroke(200);
-
-		int h0 = height;
-		int h1 = height - 10;
-		int h2 = height - 83;
-
+		int h2 = height - 70;
 		int offset = 20;
-		int w2 = 125;
-		int w3 = 70;
-
-		int yA = 0;
-
-		PShape shape4 = createShape();
-		shape4.beginShape();
-		shape4.vertex(0, h0);
-		shape4.vertex(0, h1);
-		yA += 18;
-		shape4.vertex(yA, h1);
-		yA += offset;
-		shape4.vertex(yA, h2);
-		yA += w2;
-		shape4.vertex(yA, h2);
-		yA += offset;
-		shape4.vertex(yA, h1);
-		yA = width - 7 - 2 * offset - w3;
-		shape4.vertex(yA, h1);
-		yA += offset;
-		shape4.vertex(yA, h2);
-		yA += w3;
-		shape4.vertex(yA, h2);
-		yA += offset;
-		shape4.vertex(yA, h1);
-		shape4.vertex(width, h1);
-		shape4.vertex(width, h0);
-		shape4.endShape(CLOSE);
-
 		int h4 = 23;
-		int w1 = 200;
 
-		PShape shape = createShape();
-		shape.beginShape();
-		shape.vertex(width / 2 - w1 / 2, 0);
-		shape.vertex(width / 2 + w1 / 2, 0);
-		shape.vertex(width / 2 + w1 / 2 - 10, h4);
-		shape.vertex(width / 2 - w1 / 2 + 10, h4);
-		shape.endShape(CLOSE);
-
-		shape(shape4);
-		shape(shape);
-		popStyle();
 
 		pushStyle();
-		int sFont = 20;
+		int sFont = 28;
 		textAlign(CENTER);
-		fill(255);
+		fill(0);
 		textFont(f, sFont);
-		text(("Level " + lvl.currentLevel), width / 2, h4 / 2 + sFont / 2 - 3);
+		text(("Level " + lvl.currentLevel), width / 2, h4 / 2 +5 + sFont / 2 - 3);
 		popStyle();
 
 		float xb = 18+offset+5;
 		
-		coin.resize(20, 20);
-		heart1.resize(20, 20);
-		image(coin, xb, h2 + 10);
+		image(coin, xb, h2 + 10,20,20);
 		for (int i = 0; i < sp1.lives; i++) {
-			image(heart1, xb + i * 20, h2 +30);
+			image(heart1, xb + i * 20, h2 +30, 20,20);
 		}
 		
 		textAlign(LEFT,CENTER);
-
-		text(sp1.acumulativeScore, xb+ coin.width + 5, h2 +20);
-		text("Stars left: " + lvl.nbBonus, xb, h2 + 60);
-		timer.display(width - 61, (int) (height * 0.92), 25);
+		fill(255);
+		
+		
+		text(sp1.acumulativeScore, xb + 20 + 5, h2 +20);
+		image(bonus, xb, h2 + 50,20,20);
+		text("left: " + lvl.nbBonus, xb + 20 + 5, h2 + 60);
+		timer.display(width - 30, (int) (height-30), 20);
 	}
 
 	private void displayStoryScreen() {
@@ -923,14 +866,6 @@ public class Wizzball extends PApplet {
 		popMatrix();
 	}
 
-	private void imagesResizing() {
-		// img.resize(width, height);
-		stars1.resize(width, height);
-		ceiling.resize(ceiling.width, (int) (height * 0.1));
-		floor.resize(width * 9, (int) (height * 0.2));
-		if (lvl.getImage() != null)
-			lvl.getImage().resize(width, height);
-	}
 
 	private void loopThemeMusic() {
 		if (!musicPlayer.isPlaying())
@@ -1563,18 +1498,6 @@ public class Wizzball extends PApplet {
 
 	private void restartTheLevel() {
 		isInGame = false;
-	}
-
-	void paraDrawCeiling(PImage img, float imgX, float imgY) {
-
-		if (imgX > 0)
-			image(img, -imgY - 1000, 0);
-	}
-
-	void paraDrawFloor(PImage img, float imgX, float imgY) {
-
-		if (imgX > 0)
-			image(img, -imgY - 1000, height - img.height);
 	}
 
 	public float getLimitX(char side) {

@@ -65,6 +65,10 @@ public class Spot {
 		mouth = p.loadImage("mouth.png");
 		eyes = p.loadImage("eyes.png");
 
+		for(int i = 0; i <6; i++){
+			changeEyes();
+		}
+		
 	}
 
 	public void initSpot() {

@@ -26,7 +26,6 @@ import wizzball.objects.weapons.LaserPistol;
 import wizzball.objects.weapons.Pistol;
 import wizzball.game.Wizzball;
 
-
 public class Level {
 
 	PImage image;
@@ -68,8 +67,8 @@ public class Level {
 			String strLine;
 
 			try {
-				//image = wizz.loadImage("level" + currentLevel + "_background.jpg");
-				image.resize(500, 500);
+				image = wizz.loadImage("bk" + currentLevel + ".png");
+				image = image.get(0, 0, image.width, 356);
 			} catch (Exception e) {
 				image = null;
 			}
@@ -92,12 +91,12 @@ public class Level {
 
 				// Initialize begin, end and time for the level
 				if (nbLine == 0) {
-					xBegin = PApplet.parseInt(words[1]); 
+					xBegin = PApplet.parseInt(words[1]);
 					nbLine++;
 				} else if (nbLine == 1) {
 					xEnd = PApplet.parseInt(words[1]);
-					objects.addElement(new Platform(wizz, xEnd + wizz.width/2 + wizz.sp1.radius, (float) (wizz.height * 0.7), wizz.width/2, true));
-					objects.addElement(new Platform(wizz, xBegin - wizz.width/4, (float) (wizz.height * 0.7), wizz.width/2, true));
+					objects.addElement(new Platform(wizz, xEnd + wizz.width / 2 + wizz.sp1.radius, (float) (wizz.height * 0.7), wizz.width / 2, true));
+					objects.addElement(new Platform(wizz, xBegin - wizz.width / 4, (float) (wizz.height * 0.7), wizz.width / 2, true));
 					nbLine++;
 				} else if (nbLine == 2) {
 					wizz.timer.init(PApplet.parseInt(words[1]));
@@ -144,22 +143,24 @@ public class Level {
 
 					if (words[0].equals("SE")) {
 						objects.addElement(new StaticEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
-								.parseFloat(words[3]),true,null,0,0));
+								.parseFloat(words[3]), true, null, 0, 0));
 					}
 
 					if (words[0].equals("BO")) {
-						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.enemy,Wizzball.BOMB_LIVES,Wizzball.BOMBS_POINTS));
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
+								.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true, Wizzball.enemy, Wizzball.BOMB_LIVES, Wizzball.BOMBS_POINTS));
 					}
 
 					if (words[0].equals("N")) {
-						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.nasty,Wizzball.NASTY_LIVES,Wizzball.NASTIES_POINTS));
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
+								.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true, Wizzball.nasty, Wizzball.NASTY_LIVES,
+								Wizzball.NASTIES_POINTS));
 					}
-					
+
 					if (words[0].equals("MA")) {
-						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet.parseFloat(words[4]),
-								PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true,Wizzball.movingAlien,Wizzball.NASTY_LIVES,Wizzball.NASTIES_POINTS));
+						objects.addElement(new MovingEnemy(wizz, PApplet.parseFloat(words[1]), PApplet.parseFloat(words[2]), PApplet.parseFloat(words[3]), PApplet
+								.parseFloat(words[4]), PApplet.parseFloat(words[5]), PApplet.parseFloat(words[5]), true, Wizzball.movingAlien, Wizzball.NASTY_LIVES,
+								Wizzball.NASTIES_POINTS));
 					}
 
 					if (words[0].equals("L")) {
