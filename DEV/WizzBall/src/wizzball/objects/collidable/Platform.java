@@ -6,7 +6,6 @@
 
 package wizzball.objects.collidable;
 
-import processing.core.PImage;
 import processing.core.PShape;
 import wizzball.game.Wizzball;
 import wizzball.objects.basics.BasicObject;
