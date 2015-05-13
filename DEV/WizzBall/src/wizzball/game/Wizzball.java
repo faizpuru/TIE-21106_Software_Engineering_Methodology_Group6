@@ -25,6 +25,7 @@ import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;
 import wizzball.objects.collidable.Hole;
 import wizzball.utilities.Timer;
+import wizzball.utilities.ValueComparator;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
@@ -1094,7 +1095,6 @@ public class Wizzball extends PApplet {
 		fill(50);
 		textAlign(CENTER);
 		int w = width / 2;
-		int h = height / 4;
 		fill(249, 241, 241);
 		text("    Name      " + "Score    ", w, height / 2);
 		text("------------------------------", w, height / 2 + 5);
@@ -1306,6 +1306,10 @@ public class Wizzball extends PApplet {
 				if (sp1.isAllowedToShoot()) {
 					sp1.activateWeapon();
 				}
+			}
+			
+			if (key == 'f') {
+				sp1.changeWeapon();
 			}
 
 			if (keyCode == 71) {

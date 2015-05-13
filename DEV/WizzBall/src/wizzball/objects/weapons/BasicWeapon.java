@@ -39,7 +39,7 @@ public abstract class BasicWeapon extends BasicCollectable {
 	 */
 	@Override
 	public void effect() {
-		parent.sp1.switchWeapon(this);
+		parent.sp1.addWeapon(this);
 	}
 
 	public void weaponEffectAndAnimation() {

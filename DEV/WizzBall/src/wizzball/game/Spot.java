@@ -33,8 +33,9 @@ public class Spot {
 	public int score = 0;
 	public int acumulativeScore = 0;
 	public boolean power = false;
-	private BasicWeapon weapon;
+	private Vector<BasicWeapon> weapon = new Vector<BasicWeapon>();
 	private boolean appearing = true;
+	private int selectedWeapon = 0;
 
 	// First version of the Spot constructor;
 	// the fields are assigned default values
@@ -65,17 +66,17 @@ public class Spot {
 		mouth = p.loadImage("mouth.png");
 		eyes = p.loadImage("eyes.png");
 
-		for(int i = 0; i <6; i++){
+		for (int i = 0; i < 6; i++) {
 			changeEyes();
 		}
-		
+
 	}
 
 	public void initSpot() {
 		lives = 3;
 		score = 0;
 		if (power) {
-			//changeColour();
+			// changeColour();
 			power = false;
 		}
 		rotationSpeed = 0;
@@ -106,22 +107,20 @@ public class Spot {
 			} else {
 				currentAngle = currentAngle - rotationSpeed;
 			}
-			
-			
-			
+
 			parent.pushMatrix();
 			parent.translate(parent.width / 2, y);
-			
-			if(power){
+
+			if (power) {
 				parent.pushStyle();
-				  parent.fill(0, 0, 0, 0);
-				  parent.stroke(100,180,255);
-				  parent.strokeWeight(4);
-				  parent.ellipse(0, 0, radius+5,radius+5);
-				  parent.popStyle();
+				parent.fill(0, 0, 0, 0);
+				parent.stroke(100, 180, 255);
+				parent.strokeWeight(4);
+				parent.ellipse(0, 0, radius + 5, radius + 5);
+				parent.popStyle();
 
 			}
-			
+
 			parent.rotate(currentAngle);
 			parent.image(ball, -radius, -radius, radius * 2, radius * 2);
 			if (eyes != null)
@@ -132,15 +131,28 @@ public class Spot {
 				parent.image(custom, -radius, -radius, radius * 2, radius * 2);
 
 			parent.popMatrix();
-			if (weapon != null) {
-				if (weapon.isShooting()) {
-					weapon.weaponEffectAndAnimation();
+			if (getActiveWeapon() != null) {
+				if (getActiveWeapon().isShooting()) {
+					getActiveWeapon().weaponEffectAndAnimation();
 				}
 			}
 
 			friction();
 		}
 
+	}
+
+	public void changeWeapon() {
+		selectedWeapon++;
+		if (selectedWeapon >= weapon.size()) {
+			selectedWeapon = 0;
+		}
+	}
+
+	public BasicWeapon getActiveWeapon() {
+		if (selectedWeapon < weapon.size())
+			return weapon.elementAt(selectedWeapon);
+		return null;
 	}
 
 	/**
@@ -225,12 +237,10 @@ public class Spot {
 	}
 
 	public void switchPower() {
-		//changeColour();
+		// changeColour();
 		power = !power;
 	}
 
-
-	
 	/**
 	 * 
 	 */
@@ -319,19 +329,24 @@ public class Spot {
 	/**
 	 * @param basicWeapon
 	 */
-	public void switchWeapon(BasicWeapon weapon) {
-		this.weapon = weapon;
+	public void addWeapon(BasicWeapon weapontoadd) {
+		for (BasicWeapon b : weapon) {
+			if (b.getClass().equals(weapontoadd.getClass())) {
+				return;
+			}
+		}
+		this.weapon.addElement((BasicWeapon) weapontoadd);
 	}
 
 	/**
 	 * 
 	 */
 	public void activateWeapon() {
-		if (weapon != null) {
-			weapon.activateWeapon();
-			if (weapon instanceof Pistol) {
+		if (getActiveWeapon() != null) {
+			getActiveWeapon().activateWeapon();
+			if (getActiveWeapon() instanceof Pistol) {
 				parent.playGunSound();
-			} else if (weapon instanceof LaserPistol) {
+			} else if (getActiveWeapon() instanceof LaserPistol) {
 				parent.playRaySound();
 			}
 		}
@@ -345,8 +360,8 @@ public class Spot {
 	 * @return
 	 */
 	public boolean isAllowedToShoot() {
-		if (weapon != null)
-			return weapon.isAllowedToShoot();
+		if (getActiveWeapon() != null)
+			return getActiveWeapon().isAllowedToShoot();
 		return false;
 	}
 
@@ -354,8 +369,8 @@ public class Spot {
 	 * 
 	 */
 	public void deleteBullet() {
-		if (weapon instanceof Pistol) {
-			((Pistol)weapon).deleteBullets();
+		if (getActiveWeapon() instanceof Pistol) {
+			((Pistol) getActiveWeapon()).deleteBullets();
 		}
 	}
 
