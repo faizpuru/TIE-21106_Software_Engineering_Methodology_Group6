@@ -24,6 +24,7 @@ import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;
 import wizzball.objects.collidable.Hole;
+import wizzball.objects.weapons.BombPistol;
 import wizzball.utilities.Timer;
 import wizzball.utilities.ValueComparator;
 import ddf.minim.AudioPlayer;
@@ -949,9 +950,11 @@ public class Wizzball extends PApplet {
 	}
 
 	private void manageObjectsCollision() {
+		
+		
 		for (BasicObject p : lvl.objects) {
+			
 			if (p.isDisplay()) {
-
 				// racine_carre((x_point - x_centre)� + (y_centre - y_point)) <
 				// rayon
 				if (p.isCollide(C_TOP_LEFT)) {

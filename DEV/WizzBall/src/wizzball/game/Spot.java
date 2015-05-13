@@ -71,6 +71,8 @@ public class Spot {
 			changeEyes();
 		}
 		
+		weapon.add(new BombPistol(parent, 0, 0, 0, 0, true));
+
 	}
 
 	public void initSpot() {

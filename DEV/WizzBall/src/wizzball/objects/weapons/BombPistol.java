@@ -27,7 +27,7 @@ public class BombPistol extends BasicWeapon {
 	 * @param down
 	 */
 
-	private float sizeBullet = 0;
+	public float sizeBullet = 0;
 
 	public BombPistol(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
 		super(p, xpos, ypos, height, width, down);
@@ -50,15 +50,16 @@ public class BombPistol extends BasicWeapon {
 	public void weaponAnimation() {
 
 		if (isShooting()) {
-			if(sizeBullet>=50){
+			if(sizeBullet>=40){
 				sizeBullet = 0;
 				return;
 			}
 			parent.pushMatrix();
 			parent.pushStyle();
-			parent.translate(parent.xpos + parent.width/2, parent.ypos);
+			parent.translate(parent.width/2 , parent.ypos);
 			parent.fill(0,0,0,0);
-			parent.ellipse(x, y, sizeBullet, sizeBullet);
+			parent.stroke(200,20,20);
+			parent.ellipse(0, 0, sizeBullet, sizeBullet);
 			sizeBullet += 2 ;
 			parent.popStyle();
 			parent.popMatrix();

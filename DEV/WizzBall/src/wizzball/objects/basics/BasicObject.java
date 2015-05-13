@@ -9,6 +9,8 @@ package wizzball.objects.basics;
 import processing.core.PConstants;
 import processing.core.PImage;
 import wizzball.game.Wizzball;
+import wizzball.objects.enemies.BasicEnemy;
+import wizzball.objects.weapons.BombPistol;
 
 public class BasicObject {
 
@@ -63,6 +65,16 @@ public class BasicObject {
 		
 		return false;
 	}
+	
+	private float getRadius(){
+		boolean bomb = (parent.sp1.getActiveWeapon()!=null && parent.sp1.getActiveWeapon() instanceof BombPistol && parent.sp1.getActiveWeapon().isShooting());
+		if(this instanceof BasicEnemy && bomb){
+			return ((BombPistol)parent.sp1.getActiveWeapon()).sizeBullet;
+		} else {
+			return parent.sp1.radius;
+		}
+		
+	}
 
 	public float getLeft() {
 		return xAbs - width / 2;
@@ -82,7 +94,7 @@ public class BasicObject {
 
 	private boolean isTopCollide() {
 		if (parent.xpos >= getLeft() && parent.xpos <= getRight()) {
-			if (getTop() >= parent.ypos - parent.sp1.radius && getTop() <= parent.ypos + parent.sp1.radius) {
+			if (getTop() >= parent.ypos - getRadius() && getTop() <= parent.ypos + getRadius()) {
 				return true;
 			}
 		}
@@ -91,7 +103,7 @@ public class BasicObject {
 
 	private boolean isBottomCollide() {
 		if (parent.xpos >= getLeft() && parent.xpos <= getRight()) {
-			if (getBottom() <= parent.ypos + parent.sp1.radius && getBottom() >= parent.ypos - parent.sp1.radius) {
+			if (getBottom() <= parent.ypos + getRadius() && getBottom() >= parent.ypos - getRadius()) {
 				return true;
 			}
 		}
@@ -100,8 +112,8 @@ public class BasicObject {
 
 	private boolean isLeftCollide() {
 		if (parent.xspeed > 0) {
-			if (parent.ypos + parent.sp1.radius >= getTop() && parent.ypos - parent.sp1.radius <= getBottom()) {
-				if (getLeft() <= parent.xpos + parent.sp1.radius && parent.sp1.radius < x - width / 2) {
+			if (parent.ypos + getRadius() >= getTop() && parent.ypos - getRadius() <= getBottom()) {
+				if (getLeft() <= parent.xpos + getRadius() && getRadius() < x - width / 2) {
 					return true;
 				}
 			}
@@ -113,7 +125,7 @@ public class BasicObject {
 
 		if (parent.xspeed < 0) {
 			if (parent.ypos >= getTop() && parent.ypos <= getBottom()) {
-				if (getRight() >= parent.xpos - parent.sp1.radius && parent.sp1.radius > x + width / 2) {
+				if (getRight() >= parent.xpos - getRadius() && getRadius() > x + width / 2) {
 					return true;
 				}
 			}
@@ -122,19 +134,19 @@ public class BasicObject {
 	}
 
 	private boolean isTopLeftCollide() {
-		return Math.sqrt(Math.pow((getLeft() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getTop()), 2)) <= parent.sp1.radius;
+		return Math.sqrt(Math.pow((getLeft() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getTop()), 2)) <= getRadius();
 	}
 
 	private boolean isTopRightCollide() {
-		return Math.sqrt(Math.pow((getRight() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getTop()), 2)) <= parent.sp1.radius;
+		return Math.sqrt(Math.pow((getRight() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getTop()), 2)) <= getRadius();
 	}
 
 	private boolean isBottomLeftCollide() {
-		return Math.sqrt(Math.pow((getLeft() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getBottom()), 2)) <= parent.sp1.radius;
+		return Math.sqrt(Math.pow((getLeft() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getBottom()), 2)) <= getRadius();
 	}
 
 	private boolean isBottomRightCollide() {
-		return Math.sqrt(Math.pow((getRight() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getBottom()), 2)) <= parent.sp1.radius;
+		return Math.sqrt(Math.pow((getRight() - parent.sp1.x), 2) + Math.pow((parent.sp1.y - getBottom()), 2)) <= getRadius();
 	}
 
 	public boolean isCollide(int edge) {
