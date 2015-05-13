@@ -334,6 +334,8 @@ public class Wizzball extends PApplet {
 
 	public void draw() {
 
+		System.gc();
+		
 		if (loading < 35) {
 
 			displayLoading();
@@ -485,7 +487,7 @@ public class Wizzball extends PApplet {
 		/*
 		 * if (!nyancatmode) { if (lvl.getImage() != null) { background(lvl.getImage()); } else { background(50); } } else { background(239, 89, 123); }
 		 */
-		// displayStars();
+	
 
 		textAlign(LEFT);
 		textFont(f, 14);
@@ -533,7 +535,8 @@ public class Wizzball extends PApplet {
 		}
 
 		// Display platforms to the good position
-		for (BasicObject p : (Vector<BasicObject>) lvl.objects.clone()) {
+		Vector<BasicObject> test = (Vector<BasicObject>) lvl.objects.clone();
+		for (BasicObject p : test) {
 			if (p.isDisplay()) {
 				p.display();
 			}
@@ -937,7 +940,7 @@ public class Wizzball extends PApplet {
 		ypos = (float) (ypos < height * 0.1 + sp1.radius ? height * 0.1 + sp1.radius : ypos);
 		ypos = (float) (ypos > height * 0.8 - sp1.radius ? height * 0.8 - sp1.radius : ypos);
 
-		if (ypos >= (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this								// with
+		if (ypos >= (height * 0.8 - sp1.radius) && yspeed > 0) { // Adjust this // with
 																	// floor
 			ybounce();
 		} else if (ypos <= (height * 0.1 + sp1.radius) && yspeed < 0) { // Adjust number for proper collision with ceiling

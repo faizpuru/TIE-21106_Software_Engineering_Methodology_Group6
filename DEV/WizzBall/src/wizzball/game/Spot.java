@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import processing.core.PImage;
 import wizzball.objects.weapons.BasicWeapon;
+import wizzball.objects.weapons.BombPistol;
 import wizzball.objects.weapons.LaserPistol;
 import wizzball.objects.weapons.Pistol;
 
@@ -69,7 +70,7 @@ public class Spot {
 		for (int i = 0; i < 6; i++) {
 			changeEyes();
 		}
-
+		
 	}
 
 	public void initSpot() {
