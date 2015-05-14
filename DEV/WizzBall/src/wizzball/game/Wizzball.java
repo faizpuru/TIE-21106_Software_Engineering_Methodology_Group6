@@ -810,7 +810,6 @@ public class Wizzball extends PApplet {
 		text(sp1.acumulativeScore, xb + 20 + 5, h2 + 20);
 		image(bonus1, xb, h2 + 50);
 		text("left: " + lvl.nbBonus, xb + 20 + 5, h2 + 60);
-		text("FPS: " + frameRate, xb + 20 + 5, h2 - 20);
 
 		if (sp1.getActiveWeapon() != null)
 			image(sp1.getActiveWeapon().getImage(), width / 2, height - 60, 50, 50);
