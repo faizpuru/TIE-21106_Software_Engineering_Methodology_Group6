@@ -81,7 +81,7 @@ public class Wizzball extends PApplet {
 
 	public static PImage nasty;
 	public PImage rainbow;
-	public PImage bonus;
+	public PImage bonus, bonus1;
 	public PImage heart;
 	public PImage powerup;
 	public PImage hole;
@@ -105,7 +105,7 @@ public class Wizzball extends PApplet {
 	PVector vfront = new PVector(0, 5);
 
 	public static final int TYPING = 0, STORY = 1, GAME = 2, GAME_OVER = 3, MENU = 42, SETTINGS = 43, PAUSE = 44, SUCCESS = 45;
-	private float FRAMERATE = 32;
+	private float FRAMERATE = 28;
 	public int state = MENU;
 
 	String typing = "";
@@ -134,6 +134,8 @@ public class Wizzball extends PApplet {
 	private boolean multithreading = false;
 	private boolean keyLeft = false, keyRight = false;
 	public static int loading = 0;
+
+	public boolean boundOnce = false;
 
 	@Override
 	public void init() {
@@ -265,8 +267,11 @@ public class Wizzball extends PApplet {
 		loading++;
 		bonus = loadImage("bonus.png");
 		loading++;
+		bonus1 = loadImage("bonus.png");
+		bonus1.resize(20, 20);
 		heart = loadImage("heart.png");
 		heart1 = loadImage("heart.png");
+		heart1.resize(20, 20);
 		loading++;
 		powerup = loadImage("powerup.png");
 		loading++;
@@ -461,7 +466,6 @@ public class Wizzball extends PApplet {
 		stroke(0);
 		strokeWeight(5);
 
-		frameRate(32);
 
 		image(lvl.getImage(), -xpos / 5, (float) (height * 0.1), lvl.getImage().width, (float) (height * 0.7));
 		image(floor, 0, (float) (height * 0.8), floor.width, (float) (height * 0.2));
@@ -470,7 +474,6 @@ public class Wizzball extends PApplet {
 		image(ceiling, -xpos + pos * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
 		image(ceiling, -xpos + (pos - 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
 		image(ceiling, -xpos + (pos + 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
-
 
 		if (keyRight) {
 			sp1.accelerateRotation(INCR_SPEED);
@@ -536,7 +539,6 @@ public class Wizzball extends PApplet {
 			b.recalculatePositionX(xpos);
 
 		}
-		
 
 		if (trapInHole == null && state != GAME_OVER && !sp1.isAppearing()) {
 			xpos = (float) (xpos + xspeed * 0.2);
@@ -796,14 +798,14 @@ public class Wizzball extends PApplet {
 
 		image(coin, xb, h2 + 10, 20, 20);
 		for (int i = 0; i < sp1.lives; i++) {
-			image(heart1, xb + i * 20, h2 + 30, 20, 20);
+			image(heart1, xb + i * 20, h2 + 30);
 		}
 
 		textAlign(LEFT, CENTER);
 		fill(255);
 
 		text(sp1.acumulativeScore, xb + 20 + 5, h2 + 20);
-		image(bonus, xb, h2 + 50, 20, 20);
+		image(bonus1, xb, h2 + 50);
 		text("left: " + lvl.nbBonus, xb + 20 + 5, h2 + 60);
 		text("FPS: " + frameRate, xb + 20 + 5, h2 - 20);
 
@@ -868,6 +870,9 @@ public class Wizzball extends PApplet {
 	}
 
 	private void ybounce() {
+		if (!boundOnce) {
+			boundOnce = true;
+		}
 		yspeed = yspeed * -1;
 		xspeed += sp1.rotationSpeed * rotationEffect; // rotation effect
 		xspeed = abs(xspeed) > MAX_SPEED ? (xspeed / abs(xspeed)) * MAX_SPEED : xspeed;
@@ -1297,7 +1302,11 @@ public class Wizzball extends PApplet {
 			}
 
 			if (keyCode == 71) {
-				gravity = gravity * (-1);
+				if (boundOnce){
+					gravity = gravity * (-1);
+					boundOnce = false;
+
+				}
 			}
 
 			// To debug -- DELETE IT AFTER
