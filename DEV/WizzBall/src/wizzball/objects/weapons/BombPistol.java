@@ -98,7 +98,7 @@ public class BombPistol extends BasicWeapon {
 	 */
 	@Override
 	public void loadImage() {
-		image = parent.lasergun;
+		image = parent.bomb;
 	}
 
 	/*

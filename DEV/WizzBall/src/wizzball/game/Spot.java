@@ -70,7 +70,7 @@ public class Spot {
 			changeEyes();
 		}
 		
-		weapon.add(new LaserPistol(parent, 0, 0, 0, 0, true));
+		//weapon.add(new LaserPistol(parent, 0, 0, 0, 0, true));
 
 	}
 

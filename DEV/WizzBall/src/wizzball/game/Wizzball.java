@@ -81,6 +81,7 @@ public class Wizzball extends PApplet {
 
 	public static PImage nasty;
 	public PImage rainbow;
+	public PImage bomb;
 	public PImage bonus, bonus1;
 	public PImage heart;
 	public PImage powerup;
@@ -253,6 +254,8 @@ public class Wizzball extends PApplet {
 		/*
 		 * backg = loadImage("Background1.png"); backg = backg.get(0,0,backg.width,356);
 		 */
+		bomb = loadImage("bomb.png");
+		loading++;
 		ceiling = loadImage("up.png");
 		loading++;
 		avatars = loadImage("avatars.png");
