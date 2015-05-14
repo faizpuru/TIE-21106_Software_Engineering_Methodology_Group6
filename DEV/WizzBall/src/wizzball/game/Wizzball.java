@@ -24,7 +24,6 @@ import wizzball.objects.basics.BasicObject;
 import wizzball.objects.basics.Collectable;
 import wizzball.objects.basics.Collidable;
 import wizzball.objects.collidable.Hole;
-import wizzball.objects.weapons.BombPistol;
 import wizzball.utilities.Timer;
 import wizzball.utilities.ValueComparator;
 import ddf.minim.AudioPlayer;
@@ -51,7 +50,7 @@ public class Wizzball extends PApplet {
 	 */
 
 	public final static int NASTY_LIVES = 3;
-	public final static int BOMB_LIVES = 2;
+	public final static int BOMB_LIVES = 10;
 	public final static int STALIEN_LIVES = 5;
 	public final static int MVALIEN_LIVES = 4;
 
@@ -336,7 +335,7 @@ public class Wizzball extends PApplet {
 	public void draw() {
 
 		System.gc();
-		
+
 		if (loading < 35) {
 
 			displayLoading();
@@ -463,18 +462,18 @@ public class Wizzball extends PApplet {
 		stroke(0);
 		strokeWeight(5);
 
+		frameRate(32);
+
 		pushMatrix();
-		translate(-xpos / 5, 0);
-		image(lvl.getImage(), 0, (float) (height * 0.1), lvl.getImage().width, (float) (height * 0.7));
+		image(lvl.getImage(), -xpos / 5, (float) (height * 0.1), lvl.getImage().width, (float) (height * 0.7));
 		image(floor, 0, (float) (height * 0.8), floor.width, (float) (height * 0.2));
 		popMatrix();
 
 		pushMatrix();
 		int pos = (int) (xpos / ceiling.width);
-		translate(-xpos, 0);
-		image(ceiling, pos * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
-		image(ceiling, (pos - 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
-		image(ceiling, (pos + 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
+		image(ceiling, -xpos + pos * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
+		image(ceiling, -xpos + (pos - 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
+		image(ceiling, -xpos + (pos + 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
 
 		popMatrix();
 
@@ -488,7 +487,6 @@ public class Wizzball extends PApplet {
 		/*
 		 * if (!nyancatmode) { if (lvl.getImage() != null) { background(lvl.getImage()); } else { background(50); } } else { background(239, 89, 123); }
 		 */
-	
 
 		textAlign(LEFT);
 		textFont(f, 14);
@@ -536,14 +534,15 @@ public class Wizzball extends PApplet {
 		}
 
 		// Display platforms to the good position
-		Vector<BasicObject> test = (Vector<BasicObject>) lvl.objects.clone();
-		for (BasicObject p : test) {
-			if (p.isDisplay()) {
-				p.display();
+		for (BasicObject b : (Vector<BasicObject>) lvl.objects.clone()) {
+			if (b.isDisplay()) {
+				b.display();
 			}
-			p.recalculatePositionX(xpos);
+			b.recalculatePositionX(xpos);
 
 		}
+		
+		System.out.println(lvl.objects.size());
 
 		if (trapInHole == null && state != GAME_OVER && !sp1.isAppearing()) {
 			xpos = (float) (xpos + xspeed * 0.2);
@@ -812,6 +811,7 @@ public class Wizzball extends PApplet {
 		text(sp1.acumulativeScore, xb + 20 + 5, h2 + 20);
 		image(bonus, xb, h2 + 50, 20, 20);
 		text("left: " + lvl.nbBonus, xb + 20 + 5, h2 + 60);
+		text("FPS: " + frameRate, xb + 20 + 5, h2 - 20);
 
 		if (sp1.getActiveWeapon() != null)
 			image(sp1.getActiveWeapon().getImage(), width / 2, height - 60, 50, 50);
@@ -950,10 +950,9 @@ public class Wizzball extends PApplet {
 	}
 
 	private void manageObjectsCollision() {
-		
-		
+
 		for (BasicObject p : lvl.objects) {
-			
+
 			if (p.isDisplay()) {
 				// racine_carre((x_point - x_centre)� + (y_centre - y_point)) <
 				// rayon

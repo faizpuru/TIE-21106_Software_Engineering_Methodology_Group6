@@ -218,7 +218,7 @@ public class Level {
 
 			loading = false;
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			wizz.state = Wizzball.SUCCESS;
 		}
 	}

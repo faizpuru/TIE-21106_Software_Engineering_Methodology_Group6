@@ -5,15 +5,12 @@
  */
 package wizzball.objects.weapons;
 
-import processing.core.PApplet;
-import processing.core.PImage;
 import wizzball.game.Wizzball;
 import wizzball.objects.basics.BasicObject;
 import wizzball.objects.enemies.BasicEnemy;
-import wizzball.objects.weapons.Pistol.Bullet;
 
 /**
- * @author francois
+ * 
  *
  */
 public class BombPistol extends BasicWeapon {
@@ -32,8 +29,10 @@ public class BombPistol extends BasicWeapon {
 	public BombPistol(Wizzball p, float xpos, float ypos, float height, float width, boolean down) {
 		super(p, xpos, ypos, height, width, down);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see wizzball.objects.weapons.BasicWeapon#activateWeapon()
 	 */
 	@Override
@@ -50,29 +49,31 @@ public class BombPistol extends BasicWeapon {
 	public void weaponAnimation() {
 
 		if (isShooting()) {
-			if(sizeBullet>=40){
+			if (sizeBullet >= 40) {
 				sizeBullet = 0;
 				return;
 			}
 			parent.pushMatrix();
 			parent.pushStyle();
-			parent.translate(parent.width/2 , parent.ypos);
-			parent.fill(0,0,0,0);
-			parent.stroke(200,20,20);
+			parent.translate(parent.width / 2, parent.ypos);
+			parent.fill(0, 0, 0, 0);
+			parent.stroke(200, 20, 20);
 			parent.ellipse(0, 0, sizeBullet, sizeBullet);
-			sizeBullet += 2 ;
+			sizeBullet += 2;
 			parent.popStyle();
 			parent.popMatrix();
 		}
 
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see wizzball.objects.weapons.BasicWeapon#isShooting()
 	 */
 	@Override
 	public boolean isShooting() {
-		return sizeBullet!=0;
+		return sizeBullet != 0;
 	}
 
 	/*
@@ -82,31 +83,32 @@ public class BombPistol extends BasicWeapon {
 	 */
 	@Override
 	protected void weaponEffect() {
-				
+
 		for (BasicObject o : parent.lvl.objects) {
-			if(o instanceof BasicEnemy){
+			if (o instanceof BasicEnemy) {
 			}
 		}
 
-				
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see wizzball.objects.basics.BasicObject#loadImage()
 	 */
 	@Override
 	public void loadImage() {
 		image = parent.lasergun;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see wizzball.objects.weapons.BasicWeapon#getTimeBetweenTwoShoot()
 	 */
 	@Override
 	protected int getTimeBetweenTwoShoot() {
 		return 1500;
 	}
-	
-	
-	
+
 }
