@@ -204,8 +204,7 @@ public class Wizzball extends PApplet {
 	private void initDisplayParameters() {
 		frameRate(FRAMERATE);
 		ellipseMode(RADIUS);
-		size(500, 500, P2D);
-		smooth();
+		size(500, 500, OPENGL);
 	}
 
 	private void initSpot() {
@@ -464,18 +463,14 @@ public class Wizzball extends PApplet {
 
 		frameRate(32);
 
-		pushMatrix();
 		image(lvl.getImage(), -xpos / 5, (float) (height * 0.1), lvl.getImage().width, (float) (height * 0.7));
 		image(floor, 0, (float) (height * 0.8), floor.width, (float) (height * 0.2));
-		popMatrix();
 
-		pushMatrix();
 		int pos = (int) (xpos / ceiling.width);
 		image(ceiling, -xpos + pos * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
 		image(ceiling, -xpos + (pos - 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
 		image(ceiling, -xpos + (pos + 1) * ceiling.width, 0, ceiling.width, (float) (height * 0.1));
 
-		popMatrix();
 
 		if (keyRight) {
 			sp1.accelerateRotation(INCR_SPEED);
@@ -542,7 +537,6 @@ public class Wizzball extends PApplet {
 
 		}
 		
-		System.out.println(lvl.objects.size());
 
 		if (trapInHole == null && state != GAME_OVER && !sp1.isAppearing()) {
 			xpos = (float) (xpos + xspeed * 0.2);
@@ -820,7 +814,6 @@ public class Wizzball extends PApplet {
 
 	private void displayStoryScreen() {
 		pushStyle();
-		pushMatrix();
 
 		background(50);
 
@@ -833,13 +826,11 @@ public class Wizzball extends PApplet {
 		text("Press TAB to continue...", xFont, height - 20);
 
 		popStyle();
-		popMatrix();
 
 	}
 
 	private void displayNameScreen() {
 		pushStyle();
-		pushMatrix();
 		stroke(0);
 		strokeWeight(5);
 		background(50);
@@ -851,7 +842,6 @@ public class Wizzball extends PApplet {
 		textFont(f, 30);
 		text(typing, width / 2, height / 2);
 		popStyle();
-		popMatrix();
 	}
 
 	private void loopThemeMusic() {
