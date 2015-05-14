@@ -81,6 +81,6 @@
 	<classpathentry kind="lib" path="lib/base/minim/jsminim.jar"/>
 	<classpathentry kind="lib" path="lib/base/minim/mp3spi1.9.4.jar"/>
 	<classpathentry kind="lib" path="lib/base/minim/tritonus_share.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_45"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-8-oracle"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

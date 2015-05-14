@@ -780,7 +780,7 @@ public class Wizzball extends PApplet {
 	 */
 	private void displayTextBoxGame() {
 
-		int h2 = height - 70;
+		int h2 = height - 78;
 		int offset = 20;
 		int h4 = 23;
 
